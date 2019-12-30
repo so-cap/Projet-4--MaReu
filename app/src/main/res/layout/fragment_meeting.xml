@@ -30,7 +30,8 @@
         app:layout_constraintStart_toEndOf="@id/room_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/ic_delete"
-        android:text="@string/app_name"/>
+        android:text="Réunion P - 14h00 - PEACH"/>
+        <!-- MAX CHARACTERS = 20 for input -->
 
     <TextView
         android:id="@+id/participants"
