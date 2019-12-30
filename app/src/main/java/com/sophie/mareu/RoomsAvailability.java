@@ -9,8 +9,14 @@ import java.util.Arrays;
 public class RoomsAvailability {
      private ArrayList<Integer> mHoursList;
      private ArrayList<String> mRoomsList;
-     private ArrayList<AvailabilityPerHour> mAvailableRoomsPerHour;
-     private AvailabilityPerHour mAvailabilityPerHour;
+     private ArrayList<AvailabilityPerHour> mAvailableRoomsPerHour = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "RoomsAvailability{" +
+                "mAvailableRoomsPerHour=" + mAvailableRoomsPerHour +
+                '}';
+    }
 
     public class AvailabilityPerHour{
         Integer hour;
@@ -39,10 +45,12 @@ public class RoomsAvailability {
         mHoursList = new ArrayList<>(Arrays.asList(8,9,10,11,12,13,14,15,16,17,18,19));
         mRoomsList = new ArrayList<>(Arrays.asList("PEACH","LUIGI","MARIO","BOWSER","WALUIGI","DAISY","WARIO","ROSALINA","TOAD","YOSHI"));
 
-        for(int position = 0; mHoursList.get(position) != null; position++)
-            mAvailabilityPerHour.setHour(mHoursList.get(position));
-            mAvailabilityPerHour.setRooms(mRoomsList);
-            mAvailableRoomsPerHour.add(mAvailabilityPerHour);
+        for(int position = 0; position < (mHoursList.size()); position++) {
+            AvailabilityPerHour availabilityPerHour = new AvailabilityPerHour();
+            availabilityPerHour.setHour(mHoursList.get(position));
+            availabilityPerHour.setRooms(new ArrayList<>(mRoomsList));
+            mAvailableRoomsPerHour.add(availabilityPerHour);
+        }
     }
 
     //display with a loop hours : getAvailableRoomsPerHour.get(position)
@@ -52,12 +60,13 @@ public class RoomsAvailability {
 
     // call before closing last MeetingCreation fragment
     public void setAvailableRoomsPerHours(ArrayList<AvailabilityPerHour> availableHoursAndRooms) {
+        mAvailableRoomsPerHour = availableHoursAndRooms;
+
         // delete hour availability if all the rooms are taken
-        for(int position = 0; mAvailableRoomsPerHour.get(position)!= null; position++) {
-            if (mAvailableRoomsPerHour.get(position).getRooms() == null)
+        for(int position = 0; position != mAvailableRoomsPerHour.size(); position++) {
+            if (mAvailableRoomsPerHour.get(position).getRooms().isEmpty())
                 mAvailableRoomsPerHour.remove(position);
         }
-        mAvailableRoomsPerHour = availableHoursAndRooms;
     }
 }
 
