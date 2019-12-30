@@ -1,6 +1,7 @@
 package com.sophie.mareu;
 
-import android.util.Log;
+
+import com.sophie.mareu.RoomsAvailability.AvailabilityPerHour;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,7 @@ import static org.junit.Assert.*;
 @RunWith(JUnit4.class)
 public class RoomsAvailabilityTests {
     private RoomsAvailability mRoomsAvailability = new RoomsAvailability();
-    private ArrayList<RoomsAvailability.AvailabilityPerHour> roomsPerHour = new ArrayList<>();
+    private ArrayList<AvailabilityPerHour> mRoomsPerHour = new ArrayList<>();
 
     // for expected data
     private ArrayList<Integer>  mHoursList = new ArrayList<>(Arrays.asList(8,9,10,11,12,13,14,15,16,17,18,19));
@@ -31,42 +32,43 @@ public class RoomsAvailabilityTests {
 
     @Test
     public void getRoomsAndHoursAvailabilityWithSuccess(){
-        roomsPerHour = mRoomsAvailability.getAvailableRoomsPerHour();
-        assertThat(roomsPerHour.get(0).getHour(), equalTo(mHoursList.get(0)));
-        assertThat(roomsPerHour.get(11).getHour(), equalTo(mHoursList.get(11)));
+        mRoomsPerHour = mRoomsAvailability.getAvailableRoomsPerHour();
+        assertThat(mRoomsPerHour.get(0).getHour(), equalTo(mHoursList.get(0)));
+        assertThat(mRoomsPerHour.get(11).getHour(), equalTo(mHoursList.get(11)));
 
-        assertThat(roomsPerHour.get(0).getRooms(), equalTo(mRoomsList));
-        assertThat(roomsPerHour.get(3).getRooms(), equalTo(mRoomsList));
+        assertThat(mRoomsPerHour.get(0).getRooms(), equalTo(mRoomsList));
+        assertThat(mRoomsPerHour.get(3).getRooms(), equalTo(mRoomsList));
     }
 
     @Test
     public void deletingARoomWithSuccess(){
-        roomsPerHour = mRoomsAvailability.getAvailableRoomsPerHour();
+        mRoomsPerHour = mRoomsAvailability.getAvailableRoomsPerHour();
 
-        roomsPerHour.get(3).getRooms().remove(3);
-        assertThat(roomsPerHour.get(3).getRooms(), not(hasItem("BOWSER")));
+        mRoomsPerHour.get(3).getRooms().remove(3);
+        assertThat(mRoomsPerHour.get(3).getRooms(), not(hasItem("BOWSER")));
     }
 
     @Test
     public void updateHoursAvailabilityWithSuccess(){
-        roomsPerHour = mRoomsAvailability.getAvailableRoomsPerHour();
+        mRoomsPerHour = mRoomsAvailability.getAvailableRoomsPerHour();
 
         // Index 2 = 10 beforehand
-        assertThat(roomsPerHour.get(2).getHour(), equalTo(10));
+        assertThat(mRoomsPerHour.get(2).getHour(), equalTo(10));
 
 
         //deleting all the rooms at index 2
-        while(roomsPerHour.get(2).getRooms().size() > 0){
-            System.out.println(roomsPerHour.get(1).getRooms().size());
-            roomsPerHour.get(2).getRooms().remove(0);
+        while(mRoomsPerHour.get(2).getRooms().size() > 0){
+            mRoomsPerHour.get(2).getRooms().remove(0);
         }
 
         // Updating list
-        mRoomsAvailability.setAvailableRoomsPerHours(roomsPerHour);
+        mRoomsAvailability.setAvailableRoomsPerHours(mRoomsPerHour);
 
         //Index 2 = 11 after removing hour availability
-        assertThat(roomsPerHour.get(2).getHour(), equalTo(11));
+        assertThat(mRoomsPerHour.get(2).getHour(), equalTo(11));
 
+
+        System.out.println(mRoomsPerHour.get(1).getRooms().toString());
     }
 
 }

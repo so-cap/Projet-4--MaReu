@@ -11,13 +11,6 @@ public class RoomsAvailability {
      private ArrayList<String> mRoomsList;
      private ArrayList<AvailabilityPerHour> mAvailableRoomsPerHour = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return "RoomsAvailability{" +
-                "mAvailableRoomsPerHour=" + mAvailableRoomsPerHour +
-                '}';
-    }
-
     public class AvailabilityPerHour{
         Integer hour;
         ArrayList<String> rooms;
@@ -39,7 +32,6 @@ public class RoomsAvailability {
         }
     }
 
-    // call when opening activity (onCreate)
     public void initRoomsAndHours(){
         // use tags for each hour view (get size of array, then loop to setTag on button.
         mHoursList = new ArrayList<>(Arrays.asList(8,9,10,11,12,13,14,15,16,17,18,19));

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">MaReu</string>
     <string name="longttext">YLNBVSDFGJJJJJJJJKKKKKKKKKKKKKKKKKKKKKKKKKKJJJJ</string>
+    <string name="title_hour_room">"%1$s - %2£s - %3$s"</string>
 </resources>
