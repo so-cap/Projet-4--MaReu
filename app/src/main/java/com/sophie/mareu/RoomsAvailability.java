@@ -1,5 +1,7 @@
 package com.sophie.mareu;
 
+import com.sophie.mareu.DI.DI;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -9,7 +11,7 @@ import java.util.Arrays;
 public class RoomsAvailability {
      private ArrayList<Integer> mHoursList;
      private ArrayList<String> mRoomsList;
-     private ArrayList<AvailabilityPerHour> mAvailableRoomsPerHour = new ArrayList<>();
+     private static ArrayList<AvailabilityPerHour> mAvailableRoomsPerHour = new ArrayList<>();
 
     public class AvailabilityPerHour{
         Integer hour;
@@ -34,8 +36,8 @@ public class RoomsAvailability {
 
     public void initRoomsAndHours(){
         // use tags for each hour view (get size of array, then loop to setTag on button.
-        mHoursList = new ArrayList<>(Arrays.asList(8,9,10,11,12,13,14,15,16,17,18,19));
-        mRoomsList = new ArrayList<>(Arrays.asList("PEACH","LUIGI","MARIO","BOWSER","WALUIGI","DAISY","WARIO","ROSALINA","TOAD","YOSHI"));
+        mHoursList = DI.getNewHoursList();
+        mRoomsList = DI.getNewRoomsList();
 
         for(int position = 0; position < (mHoursList.size()); position++) {
             AvailabilityPerHour availabilityPerHour = new AvailabilityPerHour();
@@ -46,12 +48,12 @@ public class RoomsAvailability {
     }
 
     //display with a loop hours : getAvailableRoomsPerHour.get(position)
-    public ArrayList<AvailabilityPerHour> getAvailableRoomsPerHour(){
+    public static ArrayList<AvailabilityPerHour> getAvailableRoomsPerHour(){
         return mAvailableRoomsPerHour;
     }
 
-    // call before closing last MeetingCreation fragment
-    public void setAvailableRoomsPerHours(ArrayList<AvailabilityPerHour> availableHoursAndRooms) {
+    // call before closing last MeetingCreationStartFragment fragment
+    public static void setAvailableRoomsPerHours(ArrayList<AvailabilityPerHour> availableHoursAndRooms) {
         mAvailableRoomsPerHour = availableHoursAndRooms;
 
         // delete hour availability if all the rooms are taken

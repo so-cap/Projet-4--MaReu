@@ -1,6 +1,7 @@
 package com.sophie.mareu;
 
 
+import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.RoomsAvailability.AvailabilityPerHour;
 
 import org.junit.Before;
@@ -22,8 +23,8 @@ public class RoomsAvailabilityTests {
     private ArrayList<AvailabilityPerHour> mRoomsPerHour = new ArrayList<>();
 
     // for expected data
-    private ArrayList<Integer>  mHoursList = new ArrayList<>(Arrays.asList(8,9,10,11,12,13,14,15,16,17,18,19));
-    private ArrayList<String> mRoomsList = new ArrayList<>(Arrays.asList("PEACH","LUIGI","MARIO","BOWSER","WALUIGI","DAISY","WARIO","ROSALINA","TOAD","YOSHI"));
+    private ArrayList<Integer>  mHoursList = DI.getNewHoursList();
+    private ArrayList<String> mRoomsList = DI.getNewRoomsList();
 
     @Before
     public void setup(){
@@ -66,9 +67,6 @@ public class RoomsAvailabilityTests {
 
         //Index 2 = 11 after removing hour availability
         assertThat(mRoomsPerHour.get(2).getHour(), equalTo(11));
-
-
-        System.out.println(mRoomsPerHour.get(1).getRooms().toString());
     }
 
 }

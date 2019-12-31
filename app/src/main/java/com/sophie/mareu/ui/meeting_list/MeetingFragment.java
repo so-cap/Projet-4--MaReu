@@ -13,11 +13,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
 import com.sophie.mareu.RoomsAvailability;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.ui.MeetingsApi;
-import com.sophie.mareu.ui.meeting_creation_fragments.MeetingCreationEnd;
+import com.sophie.mareu.ui.meeting_creation_fragments.MeetingCreationEndFragment;
 
 import java.util.ArrayList;
 
@@ -26,10 +27,11 @@ import java.util.ArrayList;
  */
 public class MeetingFragment extends Fragment {
     private RoomsAvailability mRoomsAvailability = new RoomsAvailability();
-    private MeetingCreationEnd mMeetingCreationEnd = new MeetingCreationEnd();
+    private MeetingCreationEndFragment mMeetingCreationEndFragment = new MeetingCreationEndFragment();
     private ArrayList<Meeting> mMeetings = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private Context context;
+    private FloatingActionButton mFab;
 
     @Nullable
     @Override
@@ -37,11 +39,14 @@ public class MeetingFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_list_meetings, container, false);
 
+
         mRoomsAvailability.initRoomsAndHours();
         context = view.getContext();
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+
+        mFab = getActivity().findViewById(R.id.fab);
 
         initList();
         return view;
@@ -55,6 +60,7 @@ public class MeetingFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        mFab.show();
         initList();
     }
 }

@@ -14,6 +14,4 @@ public class MeetingsApi {
     public static ArrayList<Meeting> getMeetingsList(){
         return mMeetings;
     }
-
-
 }

@@ -10,22 +10,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.ui.MeetingsApi;
 
 import java.util.ArrayList;
 
 
-public class MeetingCreationEnd extends Fragment {
+public class MeetingCreationEndFragment extends Fragment {
     private Meeting mMeeting;
-    private MeetingCreation mMeetingCreation;
+    private MeetingCreationStartFragment mMeetingCreationStart;
     private String mTitle, mHour, mRoomName, mDetailSubject;
     private ArrayList<String> mParticipants;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRoomName = mMeetingCreation.getSelectedRoom();
-        mHour = mMeetingCreation.getSelectedHour();
+        mRoomName = mMeetingCreationStart.getSelectedRoom();
+        mHour = mMeetingCreationStart.getSelectedHour();
     }
 
     @Nullable
@@ -39,7 +38,7 @@ public class MeetingCreationEnd extends Fragment {
     public void setMeeting(){
         mMeeting = new Meeting(mTitle, mHour, mRoomName, mParticipants, mDetailSubject);
     }
-    
+
     // once all OK :  meeting
     // end , onClick : MeetingApi.addMeeting(mMeeting);
 }
