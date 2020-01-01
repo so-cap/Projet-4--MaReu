@@ -22,7 +22,6 @@ public class MeetingCreationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_meeting_creation);
 
         configureAndShowMeetingCreationStartFragment();
-        configureAndShowListMeetingFragment();
     }
 
     private void configureAndShowMeetingCreationStartFragment() {

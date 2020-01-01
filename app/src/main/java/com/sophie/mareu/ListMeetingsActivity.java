@@ -20,7 +20,7 @@ public class ListMeetingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listmeetings);
 
         configureAndShowListMeetingFragment();
-        configureAndShowMeetingCreationFragment();
+        configureAndShowHomeStartMeetingCreationFragment();
     }
 
     private void configureAndShowListMeetingFragment() {
@@ -32,7 +32,7 @@ public class ListMeetingsActivity extends AppCompatActivity {
         }
     }
 
-    private void configureAndShowMeetingCreationFragment() {
+    private void configureAndShowHomeStartMeetingCreationFragment() {
         mHomeStartMeetingCreationFragment = (HomeStartMeetingCreationFragment) getSupportFragmentManager().findFragmentById(R.id.frame_setmeeting);
         if(mHomeStartMeetingCreationFragment == null && findViewById(R.id.frame_setmeeting) != null){
             FragmentTransaction fm = getSupportFragmentManager().beginTransaction();

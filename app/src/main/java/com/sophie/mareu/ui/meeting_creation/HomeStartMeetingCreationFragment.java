@@ -38,4 +38,5 @@ public class HomeStartMeetingCreationFragment extends Fragment implements View.O
             FragmentTransaction fm = getFragmentManager().beginTransaction();
             fm.replace(R.id.frame_setmeeting, new MeetingCreationStartFragment()).addToBackStack(null).commit();
     }
+
 }
