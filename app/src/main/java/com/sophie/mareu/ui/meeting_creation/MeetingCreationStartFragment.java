@@ -1,7 +1,9 @@
-package com.sophie.mareu.ui.meeting_creation_fragments;
+package com.sophie.mareu.ui.meeting_creation;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,25 +25,23 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.sophie.mareu.CustomRadioGroupLayout;
 import com.sophie.mareu.R;
 import com.sophie.mareu.RoomsAvailability;
 import com.sophie.mareu.RoomsAvailability.AvailabilityPerHour;
-import com.sophie.mareu.model.Meeting;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MeetingCreationStartFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
+public class MeetingCreationStartFragment extends Fragment implements View.OnClickListener {
     private ArrayList<AvailabilityPerHour> mAvailableHoursAndRooms;
-    private Meeting mMeeting = new Meeting();
     private ArrayList<String> mSpinnerArray;
-    private ArrayList<String> mParticipants = new ArrayList<>();
     private String mSelectedRoomName, mSelectedHour;
     private int mHourPosition;
     private Context mContext;
-    private FloatingActionButton mFab;
+    private CustomRadioGroupLayout mCustomRadioGroup;
 
     private static final String TAG = "MeetingCreationStartFra";
 
@@ -56,10 +57,6 @@ public class MeetingCreationStartFragment extends Fragment implements RadioGroup
     @BindView(R.id.radio_group_rooms)
     RadioGroup mRadioGroup;
 
-    @BindView(R.id.email_container)
-    LinearLayout mEmailContainer;
-    @BindView(R.id.add_more_email)
-    ImageButton mAddMoreEmail;
     @BindView(R.id.next_page)
     Button mNextPage;
 
@@ -72,42 +69,28 @@ public class MeetingCreationStartFragment extends Fragment implements RadioGroup
         mContext = getContext();
         ButterKnife.bind(this, view);
 
-        mFab = getActivity().findViewById(R.id.fab);
-        mFab.hide();
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        if (fab != null)
+            fab.hide();
 
         initSpinner();
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    mHourPosition = position;
-                    mSelectedHour = mAvailableHoursAndRooms.get(mHourPosition).getHour() + "h00";
-                    initRadioGroup();
-
+                mHourPosition = position;
+                mSelectedHour = mAvailableHoursAndRooms.get(mHourPosition).getHour() + "h00";
+                initRadioGroup();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
-        mAddMoreEmail.setOnClickListener(this);
         mNextPage.setOnClickListener(this);
-        mRadioGroup.setOnCheckedChangeListener(this);
 
-        initParticipantsList();
+        mCustomRadioGroup = new CustomRadioGroupLayout();
         return view;
-    }
-
-    private void initParticipantsList() {
-        int emailsEntered = mEmailContainer.getChildCount();
-
-        for (int i = 0; i < emailsEntered; i++ ){
-            if(!(((EditText)mEmailContainer.getChildAt(i)).getText().toString().isEmpty())) {
-                String emailAddress;
-                emailAddress =((EditText)mEmailContainer.getChildAt(i)).getText().toString();
-                mParticipants.add(emailAddress);
-            }
-            Log.d(TAG, "initParticipantsList: " + mParticipants.toString());
-        }
     }
 
     public void initSpinner() {
@@ -134,22 +117,22 @@ public class MeetingCreationStartFragment extends Fragment implements RadioGroup
 
         clearChildViews();
 
-        while(i < roomsAvailable){
-            while(i < 4){
+        while (i < roomsAvailable) {
+            while (i < 4) {
                 RadioButton radioButton = new RadioButton(mContext);
                 radioButton.setId(i);
                 radioButton.setText(mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(i));
                 mRadioGrpColumn1.addView(radioButton);
                 i++;
             }
-            while (i >= 4 && i < 8){
+            while (i >= 4 && i < 8) {
                 RadioButton radioButton = new RadioButton(mContext);
                 radioButton.setId(i);
                 radioButton.setText(mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(i));
                 mRadioGrpColumn2.addView(radioButton);
                 i++;
             }
-            while (i >= 8 && i < roomsAvailable ){
+            while (i >= 8 && i < roomsAvailable) {
                 RadioButton radioButton = new RadioButton(mContext);
                 radioButton.setId(i);
                 radioButton.setText(mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(i));
@@ -157,19 +140,50 @@ public class MeetingCreationStartFragment extends Fragment implements RadioGroup
                 i++;
             }
         }
+        Log.d(TAG, "LOGGinitRadioGroup: HERE");
+        initClickOnRadioButton();
     }
 
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        int selectedRoomPosition = mRadioGroup.getCheckedRadioButtonId();
-        mSelectedRoomName = mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(selectedRoomPosition);
+    private void initClickOnRadioButton() {
+        ArrayList<RadioButton> radioButtons = new ArrayList<>();
+        int childViews1 = mRadioGrpColumn1.getChildCount();
+        int childViews2 = mRadioGrpColumn2.getChildCount();
+        int childViews3 = mRadioGrpColumn3.getChildCount();
+        int nbrOfColumns;
+
+        if (childViews2 != 0)
+            nbrOfColumns = 2;
+        else
+            nbrOfColumns = 3;
+
+        if (childViews1 != 0) {
+            for (int i = 0; i < nbrOfColumns; i++) {
+                int k = 0;
+                while (k < childViews1) {
+                    radioButtons.add((RadioButton) mRadioGrpColumn1.getChildAt(k));
+                    k++;
+                }
+                int j = 0;
+                while (j < childViews2) {
+                    radioButtons.add((RadioButton) mRadioGrpColumn2.getChildAt(j));
+                    j++;
+                }
+                int y = 0;
+                while (y < childViews3) {
+                    radioButtons.add((RadioButton) mRadioGrpColumn3.getChildAt(y));
+                    y++;
+                }
+                i++;
+            }
+        }
+        mCustomRadioGroup.addRadioButtonToTracker(radioButtons);
     }
 
-    private void clearChildViews(){
+    private void clearChildViews() {
         int nbrOfChildViews = mRadioGrpColumn1.getChildCount();
         mRadioGrpColumn3.removeAllViews();
 
-        if (nbrOfChildViews != 0){
+        if (nbrOfChildViews != 0) {
             mRadioGrpColumn1.removeAllViews();
             mRadioGrpColumn2.removeAllViews();
             mRadioGrpColumn3.removeAllViews();
@@ -178,24 +192,34 @@ public class MeetingCreationStartFragment extends Fragment implements RadioGroup
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.add_more_email:
-                EditText anotherEmail = new EditText(mContext);
-                anotherEmail.setHint(getString(R.string.email_hint));
-                mEmailContainer.addView(anotherEmail);
-                break;
-            case R.id.next_page:
-                checkIfValid();
-                FragmentTransaction fm = getFragmentManager().beginTransaction();
-                fm.replace(R.id.frame_listmeetings, new MeetingCreationEndFragment())
-                        .addToBackStack(null).commit();
+        if (checkIfValid()) {
+            MeetingCreationEndFragment meetingCreationEndFragment = new MeetingCreationEndFragment();
 
+            Bundle bundle = new Bundle();
+            bundle.putString(mSelectedHour, "selected_hour");
+            bundle.putString(mSelectedRoomName, "selected_room");
+            meetingCreationEndFragment.setArguments(bundle);
+
+            FragmentTransaction fm = getFragmentManager().beginTransaction();
+            fm.replace(R.id.frame_setmeeting, meetingCreationEndFragment)
+                    .addToBackStack(null).commit();
         }
     }
 
-    public String getSelectedRoom() { return mSelectedRoomName; }
 
-    public String getSelectedHour() { return mSelectedHour; }
+    private boolean checkIfValid() {
+        int selectedRoomPosition = mCustomRadioGroup.getCheckedRadioButtonId();
 
-    public ArrayList<String> getSpinnerArray() { return mSpinnerArray; }
+        if (selectedRoomPosition >= 0) {
+            mSelectedRoomName = mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(selectedRoomPosition);
+            return true;
+        } else
+            Toast.makeText(mContext, "Choisissez votre salle de réunion!", Toast.LENGTH_LONG).show();
+        return false;
+
+    }
+
+    public ArrayList<String> getSpinnerArray() {
+        return mSpinnerArray;
+    }
 }

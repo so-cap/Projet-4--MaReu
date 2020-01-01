@@ -2,7 +2,7 @@ package com.sophie.mareu;
 
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.ui.meeting_creation_fragments.MeetingCreationStartFragment;
+import com.sophie.mareu.ui.meeting_creation.MeetingCreationStartFragment;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(JUnit4.class)
 public class MeetingCreationStartTests {
     private MeetingCreationStartFragment mMeetingCreationStartFragment = new MeetingCreationStartFragment();
-    RoomsAvailability mRoomsAvailability = new RoomsAvailability();
+    private RoomsAvailability mRoomsAvailability = new RoomsAvailability();
 
     private ArrayList<Integer>  mHoursList = DI.getNewHoursList();
     private ArrayList<String> mRoomsList = new ArrayList<>(Arrays.asList("8h00", "9h00", "10h00", "19h00"));

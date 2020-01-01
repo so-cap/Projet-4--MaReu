@@ -4,63 +4,39 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.sophie.mareu.ui.meeting_creation_fragments.MeetingCreationStartFragment;
-import com.sophie.mareu.ui.meeting_list.MeetingFragment;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
+import com.sophie.mareu.ui.meeting_creation.MeetingCreationStartFragment;
+import com.sophie.mareu.ui.meeting_creation.ListMeetingFragment;
 
 public class ListMeetingsActivity extends AppCompatActivity {
-    private MeetingFragment mMeetingFragment;
-    private MeetingCreationStartFragment mMeetingCreationStartFragment;
-
-    @BindView(R.id.fab)
-    FloatingActionButton mFab;
+    private ListMeetingFragment mListMeetingFragment;
+    private HomeStartMeetingCreationFragment mHomeStartMeetingCreationFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listmeetings);
 
-        ButterKnife.bind(this);
-
-        configureAndShowMeetingFragment();
+        configureAndShowListMeetingFragment();
         configureAndShowMeetingCreationFragment();
     }
 
-    private void configureAndShowMeetingFragment() {
-        mMeetingFragment = (MeetingFragment) getSupportFragmentManager().findFragmentById(R.id.frame_listmeetings);
-
-        if(mMeetingFragment == null) {
-            mMeetingFragment = new MeetingFragment();
+    private void configureAndShowListMeetingFragment() {
+        mListMeetingFragment = (ListMeetingFragment) getSupportFragmentManager().findFragmentById(R.id.frame_listmeetings);
+        if(mListMeetingFragment == null) {
+            mListMeetingFragment = new ListMeetingFragment();
             FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
-            fm.add(R.id.frame_listmeetings, mMeetingFragment).commit();
-        }
-
-        if(mMeetingCreationStartFragment == null){
-            mFab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
-                    fm.replace(R.id.frame_listmeetings, new MeetingCreationStartFragment())
-                            .addToBackStack(null).commit();
-                }
-            });
+            fm.add(R.id.frame_listmeetings, mListMeetingFragment).commit();
         }
     }
 
     private void configureAndShowMeetingCreationFragment() {
-        mMeetingCreationStartFragment = (MeetingCreationStartFragment) getSupportFragmentManager().findFragmentById(R.id.frame_setmeeting);
-
-        if(mMeetingCreationStartFragment == null && findViewById(R.id.frame_setmeeting) != null){
-            mMeetingCreationStartFragment = new MeetingCreationStartFragment();
+        mHomeStartMeetingCreationFragment = (HomeStartMeetingCreationFragment) getSupportFragmentManager().findFragmentById(R.id.frame_setmeeting);
+        if(mHomeStartMeetingCreationFragment == null && findViewById(R.id.frame_setmeeting) != null){
             FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
-
-            if // frame exist 
-            fm.add(R.id.frame_setmeeting, mMeetingCreationStartFragment).commit();
+            fm.add(R.id.frame_setmeeting, new HomeStartMeetingCreationFragment()).addToBackStack(null).commit();
         }
     }
 }
