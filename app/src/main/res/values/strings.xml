@@ -1,7 +1,10 @@
 <resources>
-    <string name="app_name">MaReu</string>
+    <string name="app_name">Ma réu</string>
     <string name="longttext">YLNBVSDFGJJJJJJJJKKKKKKKKKKKKKKKKKKKKKKKKKKJJJJ</string>
     <string name="title_hour_room">"%1$s - %2$s - %3$s"</string>
     <string name="email_hint">email@address.com</string>
     <string name="previous_page">RETOUR</string>
+    <string name="no_new_meetings">Aucune réunion de prévue</string>
+    <string name="all_meetings_full">PLUS AUCUN CRENEAU N\'EST DISPONIBLE !</string>
+    <string name="next_page">Suivant</string>
 </resources>

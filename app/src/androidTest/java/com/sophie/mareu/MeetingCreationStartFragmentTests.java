@@ -32,8 +32,8 @@ import static org.hamcrest.Matchers.notNullValue;
 @RunWith(AndroidJUnit4.class)
 public class MeetingCreationStartFragmentTests {
     private ListMeetingsActivity mActivity;
+    private RoomsAvailability mRoomsAvailability = new RoomsAvailability();
     private ArrayList<AvailabilityPerHour> mRoomsAndHours = new ArrayList<>();
-    private RoomsAvailability mRoomsAvailability;
     private ArrayList<String> mRooms;
 
     @Rule
@@ -42,7 +42,7 @@ public class MeetingCreationStartFragmentTests {
 
     @Before
     public void setup(){
-        mActivity = mActivityRule.getActivity();
+      /*  mActivity = mActivityRule.getActivity();
         assertThat(mActivity, notNullValue());
 
         mRooms = new ArrayList<>(Arrays.asList("PEACH","MARIO","WARIO"));
@@ -52,22 +52,50 @@ public class MeetingCreationStartFragmentTests {
 
         RoomsAvailability.updateAvailableHours(mRoomsAndHours);
 
+       */
+      mRoomsAvailability.initRoomsAndHours();
+      mRoomsAndHours = RoomsAvailability.getAvailableRoomsPerHour();
+
     }
 
     @Test
     public void updateHoursAvailability(){
         int initialHoursAvailable = 3;
+        char A = 'A';
 
         for (int i = 0; i < initialHoursAvailable; i++) {
-            int position = 2;
-            while (position >= 0) {
+            int initialRoomsCount = 3-1;
+            while (initialRoomsCount >= 0) {
                 onView(withId(R.id.fab)).perform(click());
-                onView(withText(mRooms.get(position))).perform(click());
+                onView(withText(mRooms.get(initialRoomsCount))).perform(click());
                 onView(withText("SUIVANT")).perform(click());
-                onView(withId(R.id.meeting_title_input)).perform(typeText("Reunions " + i));
+                onView(withId(R.id.meeting_title_input)).perform(typeText("Reunion " + A));
                 onView(withId(R.id.email_one)).perform(typeText("email@address.com"));
                 onView(withText("VALIDER")).perform(scrollTo()).perform(click());
-                position--;
+                initialRoomsCount--;
+            }
+        }
+        onView(withId(R.id.fab)).perform(click());
+        onView(withId(R.id.all_meetings_full)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void updateHoursAvailabilityReal(){
+        int initialHoursAvailable = 12;
+        char a = 'a';
+
+        for (int i = 0; i < initialHoursAvailable; i++) {
+            int initialRoomsCount = 10 - 1;
+            while (initialRoomsCount >= 0) {
+                onView(withId(R.id.fab)).perform(click());
+                onView(withText(mRoomsAndHours.get(i).getRooms().get(initialRoomsCount))).perform(click());
+                onView(withText("SUIVANT")).perform(click());
+                onView(withId(R.id.meeting_title_input)).perform(typeText("Reunion " + (a++)));
+                onView(withId(R.id.email_one)).perform(typeText("email@address.com"));
+                onView(withText("VALIDER")).perform(scrollTo()).perform(click());
+                initialRoomsCount--;
+                if(a == 'Z')
+                    a = 'a';
             }
         }
         onView(withId(R.id.fab)).perform(click());

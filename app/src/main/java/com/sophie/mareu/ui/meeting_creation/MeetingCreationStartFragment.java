@@ -131,14 +131,14 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
                 mRadioGrpColumn1.addView(radioButton);
                 i++;
             }
-            while (i >= 4 && i < 8 && i < roomsAvailable) {
+            while (i >= 4 && i < 7 && i < roomsAvailable) {
                 RadioButton radioButton = new RadioButton(mContext);
                 radioButton.setId(i);
                 radioButton.setText(mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(i));
                 mRadioGrpColumn2.addView(radioButton);
                 i++;
             }
-            while (i >= 8 && i < roomsAvailable) {
+            while (i >= 7 && i < roomsAvailable) {
                 RadioButton radioButton = new RadioButton(mContext);
                 radioButton.setId(i);
                 radioButton.setText(mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(i));
@@ -209,7 +209,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             fm.replace(R.id.frame_setmeeting, meetingCreationEndFragment)
                     .addToBackStack(null).commit();
         }
-        else{
+        else if(mSpinnerArray == null){
             if (getActivity().getClass().getSimpleName() == "ListMeetingsActivity")
             getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             else

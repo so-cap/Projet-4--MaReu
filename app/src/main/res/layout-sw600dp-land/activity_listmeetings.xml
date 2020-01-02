@@ -1,23 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="100"
-    tools:context=".ui.list_meetings.ListMeetingsActivity">
+    android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/frame_listmeetings"
-        android:layout_width="0dp"
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:title="@string/app_name"
+            app:titleTextColor="@android:color/white" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="40">
-    </FrameLayout>
+        android:baselineAligned="false"
+        android:weightSum="100"
+        tools:context=".ui.list_meetings.ListMeetingsActivity"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-    <FrameLayout
-        android:id="@+id/frame_setmeeting"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60" />
+        <FrameLayout
+            android:id="@+id/frame_listmeetings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="40">
+            <include
+                android:id="@+id/no_new_meetings"
+                layout="@layout/no_new_meetings" />
+        </FrameLayout>
 
-</LinearLayout>
+        <FrameLayout
+            android:id="@+id/frame_setmeeting"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="60" />
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

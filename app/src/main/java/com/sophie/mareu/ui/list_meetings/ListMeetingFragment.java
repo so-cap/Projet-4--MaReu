@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,6 +41,7 @@ public class ListMeetingFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private Context context;
     private FloatingActionButton mFab;
+    private TextView mNoNewMeetings;
 
     private static final String TAG = "ListMeetingFragment";
 
@@ -54,6 +56,8 @@ public class ListMeetingFragment extends Fragment {
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+
+        mNoNewMeetings = getActivity().findViewById(R.id.no_new_meetings);
 
         mFab = getActivity().findViewById(R.id.fab);
         if(mFab != null){
@@ -86,6 +90,9 @@ public class ListMeetingFragment extends Fragment {
     public void onResume() {
         super.onResume();
         initList();
+
+        if(!(mMeetings.isEmpty()))
+            mNoNewMeetings.setVisibility(View.GONE);
     }
 
     @Override
@@ -97,6 +104,9 @@ public class ListMeetingFragment extends Fragment {
     public void onDeleteMeeting (DeleteMeetingEvent event){
         MeetingsApi.deleteMeeting(event.meeting);
         initList();
+
+        if(mMeetings.isEmpty())
+            mNoNewMeetings.setVisibility(View.VISIBLE);
     }
 
     @Override
