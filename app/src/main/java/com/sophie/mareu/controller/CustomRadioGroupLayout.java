@@ -1,4 +1,4 @@
-package com.sophie.mareu;
+package com.sophie.mareu.controller;
 
 import java.util.ArrayList;
 import java.util.List;

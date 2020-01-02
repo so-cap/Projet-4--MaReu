@@ -1,7 +1,8 @@
 package com.sophie.mareu;
 
+import com.sophie.mareu.controller.RoomsAvailability;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.ui.AvailabilityPerHour;
+import com.sophie.mareu.controller.AvailabilityPerHour;
 
 import org.junit.Before;
 import org.junit.Test;

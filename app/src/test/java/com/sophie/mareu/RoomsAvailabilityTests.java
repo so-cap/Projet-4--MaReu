@@ -2,7 +2,8 @@ package com.sophie.mareu;
 
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.ui.AvailabilityPerHour;
+import com.sophie.mareu.controller.RoomsAvailability;
+import com.sophie.mareu.controller.AvailabilityPerHour;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;

@@ -1,16 +1,14 @@
-package com.sophie.mareu;
+package com.sophie.mareu.ui.list_meetings;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.util.Log;
 
-import com.sophie.mareu.ui.MeetingsApi;
+import com.sophie.mareu.R;
+import com.sophie.mareu.api.MeetingsApi;
 import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
-import com.sophie.mareu.ui.meeting_creation.MeetingCreationStartFragment;
-import com.sophie.mareu.ui.meeting_creation.ListMeetingFragment;
 
 public class ListMeetingsActivity extends AppCompatActivity {
     private Fragment homeFragment, listMeetingFragment;

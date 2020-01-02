@@ -23,10 +23,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.sophie.mareu.CustomRadioGroupLayout;
+import com.sophie.mareu.controller.CustomRadioGroupLayout;
 import com.sophie.mareu.R;
-import com.sophie.mareu.RoomsAvailability;
-import com.sophie.mareu.ui.AvailabilityPerHour;
+import com.sophie.mareu.controller.RoomsAvailability;
+import com.sophie.mareu.controller.AvailabilityPerHour;
 
 import java.util.ArrayList;
 
@@ -41,7 +41,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     private Context mContext;
     private CustomRadioGroupLayout mCustomRadioGroup;
 
-    private static final String TAG = "MeetingCreationStartFra";
+   // private static final String TAG = "MeetingCreationStartFra";
 
     @BindView(R.id.spinner_hour)
     Spinner mSpinner;
@@ -74,6 +74,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             fab.hide();
 
         initSpinner();
+        displaySpinner();
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -102,19 +103,18 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             mHour = (mAvailableHoursAndRooms.get(position).getHour());
             mSpinnerArray.add(mHour);
         }
+    }
 
-        if(!(mSpinnerArray.isEmpty()))
-        displaySpinner(mSpinnerArray);
-        else {
+    private void displaySpinner() {
+        if(!(mSpinnerArray.isEmpty())) {
+            ArrayAdapter<String> spinnerAdapter =
+                    new ArrayAdapter<>(mContext, R.layout.support_simple_spinner_dropdown_item, mSpinnerArray);
+            spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            mSpinner.setAdapter(spinnerAdapter);
+        } else {
             mMeetingsFull.setVisibility(View.VISIBLE);
             mNextPage.setText(getString(R.string.previous_page));
         }
-    }
-
-    private void displaySpinner(ArrayList<String> spinnerArray) {
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.support_simple_spinner_dropdown_item, spinnerArray);
-        spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        mSpinner.setAdapter(spinnerAdapter);
     }
 
     private void initRadioGroup() {

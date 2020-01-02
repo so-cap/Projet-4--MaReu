@@ -1,8 +1,7 @@
-package com.sophie.mareu.ui.meeting_creation;
+package com.sophie.mareu.ui.list_meetings;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sophie.mareu.R;
 import com.sophie.mareu.event.DeleteMeetingEvent;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.ui.MeetingsApi;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -45,7 +43,6 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
     @Override
     public ListMeetingsRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_meeting, parent, false);
-        iconSelector++;
         return new ViewHolder(view);
     }
 
@@ -77,10 +74,12 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
 
         public void bind(Meeting meeting) {
             Resources res = mContext.getResources();
+            iconSelector++;
             if(iconSelector == 3)
                 iconSelector = 0;
+            int finalIcon = iconSelector;
 
-            mIcon.setImageDrawable(res.getDrawable((int)iconList.get(iconSelector)));
+            mIcon.setImageDrawable(res.getDrawable((int)iconList.get(finalIcon)));
             mTitle.setText(res.getString(R.string.title_hour_room, meeting.getTitle(), meeting.getHour(), meeting.getRoomName()));
             mParticipants.setText(meeting.getParticipants());
             mDeleteButton.setOnClickListener(new View.OnClickListener() {

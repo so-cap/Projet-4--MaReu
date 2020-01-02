@@ -1,9 +1,7 @@
 package com.sophie.mareu.ui.meeting_creation;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.sophie.mareu.ListMeetingsActivity;
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.ui.MeetingsApi;
+import com.sophie.mareu.api.MeetingsApi;
+import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
 
 import java.util.ArrayList;
 

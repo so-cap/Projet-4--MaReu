@@ -3,8 +3,9 @@ package com.sophie.mareu;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
-import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.ui.AvailabilityPerHour;
+import com.sophie.mareu.controller.RoomsAvailability;
+import com.sophie.mareu.controller.AvailabilityPerHour;
+import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 
 import org.junit.Before;
 import org.junit.Rule;

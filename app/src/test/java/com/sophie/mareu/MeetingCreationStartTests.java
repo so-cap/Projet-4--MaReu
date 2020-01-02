@@ -2,6 +2,7 @@ package com.sophie.mareu;
 
 
 import com.sophie.mareu.DI.DI;
+import com.sophie.mareu.controller.RoomsAvailability;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationStartFragment;
 
 import org.junit.Test;

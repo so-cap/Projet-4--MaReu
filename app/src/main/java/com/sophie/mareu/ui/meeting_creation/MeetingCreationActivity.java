@@ -1,13 +1,13 @@
 package com.sophie.mareu.ui.meeting_creation;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.sophie.mareu.R;
+import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
 
 /**
  * Created by SOPHIE on 31/12/2019.

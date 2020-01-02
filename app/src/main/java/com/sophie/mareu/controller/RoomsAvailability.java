@@ -1,12 +1,8 @@
-package com.sophie.mareu;
-
-import android.widget.ScrollView;
+package com.sophie.mareu.controller;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.ui.AvailabilityPerHour;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by SOPHIE on 30/12/2019.
