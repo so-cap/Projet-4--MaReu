@@ -7,7 +7,7 @@
     android:id="@+id/fragment_meeting">
 
     <ImageView
-        android:id="@+id/room_icon"
+        android:id="@+id/meeting_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
@@ -16,7 +16,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_lightpink"/>
+        android:src="@drawable/ic_lightpink"
+        android:contentDescription="@string/meeting_icon" />
 
     <TextView
         android:id="@+id/titleView"
@@ -27,11 +28,14 @@
         android:layout_marginTop="10dp"
         android:scrollHorizontally="true"
         android:textStyle="bold"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/participants"
-        app:layout_constraintStart_toEndOf="@id/room_icon"
+        app:layout_constraintStart_toEndOf="@id/meeting_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/ic_delete"
-        android:text="Réunion P - 14h00 - PEACH"/>
+        android:text="@string/default_recyclerview_title"
+        android:textColor="@android:color/black"
+        />
         <!-- MAX CHARACTERS = 20 for input -->
 
     <TextView
@@ -44,11 +48,13 @@
         android:ellipsize="end"
         android:lines="1"
         android:scrollHorizontally="true"
-        android:text="@string/longttext"
+        android:text="@string/text"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/ic_delete"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@id/room_icon"
+        app:layout_constraintStart_toEndOf="@id/meeting_icon"
         app:layout_constraintTop_toBottomOf="@id/titleView" />
 
     <ImageButton
@@ -60,6 +66,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_delete_black_24dp" />
+        app:srcCompat="@drawable/ic_delete_black_24dp"
+        android:contentDescription="@string/delete_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

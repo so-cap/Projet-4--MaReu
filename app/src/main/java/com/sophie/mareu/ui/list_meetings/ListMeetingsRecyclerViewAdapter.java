@@ -57,7 +57,7 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
         TextView mTitle;
         @BindView(R.id.participants)
         TextView mParticipants;
-        @BindView(R.id.room_icon)
+        @BindView(R.id.meeting_icon)
         ImageView mIcon;
         @BindView(R.id.ic_delete)
         ImageButton mDeleteButton;
