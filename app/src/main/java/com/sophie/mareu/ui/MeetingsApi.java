@@ -14,4 +14,13 @@ public class MeetingsApi {
     public static ArrayList<Meeting> getMeetingsList(){
         return mMeetings;
     }
+
+    public static void deleteMeeting(Meeting meeting){
+        mMeetings.remove(meeting);
+    }
+
+    public static void clearMeetingList(){
+        mMeetings.clear();
+    }
+
 }

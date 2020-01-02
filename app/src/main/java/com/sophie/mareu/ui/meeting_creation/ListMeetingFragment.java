@@ -19,8 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
 import com.sophie.mareu.RoomsAvailability;
+import com.sophie.mareu.event.DeleteMeetingEvent;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.ui.MeetingsApi;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
@@ -59,9 +63,6 @@ public class ListMeetingFragment extends Fragment {
                 }
             });
         }
-
-        Log.d(TAG, "LOGGonCreateView: LISTMEETING FRAG CREATE");
-        initList();
         return view;
     }
 
@@ -73,10 +74,43 @@ public class ListMeetingFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        EventBus.getDefault().register(this);
 
         if (mFab != null)
             mFab.show();
 
+        Log.d(TAG, "LOGGonStart: START");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         initList();
+
+        Log.d(TAG, "LOGGonResume:  RESUME");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "LOGGonPause: PAUSE");
+    }
+
+    @Subscribe
+    public void onDeleteMeeting (DeleteMeetingEvent event){
+        MeetingsApi.deleteMeeting(event.meeting);
+        initList();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "LOGGonDestroy: DESTROY");
     }
 }

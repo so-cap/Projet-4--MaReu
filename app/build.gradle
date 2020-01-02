@@ -36,4 +36,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'org.apmem.tools:layouts:1.10@aar'
+
+    implementation 'org.greenrobot:eventbus:3.1.1'
 }

@@ -140,7 +140,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
                 i++;
             }
         }
-        Log.d(TAG, "LOGGinitRadioGroup: HERE");
         initClickOnRadioButton();
     }
 
@@ -196,8 +195,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             MeetingCreationEndFragment meetingCreationEndFragment = new MeetingCreationEndFragment();
 
             Bundle bundle = new Bundle();
-            bundle.putString(mSelectedHour, "selected_hour");
-            bundle.putString(mSelectedRoomName, "selected_room");
+            bundle.putString("selected_hour", mSelectedHour);
+            bundle.putString("selected_room", mSelectedRoomName);
             meetingCreationEndFragment.setArguments(bundle);
 
             FragmentTransaction fm = getFragmentManager().beginTransaction();

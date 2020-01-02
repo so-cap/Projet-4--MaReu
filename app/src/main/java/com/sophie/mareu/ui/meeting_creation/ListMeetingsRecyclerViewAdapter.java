@@ -2,9 +2,11 @@ package com.sophie.mareu.ui.meeting_creation;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,7 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sophie.mareu.R;
+import com.sophie.mareu.event.DeleteMeetingEvent;
 import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.ui.MeetingsApi;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,6 +67,8 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
         TextView mParticipants;
         @BindView(R.id.room_icon)
         ImageView mIcon;
+        @BindView(R.id.ic_delete)
+        ImageButton mDeleteButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,12 +77,18 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
 
         public void bind(Meeting meeting) {
             Resources res = mContext.getResources();
-            if(iconSelector == 2)
+            if(iconSelector == 3)
                 iconSelector = 0;
 
             mIcon.setImageDrawable(res.getDrawable((int)iconList.get(iconSelector)));
-            mTitle.setText(res.getString(R.string.title_hour_room, meeting.getRoomName(), meeting.getHour(), meeting.getRoomName()));
+            mTitle.setText(res.getString(R.string.title_hour_room, meeting.getTitle(), meeting.getHour(), meeting.getRoomName()));
             mParticipants.setText(meeting.getParticipants());
+            mDeleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EventBus.getDefault().post(new DeleteMeetingEvent(meeting));
+                }
+            });
         }
     }
 }
