@@ -3,4 +3,5 @@
     <string name="longttext">YLNBVSDFGJJJJJJJJKKKKKKKKKKKKKKKKKKKKKKKKKKJJJJ</string>
     <string name="title_hour_room">"%1$s - %2$s - %3$s"</string>
     <string name="email_hint">email@address.com</string>
+    <string name="previous_page">RETOUR</string>
 </resources>

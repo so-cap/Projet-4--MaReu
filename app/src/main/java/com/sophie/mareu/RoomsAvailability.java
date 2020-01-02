@@ -3,6 +3,7 @@ package com.sophie.mareu;
 import android.widget.ScrollView;
 
 import com.sophie.mareu.DI.DI;
+import com.sophie.mareu.ui.AvailabilityPerHour;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,24 +15,6 @@ public class RoomsAvailability {
      private ArrayList<String> mHoursList;
      private ArrayList<String> mRoomsList;
      private static ArrayList<AvailabilityPerHour> mAvailableRoomsPerHour = new ArrayList<>();
-
-    public class AvailabilityPerHour{
-        String hour;
-        ArrayList<String> rooms;
-
-        public AvailabilityPerHour(String hour, ArrayList<String> rooms){
-            this.hour = hour;
-            this.rooms = rooms;
-        }
-
-        public String getHour(){
-            return hour;
-        }
-
-        public ArrayList<String> getRooms(){
-            return rooms;
-        }
-    }
 
     public void initRoomsAndHours(){
         // use tags for each hour view (get size of array, then loop to setTag on button.
@@ -54,8 +37,10 @@ public class RoomsAvailability {
 
         // delete hour availability if all the rooms are taken
         for(int position = 0; position != mAvailableRoomsPerHour.size(); position++) {
-            if (mAvailableRoomsPerHour.get(position).getRooms().isEmpty())
+            if (mAvailableRoomsPerHour.get(position).getRooms().isEmpty()){
                 mAvailableRoomsPerHour.remove(position);
+                break;
+            }
         }
     }
 }

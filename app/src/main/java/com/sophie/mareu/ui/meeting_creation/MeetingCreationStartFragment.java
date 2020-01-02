@@ -2,8 +2,6 @@ package com.sophie.mareu.ui.meeting_creation;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +12,21 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.CustomRadioGroupLayout;
 import com.sophie.mareu.R;
 import com.sophie.mareu.RoomsAvailability;
-import com.sophie.mareu.RoomsAvailability.AvailabilityPerHour;
+import com.sophie.mareu.ui.AvailabilityPerHour;
 
 import java.util.ArrayList;
 
@@ -54,6 +55,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     @BindView(R.id.radio_group_rooms)
     RadioGroup mRadioGroup;
 
+    @BindView(R.id.all_meetings_full)
+    TextView mMeetingsFull;
     @BindView(R.id.next_page)
     Button mNextPage;
 
@@ -99,7 +102,13 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             mHour = (mAvailableHoursAndRooms.get(position).getHour());
             mSpinnerArray.add(mHour);
         }
+
+        if(!(mSpinnerArray.isEmpty()))
         displaySpinner(mSpinnerArray);
+        else {
+            mMeetingsFull.setVisibility(View.VISIBLE);
+            mNextPage.setText(getString(R.string.previous_page));
+        }
     }
 
     private void displaySpinner(ArrayList<String> spinnerArray) {
@@ -188,7 +197,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        if (checkIfValid()) {
+        if (checkIfValid() && mSpinnerArray != null) {
             MeetingCreationEndFragment meetingCreationEndFragment = new MeetingCreationEndFragment();
 
             Bundle bundle = new Bundle();
@@ -199,6 +208,12 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             FragmentTransaction fm = getFragmentManager().beginTransaction();
             fm.replace(R.id.frame_setmeeting, meetingCreationEndFragment)
                     .addToBackStack(null).commit();
+        }
+        else{
+            if (getActivity().getClass().getSimpleName() == "ListMeetingsActivity")
+            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            else
+                getActivity().finish();
         }
     }
 
@@ -218,6 +233,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
     }
 
+    @VisibleForTesting
     public ArrayList<String> getSpinnerArray() {
         return mSpinnerArray;
     }

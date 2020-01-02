@@ -2,7 +2,7 @@ package com.sophie.mareu;
 
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.RoomsAvailability.AvailabilityPerHour;
+import com.sophie.mareu.ui.AvailabilityPerHour;
 
 import org.junit.Before;
 import org.junit.Test;
