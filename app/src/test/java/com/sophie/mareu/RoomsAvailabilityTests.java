@@ -2,7 +2,7 @@ package com.sophie.mareu;
 
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.controller.RoomsAvailability;
+import com.sophie.mareu.service.RoomsAvailability;
 import com.sophie.mareu.controller.AvailabilityPerHour;
 
 import org.junit.Before;
@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
 public class RoomsAvailabilityTests {
-    private RoomsAvailability mRoomsAvailability = new RoomsAvailability();
     private ArrayList<AvailabilityPerHour> mRoomsPerHour = new ArrayList<>();
 
     // for expected data
@@ -28,7 +27,7 @@ public class RoomsAvailabilityTests {
 
     @Before
     public void setup(){
-        mRoomsAvailability.initRoomsAndHours();
+        RoomsAvailability.initRoomsAndHours();
     }
 
     @Test

@@ -13,10 +13,10 @@ public class DI {
 
 
     public static ArrayList<String> getNewHoursList(){
-        return mHoursList;
+        return new ArrayList<>(mHoursList);
     }
 
     public static ArrayList<String> getNewRoomsList(){
-        return mRoomsList;
+        return new ArrayList<>(mRoomsList);
     }
 }

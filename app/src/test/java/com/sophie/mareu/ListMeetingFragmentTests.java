@@ -1,6 +1,6 @@
 package com.sophie.mareu;
 
-import com.sophie.mareu.controller.RoomsAvailability;
+import com.sophie.mareu.service.RoomsAvailability;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.controller.AvailabilityPerHour;
 
@@ -18,13 +18,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(JUnit4.class)
 public class ListMeetingFragmentTests {
     private Meeting mMeeting = new Meeting();
-    private RoomsAvailability mRoomsAvailability = new RoomsAvailability();
     private ArrayList<AvailabilityPerHour> mRoomsPerHour = new ArrayList<>();
     private ArrayList<String> mParticipantsList = new ArrayList<>(Arrays.asList("pop@gmail.com", "kikou@swag.com", "yessai@email.fr"));
 
     @Before
     public void setup(){
-        mRoomsAvailability.initRoomsAndHours();
+        RoomsAvailability.initRoomsAndHours();
         mRoomsPerHour = RoomsAvailability.getAvailableRoomsPerHour();
         mMeeting.setRoomName(mRoomsPerHour.get(0).getRooms().get(4));
         mMeeting.setHour("14h00");

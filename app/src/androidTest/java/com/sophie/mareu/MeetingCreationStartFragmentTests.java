@@ -3,7 +3,7 @@ package com.sophie.mareu;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
-import com.sophie.mareu.controller.RoomsAvailability;
+import com.sophie.mareu.service.RoomsAvailability;
 import com.sophie.mareu.controller.AvailabilityPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 
@@ -32,7 +32,6 @@ import static org.hamcrest.Matchers.notNullValue;
 @RunWith(AndroidJUnit4.class)
 public class MeetingCreationStartFragmentTests {
     private ListMeetingsActivity mActivity;
-    private RoomsAvailability mRoomsAvailability = new RoomsAvailability();
     private ArrayList<AvailabilityPerHour> mRoomsAndHours = new ArrayList<>();
     private ArrayList<String> mRooms;
 
@@ -42,20 +41,8 @@ public class MeetingCreationStartFragmentTests {
 
     @Before
     public void setup(){
-      /*  mActivity = mActivityRule.getActivity();
+        mActivity = mActivityRule.getActivity();
         assertThat(mActivity, notNullValue());
-
-        mRooms = new ArrayList<>(Arrays.asList("PEACH","MARIO","WARIO"));
-        mRoomsAndHours.add(new AvailabilityPerHour("8h00", new ArrayList<>(mRooms)));
-        mRoomsAndHours.add(new AvailabilityPerHour("9h00",new ArrayList<>(mRooms)));
-        mRoomsAndHours.add(new AvailabilityPerHour("10h00",new ArrayList<>(mRooms)));
-
-        RoomsAvailability.updateAvailableHours(mRoomsAndHours);
-
-       */
-      mRoomsAvailability.initRoomsAndHours();
-      mRoomsAndHours = RoomsAvailability.getAvailableRoomsPerHour();
-
     }
 
     @Test
@@ -63,8 +50,15 @@ public class MeetingCreationStartFragmentTests {
         int initialHoursAvailable = 3;
         char A = 'A';
 
+        mRooms = new ArrayList<>(Arrays.asList("PEACH","MARIO","WARIO"));
+        mRoomsAndHours.add(new AvailabilityPerHour("8h00", new ArrayList<>(mRooms)));
+        mRoomsAndHours.add(new AvailabilityPerHour("9h00",new ArrayList<>(mRooms)));
+        mRoomsAndHours.add(new AvailabilityPerHour("10h00",new ArrayList<>(mRooms)));
+        RoomsAvailability.updateAvailableHours(mRoomsAndHours);
+
+
         for (int i = 0; i < initialHoursAvailable; i++) {
-            int initialRoomsCount = 3-1;
+            int initialRoomsCount = mRooms.size()-1;
             while (initialRoomsCount >= 0) {
                 onView(withId(R.id.fab)).perform(click());
                 onView(withText(mRooms.get(initialRoomsCount))).perform(click());
@@ -81,21 +75,24 @@ public class MeetingCreationStartFragmentTests {
 
     @Test
     public void updateHoursAvailabilityReal(){
-        int initialHoursAvailable = 12;
-        char a = 'a';
+        RoomsAvailability.initRoomsAndHours();
+        mRoomsAndHours = RoomsAvailability.getAvailableRoomsPerHour();
+        RoomsAvailability.updateAvailableHours(mRoomsAndHours);
 
+        int initialHoursAvailable = mRoomsAndHours.size();
+        int j = 0;
+
+        System.out.println(initialHoursAvailable);
         for (int i = 0; i < initialHoursAvailable; i++) {
             int initialRoomsCount = 10 - 1;
             while (initialRoomsCount >= 0) {
                 onView(withId(R.id.fab)).perform(click());
-                onView(withText(mRoomsAndHours.get(i).getRooms().get(initialRoomsCount))).perform(click());
+                onView(withText(mRoomsAndHours.get(0).getRooms().get(initialRoomsCount))).perform(click());
                 onView(withText("SUIVANT")).perform(click());
-                onView(withId(R.id.meeting_title_input)).perform(typeText("Reunion " + (a++)));
+                onView(withId(R.id.meeting_title_input)).perform(typeText("Reunion " + (j++)));
                 onView(withId(R.id.email_one)).perform(typeText("email@address.com"));
                 onView(withText("VALIDER")).perform(scrollTo()).perform(click());
                 initialRoomsCount--;
-                if(a == 'Z')
-                    a = 'a';
             }
         }
         onView(withId(R.id.fab)).perform(click());

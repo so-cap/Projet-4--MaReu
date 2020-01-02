@@ -2,7 +2,7 @@ package com.sophie.mareu;
 
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.controller.RoomsAvailability;
+import com.sophie.mareu.service.RoomsAvailability;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationStartFragment;
 
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class MeetingCreationStartTests {
 
     @Test
     public void initSpinnerWithSuccess(){
-        String resultStart, resultEnd;
+        String resultStart, resultEnd, resultFalse;
         mRoomsAvailability.initRoomsAndHours();
         mMeetingCreationStartFragment.initSpinner();
 

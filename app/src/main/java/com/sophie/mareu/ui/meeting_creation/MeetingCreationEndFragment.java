@@ -2,6 +2,7 @@ package com.sophie.mareu.ui.meeting_creation;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.api.MeetingsApi;
+import com.sophie.mareu.service.MeetingsApi;
 import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
 
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ import butterknife.ButterKnife;
 
 
 public class MeetingCreationEndFragment extends Fragment implements View.OnClickListener {
-    private Meeting mMeeting;
     private String mTitle, mHour, mRoomName, mDetailSubject;
     private ArrayList<String> mParticipants = new ArrayList<>();
     private Context mContext;
@@ -86,6 +86,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
                 EditText anotherEmail = new EditText(mContext);
                 anotherEmail.setHint(getString(R.string.email_hint));
                 anotherEmail.setTextSize(16);
+                anotherEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 mEmailContainer.addView(anotherEmail);
                 break;
             case R.id.btn_endsetup:
@@ -128,7 +129,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     }
 
     private void setMeeting() {
-        mMeeting = new Meeting(mTitle, mHour, mRoomName, mParticipants, mDetailSubject);
-        MeetingsApi.addMeeting(mMeeting);
+        Meeting meeting = new Meeting(mTitle, mHour, mRoomName, mParticipants, mDetailSubject);
+        MeetingsApi.addMeeting(meeting);
     }
 }

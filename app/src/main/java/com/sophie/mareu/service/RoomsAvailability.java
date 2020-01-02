@@ -1,6 +1,7 @@
-package com.sophie.mareu.controller;
+package com.sophie.mareu.service;
 
 import com.sophie.mareu.DI.DI;
+import com.sophie.mareu.controller.AvailabilityPerHour;
 
 import java.util.ArrayList;
 
@@ -8,18 +9,21 @@ import java.util.ArrayList;
  * Created by SOPHIE on 30/12/2019.
  */
 public class RoomsAvailability {
-     private ArrayList<String> mHoursList;
-     private ArrayList<String> mRoomsList;
+     private static ArrayList<String> mHoursList;
+     private static ArrayList<String> mRoomsList;
      private static ArrayList<AvailabilityPerHour> mAvailableRoomsPerHour = new ArrayList<>();
 
-    public void initRoomsAndHours(){
+    public static void initRoomsAndHours(){
         // use tags for each hour view (get size of array, then loop to setTag on button.
         AvailabilityPerHour availabilityPerHour;
         mHoursList = DI.getNewHoursList();
         mRoomsList = DI.getNewRoomsList();
 
-        for(int position = 0; position < (mHoursList.size()); position++) {
-            availabilityPerHour = new AvailabilityPerHour(mHoursList.get(position),new ArrayList<>(mRoomsList));
+        if(!(mAvailableRoomsPerHour.isEmpty()))
+            mAvailableRoomsPerHour.clear();
+
+        for (int position = 0; position < (mHoursList.size()); position++) {
+            availabilityPerHour = new AvailabilityPerHour(mHoursList.get(position), new ArrayList<>(mRoomsList));
             mAvailableRoomsPerHour.add(availabilityPerHour);
         }
     }

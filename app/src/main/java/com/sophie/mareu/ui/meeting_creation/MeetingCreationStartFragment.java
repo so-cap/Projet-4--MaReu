@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,10 +21,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.controller.CustomRadioGroupLayout;
 import com.sophie.mareu.R;
-import com.sophie.mareu.controller.RoomsAvailability;
+import com.sophie.mareu.service.RoomsAvailability;
 import com.sophie.mareu.controller.AvailabilityPerHour;
 
 import java.util.ArrayList;
@@ -41,8 +39,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     private Context mContext;
     private CustomRadioGroupLayout mCustomRadioGroup;
 
-   // private static final String TAG = "MeetingCreationStartFra";
-
     @BindView(R.id.spinner_hour)
     Spinner mSpinner;
 
@@ -52,8 +48,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     LinearLayout mRadioGrpColumn2;
     @BindView(R.id.linearlayout_column3)
     LinearLayout mRadioGrpColumn3;
-    @BindView(R.id.radio_group_rooms)
-    RadioGroup mRadioGroup;
 
     @BindView(R.id.all_meetings_full)
     TextView mMeetingsFull;
@@ -68,10 +62,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
         mContext = getContext();
         ButterKnife.bind(this, view);
-
-        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
-        if (fab != null)
-            fab.hide();
 
         initSpinner();
         displaySpinner();
@@ -89,7 +79,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         });
 
         mNextPage.setOnClickListener(this);
-
         mCustomRadioGroup = new CustomRadioGroupLayout();
         return view;
     }
@@ -106,7 +95,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     private void displaySpinner() {
-        if(!(mSpinnerArray.isEmpty())) {
+        if (!(mSpinnerArray.isEmpty())) {
             ArrayAdapter<String> spinnerAdapter =
                     new ArrayAdapter<>(mContext, R.layout.support_simple_spinner_dropdown_item, mSpinnerArray);
             spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -208,15 +197,13 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             FragmentTransaction fm = getFragmentManager().beginTransaction();
             fm.replace(R.id.frame_setmeeting, meetingCreationEndFragment)
                     .addToBackStack(null).commit();
-        }
-        else if(mSpinnerArray == null){
+        } else if (mSpinnerArray == null) {
             if (getActivity().getClass().getSimpleName() == "ListMeetingsActivity")
-            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             else
                 getActivity().finish();
         }
     }
-
 
     private boolean checkIfValid() {
         int selectedRoomPosition = mCustomRadioGroup.getCheckedRadioButtonId();
