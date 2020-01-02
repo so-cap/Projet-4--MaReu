@@ -23,7 +23,7 @@ public class RoomsAvailabilityTests {
     private ArrayList<AvailabilityPerHour> mRoomsPerHour = new ArrayList<>();
 
     // for expected data
-    private ArrayList<Integer>  mHoursList = DI.getNewHoursList();
+    private ArrayList<String>  mHoursList = DI.getNewHoursList();
     private ArrayList<String> mRoomsList = DI.getNewRoomsList();
 
     @Before
@@ -33,7 +33,7 @@ public class RoomsAvailabilityTests {
 
     @Test
     public void getRoomsAndHoursAvailabilityWithSuccess(){
-        mRoomsPerHour = mRoomsAvailability.getAvailableRoomsPerHour();
+        mRoomsPerHour = RoomsAvailability.getAvailableRoomsPerHour();
         assertThat(mRoomsPerHour.get(0).getHour(), equalTo(mHoursList.get(0)));
         assertThat(mRoomsPerHour.get(11).getHour(), equalTo(mHoursList.get(11)));
 
@@ -43,7 +43,7 @@ public class RoomsAvailabilityTests {
 
     @Test
     public void deletingARoomWithSuccess(){
-        mRoomsPerHour = mRoomsAvailability.getAvailableRoomsPerHour();
+        mRoomsPerHour = RoomsAvailability.getAvailableRoomsPerHour();
 
         mRoomsPerHour.get(3).getRooms().remove(3);
         assertThat(mRoomsPerHour.get(3).getRooms(), not(hasItem("BOWSER")));
@@ -51,7 +51,7 @@ public class RoomsAvailabilityTests {
 
     @Test
     public void updateHoursAvailabilityWithSuccess(){
-        mRoomsPerHour = mRoomsAvailability.getAvailableRoomsPerHour();
+        mRoomsPerHour = RoomsAvailability.getAvailableRoomsPerHour();
 
         // Index 2 = 10 beforehand
         assertThat(mRoomsPerHour.get(2).getHour(), equalTo(10));
@@ -63,7 +63,7 @@ public class RoomsAvailabilityTests {
         }
 
         // Updating list
-        mRoomsAvailability.setAvailableRoomsPerHours(mRoomsPerHour);
+        RoomsAvailability.updateAvailableHours(mRoomsPerHour);
 
         //Index 2 = 11 after removing hour availability
         assertThat(mRoomsPerHour.get(2).getHour(), equalTo(11));

@@ -1,12 +1,16 @@
 package com.sophie.mareu.ui.meeting_creation;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -78,8 +82,6 @@ public class ListMeetingFragment extends Fragment {
 
         if (mFab != null)
             mFab.show();
-
-        Log.d(TAG, "LOGGonStart: START");
     }
 
     @Override
@@ -87,13 +89,24 @@ public class ListMeetingFragment extends Fragment {
         super.onResume();
         initList();
 
-        Log.d(TAG, "LOGGonResume:  RESUME");
+        if (mMeetings == null) {
+            AlertDialog.Builder popUp = new AlertDialog.Builder(getContext());
+            popUp.setTitle("Pas de nouvelles réunions");
+            popUp.setMessage("yo");
+            popUp.setPositiveButton("Nouvelle réu", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }
+            );
+                    popUp.show();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "LOGGonPause: PAUSE");
     }
 
     @Subscribe
@@ -108,9 +121,4 @@ public class ListMeetingFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "LOGGonDestroy: DESTROY");
-    }
 }

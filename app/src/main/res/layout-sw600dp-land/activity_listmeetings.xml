@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ListMeetingsActivity"
-    android:id="@+id/activity_main"
-    android:weightSum="100">
+    android:weightSum="100"
+    tools:context=".ListMeetingsActivity">
 
     <FrameLayout
         android:id="@+id/frame_listmeetings"
-        android:layout_weight="40"
         android:layout_width="0dp"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_weight="40">
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/frame_setmeeting"
-        android:layout_weight="60"
         android:layout_width="0dp"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_weight="60" />
 
 </LinearLayout>

@@ -96,8 +96,8 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
                     if (getActivity().getClass().getSimpleName().equals("MeetingCreationActivity"))
                         getActivity().finish();
                     else {
-                        ListMeetingFragment listMeetingFragment = (ListMeetingFragment) getFragmentManager()
-                                .findFragmentById(R.id.frame_listmeetings);
+                        Fragment listMeetingFragment = getFragmentManager().
+                                findFragmentById(R.id.frame_listmeetings);
 
                         if (listMeetingFragment == null) {
                             getActivity().finish();
@@ -107,6 +107,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
                             //to update recyclerview
                             fm.beginTransaction().replace(R.id.frame_listmeetings, new ListMeetingFragment()).commit();
                         }
+                        break;
                     }
                 }
         }

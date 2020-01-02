@@ -1,6 +1,5 @@
 package com.sophie.mareu.ui.meeting_creation;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -11,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -78,7 +75,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mHourPosition = position;
-                mSelectedHour = mAvailableHoursAndRooms.get(mHourPosition).getHour() + "h00";
+                mSelectedHour = mAvailableHoursAndRooms.get(mHourPosition).getHour();
                 initRadioGroup();
             }
 
@@ -99,8 +96,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         String mHour;
 
         for (int position = 0; position < mAvailableHoursAndRooms.size(); position++) {
-            mHour = Integer.toString(mAvailableHoursAndRooms.get(position).getHour());
-            mSpinnerArray.add(mHour + "h00");
+            mHour = (mAvailableHoursAndRooms.get(position).getHour());
+            mSpinnerArray.add(mHour);
         }
         displaySpinner(mSpinnerArray);
     }
@@ -118,14 +115,14 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         clearChildViews();
 
         while (i < roomsAvailable) {
-            while (i < 4) {
+            while (i < 4 && i < roomsAvailable) {
                 RadioButton radioButton = new RadioButton(mContext);
                 radioButton.setId(i);
                 radioButton.setText(mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(i));
                 mRadioGrpColumn1.addView(radioButton);
                 i++;
             }
-            while (i >= 4 && i < 8) {
+            while (i >= 4 && i < 8 && i < roomsAvailable) {
                 RadioButton radioButton = new RadioButton(mContext);
                 radioButton.setId(i);
                 radioButton.setText(mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(i));
@@ -211,6 +208,9 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
         if (selectedRoomPosition >= 0) {
             mSelectedRoomName = mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(selectedRoomPosition);
+            //delete room availability
+            mAvailableHoursAndRooms.get(mHourPosition).getRooms().remove(selectedRoomPosition);
+            RoomsAvailability.updateAvailableHours(mAvailableHoursAndRooms);
             return true;
         } else
             Toast.makeText(mContext, "Choisissez votre salle de réunion!", Toast.LENGTH_LONG).show();

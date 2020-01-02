@@ -41,18 +41,9 @@ public class ListMeetingsActivity extends AppCompatActivity {
         }
     }
 
-    private static final String TAG = "LOGGListMeetingsActi";
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "LOGGonStart: ACTIVITY START MAIN");
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         MeetingsApi.clearMeetingList();
-        Log.d(TAG, "onDestroy: DESTROY ACTIVITY MAIN");
     }
 }
