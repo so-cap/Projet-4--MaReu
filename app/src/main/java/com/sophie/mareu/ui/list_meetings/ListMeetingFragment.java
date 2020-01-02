@@ -86,20 +86,6 @@ public class ListMeetingFragment extends Fragment {
     public void onResume() {
         super.onResume();
         initList();
-
-        if (mMeetings == null) {
-            AlertDialog.Builder popUp = new AlertDialog.Builder(getContext());
-            popUp.setTitle("Pas de nouvelles réunions");
-            popUp.setMessage("yo");
-            popUp.setPositiveButton("Nouvelle réu", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }
-            );
-                    popUp.show();
-        }
     }
 
     @Override

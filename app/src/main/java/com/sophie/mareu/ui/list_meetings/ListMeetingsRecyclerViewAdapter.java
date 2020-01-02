@@ -19,8 +19,6 @@ import com.sophie.mareu.model.Meeting;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -31,9 +29,6 @@ import butterknife.ButterKnife;
 public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMeetingsRecyclerViewAdapter.ViewHolder> {
     private ArrayList<Meeting> mMeetings;
     private Context mContext;
-    private static int iconSelector;
-    private ArrayList iconList = new ArrayList<>(Arrays.asList(R.drawable.ic_lightpink, R.drawable.ic_lightgreen,R.drawable.ic_darkergreen));
-
     public ListMeetingsRecyclerViewAdapter(ArrayList<Meeting> meetings, Context context) {
         mMeetings = meetings;
         mContext = context;
@@ -74,12 +69,8 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
 
         public void bind(Meeting meeting) {
             Resources res = mContext.getResources();
-            iconSelector++;
-            if(iconSelector == 3)
-                iconSelector = 0;
-            int finalIcon = iconSelector;
 
-            mIcon.setImageDrawable(res.getDrawable((int)iconList.get(finalIcon)));
+            mIcon.setImageDrawable(res.getDrawable(meeting.getIcon()));
             mTitle.setText(res.getString(R.string.title_hour_room, meeting.getTitle(), meeting.getHour(), meeting.getRoomName()));
             mParticipants.setText(meeting.getParticipants());
             mDeleteButton.setOnClickListener(new View.OnClickListener() {
