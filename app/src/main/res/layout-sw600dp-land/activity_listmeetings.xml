@@ -9,6 +9,7 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar"
@@ -39,7 +40,8 @@
             android:id="@+id/frame_setmeeting"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="60" />
+            android:layout_weight="60"
+            android:background="@color/light_blue"/>
 
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
