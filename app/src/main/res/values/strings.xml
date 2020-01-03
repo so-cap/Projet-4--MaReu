@@ -22,4 +22,5 @@
     <string name="hint_subject_title">mon titre</string>
     <string name="short_title">Court titre:</string>
     <string name="meeting_details">DETAILS DE LA REUNION</string>
+    <string name="choose_a_room">Choisissez votre salle de réunion!</string>
 </resources>

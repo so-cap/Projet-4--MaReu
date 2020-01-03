@@ -73,9 +73,6 @@ public class ListMeetingFragment extends Fragment {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-
-        if (mFab != null)
-            mFab.show();
     }
 
     @Override

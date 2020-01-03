@@ -14,8 +14,6 @@ import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
  * Created by SOPHIE on 31/12/2019.
  */
 public class MeetingCreationActivity extends AppCompatActivity {
-    private MeetingCreationStartFragment mMeetingCreationStartFragment;
-    private ListMeetingFragment mListMeetingFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,18 +25,21 @@ public class MeetingCreationActivity extends AppCompatActivity {
     }
 
     private void configureAndShowMeetingCreationStartFragment() {
-        mMeetingCreationStartFragment = (MeetingCreationStartFragment) getSupportFragmentManager().findFragmentById(R.id.frame_setmeeting);
-        if(mMeetingCreationStartFragment == null && findViewById(R.id.frame_setmeeting) != null){
-                mMeetingCreationStartFragment = new MeetingCreationStartFragment();
+        MeetingCreationStartFragment meetingCreationStartFragment = (MeetingCreationStartFragment)
+                getSupportFragmentManager().findFragmentById(R.id.frame_setmeeting);
+
+        if(meetingCreationStartFragment == null && findViewById(R.id.frame_setmeeting) != null){
+                meetingCreationStartFragment = new MeetingCreationStartFragment();
                 FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
-                fm.add(R.id.frame_setmeeting, mMeetingCreationStartFragment).commit();
+                fm.add(R.id.frame_setmeeting, meetingCreationStartFragment).commit();
             }
     }
 
+    // to go back to the main activity display when in land mode
     private void configureAndShowListMeetingFragment() {
-        // to go back to the main activity display in land mode
-        mListMeetingFragment = (ListMeetingFragment) getSupportFragmentManager().findFragmentById(R.id.frame_listmeetings);
-        if(mListMeetingFragment == null && findViewById(R.id.frame_listmeetings) != null) {
+        ListMeetingFragment listMeetingFragment = (ListMeetingFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.frame_listmeetings);
+        if(listMeetingFragment == null && findViewById(R.id.frame_listmeetings) != null) {
             finish();
         }
     }

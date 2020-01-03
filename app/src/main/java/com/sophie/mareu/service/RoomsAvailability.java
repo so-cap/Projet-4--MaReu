@@ -9,21 +9,19 @@ import java.util.ArrayList;
  * Created by SOPHIE on 30/12/2019.
  */
 public class RoomsAvailability {
-     private static ArrayList<String> mHoursList;
-     private static ArrayList<String> mRoomsList;
-     private static ArrayList<AvailabilityPerHour> mAvailableRoomsPerHour = new ArrayList<>();
+    private static ArrayList<AvailabilityPerHour> mAvailableRoomsPerHour = new ArrayList<>();
 
     public static void initRoomsAndHours(){
         // use tags for each hour view (get size of array, then loop to setTag on button.
         AvailabilityPerHour availabilityPerHour;
-        mHoursList = DI.getNewHoursList();
-        mRoomsList = DI.getNewRoomsList();
+        ArrayList<String> hoursList = DI.getNewHoursList();
+        ArrayList<String> roomsList = DI.getNewRoomsList();
 
         if(!(mAvailableRoomsPerHour.isEmpty()))
             mAvailableRoomsPerHour.clear();
 
-        for (int position = 0; position < (mHoursList.size()); position++) {
-            availabilityPerHour = new AvailabilityPerHour(mHoursList.get(position), new ArrayList<>(mRoomsList));
+        for (int position = 0; position < (hoursList.size()); position++) {
+            availabilityPerHour = new AvailabilityPerHour(hoursList.get(position), new ArrayList<>(roomsList));
             mAvailableRoomsPerHour.add(availabilityPerHour);
         }
     }

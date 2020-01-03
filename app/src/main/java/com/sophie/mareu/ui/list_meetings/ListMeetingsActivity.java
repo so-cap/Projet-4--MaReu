@@ -2,6 +2,7 @@ package com.sophie.mareu.ui.list_meetings;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import com.sophie.mareu.R;
 import com.sophie.mareu.service.MeetingsApi;
 import com.sophie.mareu.service.RoomsAvailability;
 import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
+import com.sophie.mareu.ui.meeting_creation.MeetingCreationEndFragment;
+import com.sophie.mareu.ui.meeting_creation.MeetingCreationStartFragment;
 
 public class ListMeetingsActivity extends AppCompatActivity {
 
@@ -23,7 +26,9 @@ public class ListMeetingsActivity extends AppCompatActivity {
     }
 
     private void configureAndShowListMeetingFragment() {
-        Fragment listMeetingFragment = getSupportFragmentManager().findFragmentById(R.id.frame_listmeetings);
+        ListMeetingFragment listMeetingFragment = (ListMeetingFragment) getSupportFragmentManager().
+                findFragmentById(R.id.frame_listmeetings);
+
         if (listMeetingFragment == null) {
             listMeetingFragment = new ListMeetingFragment();
             FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
@@ -38,8 +43,10 @@ public class ListMeetingsActivity extends AppCompatActivity {
         if (findViewById(R.id.frame_setmeeting) != null) {
             if (fragment == null)
                 fm.add(R.id.frame_setmeeting, new HomeStartMeetingCreationFragment()).commit();
-            else
+            else if (!(fragment.getClass().equals(HomeStartMeetingCreationFragment.class))) {
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 fm.replace(R.id.frame_setmeeting, new HomeStartMeetingCreationFragment()).commit();
+            }
         }
     }
 

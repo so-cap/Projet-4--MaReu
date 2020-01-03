@@ -17,8 +17,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.sophie.mareu.R;
+import com.sophie.mareu.controller.AvailabilityPerHour;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.service.MeetingsApi;
+import com.sophie.mareu.service.RoomsAvailability;
 import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
 
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     private String mTitle, mHour, mRoomName, mDetailSubject;
     private ArrayList<String> mParticipants = new ArrayList<>();
     private Context mContext;
+    private int mRoomPosition, mHourPosition;
 
     @BindView(R.id.meeting_title_input)
     EditText mTitleView;
@@ -56,10 +59,10 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         mContext = getContext();
 
         if (getArguments() != null) {
-            if (getArguments().containsKey("selected_hour"))
-                mHour = getArguments().getString("selected_hour");
-            if (getArguments().containsKey("selected_room"))
-                mRoomName = getArguments().getString("selected_room");
+            mHour = getArguments().getString("selected_hour");
+            mHourPosition = getArguments().getInt("hour_position");
+            mRoomName = getArguments().getString("selected_room");
+            mRoomPosition = getArguments().getInt("room_position");
         }
 
         mAddMoreEmail.setOnClickListener(this);
@@ -91,7 +94,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
                 break;
             case R.id.btn_endsetup:
                 if (checkIfValid()) {
-                    if (getActivity().getClass().getSimpleName().equals("MeetingCreationActivity"))
+                    if (getActivity().getClass().equals(MeetingCreationActivity.class))
                         getActivity().finish();
                     else {
                         Fragment listMeetingFragment = getFragmentManager().
@@ -131,5 +134,12 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     private void setMeeting() {
         Meeting meeting = new Meeting(mTitle, mHour, mRoomName, mParticipants, mDetailSubject);
         MeetingsApi.addMeeting(meeting);
+        updateRoomAvailability();
+    }
+
+    private void updateRoomAvailability() {
+        ArrayList<AvailabilityPerHour> roomsPerHour = RoomsAvailability.getAvailableRoomsPerHour();
+        roomsPerHour.get(mHourPosition).getRooms().remove(mRoomPosition);
+        RoomsAvailability.updateAvailableHours(roomsPerHour);
     }
 }

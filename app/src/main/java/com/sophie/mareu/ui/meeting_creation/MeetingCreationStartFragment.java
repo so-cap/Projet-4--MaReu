@@ -25,6 +25,7 @@ import com.sophie.mareu.controller.CustomRadioGroupLayout;
 import com.sophie.mareu.R;
 import com.sophie.mareu.service.RoomsAvailability;
 import com.sophie.mareu.controller.AvailabilityPerHour;
+import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 
 import java.util.ArrayList;
 
@@ -38,16 +39,17 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     private int mHourPosition;
     private Context mContext;
     private CustomRadioGroupLayout mCustomRadioGroup;
+    private int mRoomPosition;
 
     @BindView(R.id.spinner_hour)
     Spinner mSpinner;
 
     @BindView(R.id.linearlayout_column1)
-    LinearLayout mRadioGrpColumn1;
+    LinearLayout mRadioGrpRow1;
     @BindView(R.id.linearlayout_column2)
-    LinearLayout mRadioGrpColumn2;
+    LinearLayout mRadioGrpRow2;
     @BindView(R.id.linearlayout_column3)
-    LinearLayout mRadioGrpColumn3;
+    LinearLayout mRadioGrpRow3;
 
     @BindView(R.id.all_meetings_full)
     TextView mMeetingsFull;
@@ -117,71 +119,71 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
                 RadioButton radioButton = new RadioButton(mContext);
                 radioButton.setId(i);
                 radioButton.setText(mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(i));
-                mRadioGrpColumn1.addView(radioButton);
+                mRadioGrpRow1.addView(radioButton);
                 i++;
             }
             while (i >= 4 && i < 7 && i < roomsAvailable) {
                 RadioButton radioButton = new RadioButton(mContext);
                 radioButton.setId(i);
                 radioButton.setText(mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(i));
-                mRadioGrpColumn2.addView(radioButton);
+                mRadioGrpRow2.addView(radioButton);
                 i++;
             }
             while (i >= 7 && i < roomsAvailable) {
                 RadioButton radioButton = new RadioButton(mContext);
                 radioButton.setId(i);
                 radioButton.setText(mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(i));
-                mRadioGrpColumn3.addView(radioButton);
+                mRadioGrpRow3.addView(radioButton);
                 i++;
             }
         }
         initClickOnRadioButton();
     }
 
+
+    private void clearChildViews() {
+        int nbrOfChildViews = mRadioGrpRow1.getChildCount();
+
+        if (nbrOfChildViews != 0) {
+            mRadioGrpRow1.removeAllViews();
+            mRadioGrpRow2.removeAllViews();
+            mRadioGrpRow3.removeAllViews();
+        }
+    }
+
     private void initClickOnRadioButton() {
         ArrayList<RadioButton> radioButtons = new ArrayList<>();
-        int childViews1 = mRadioGrpColumn1.getChildCount();
-        int childViews2 = mRadioGrpColumn2.getChildCount();
-        int childViews3 = mRadioGrpColumn3.getChildCount();
-        int nbrOfColumns;
+        int childViews1 = mRadioGrpRow1.getChildCount();
+        int childViews2 = mRadioGrpRow2.getChildCount();
+        int childViews3 = mRadioGrpRow3.getChildCount();
+        int nbrOfRows;
 
         if (childViews2 != 0)
-            nbrOfColumns = 2;
+            nbrOfRows = 2;
         else
-            nbrOfColumns = 3;
+            nbrOfRows = 3;
 
         if (childViews1 != 0) {
-            for (int i = 0; i < nbrOfColumns; i++) {
+            for (int i = 0; i < nbrOfRows; i++) {
                 int k = 0;
                 while (k < childViews1) {
-                    radioButtons.add((RadioButton) mRadioGrpColumn1.getChildAt(k));
+                    radioButtons.add((RadioButton) mRadioGrpRow1.getChildAt(k));
                     k++;
                 }
                 int j = 0;
                 while (j < childViews2) {
-                    radioButtons.add((RadioButton) mRadioGrpColumn2.getChildAt(j));
+                    radioButtons.add((RadioButton) mRadioGrpRow2.getChildAt(j));
                     j++;
                 }
                 int y = 0;
                 while (y < childViews3) {
-                    radioButtons.add((RadioButton) mRadioGrpColumn3.getChildAt(y));
+                    radioButtons.add((RadioButton) mRadioGrpRow3.getChildAt(y));
                     y++;
                 }
                 i++;
             }
         }
         mCustomRadioGroup.addRadioButtonToTracker(radioButtons);
-    }
-
-    private void clearChildViews() {
-        int nbrOfChildViews = mRadioGrpColumn1.getChildCount();
-        mRadioGrpColumn3.removeAllViews();
-
-        if (nbrOfChildViews != 0) {
-            mRadioGrpColumn1.removeAllViews();
-            mRadioGrpColumn2.removeAllViews();
-            mRadioGrpColumn3.removeAllViews();
-        }
     }
 
     @Override
@@ -192,13 +194,15 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             Bundle bundle = new Bundle();
             bundle.putString("selected_hour", mSelectedHour);
             bundle.putString("selected_room", mSelectedRoomName);
+            bundle.putInt("hour_position", mHourPosition);
+            bundle.putInt("room_position", mRoomPosition);
             meetingCreationEndFragment.setArguments(bundle);
 
             FragmentTransaction fm = getFragmentManager().beginTransaction();
             fm.replace(R.id.frame_setmeeting, meetingCreationEndFragment)
                     .addToBackStack(null).commit();
         } else if (mSpinnerArray == null) {
-            if (getActivity().getClass().getSimpleName() == "ListMeetingsActivity")
+            if (getActivity().getClass().equals(ListMeetingsActivity.class))
                 getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             else
                 getActivity().finish();
@@ -206,16 +210,13 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     private boolean checkIfValid() {
-        int selectedRoomPosition = mCustomRadioGroup.getCheckedRadioButtonId();
+        mRoomPosition = mCustomRadioGroup.getCheckedRadioButtonId();
 
-        if (selectedRoomPosition >= 0) {
-            mSelectedRoomName = mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(selectedRoomPosition);
-            //delete room availability
-            mAvailableHoursAndRooms.get(mHourPosition).getRooms().remove(selectedRoomPosition);
-            RoomsAvailability.updateAvailableHours(mAvailableHoursAndRooms);
+        if (mRoomPosition >= 0) {
+            mSelectedRoomName = mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(mRoomPosition);
             return true;
         } else
-            Toast.makeText(mContext, "Choisissez votre salle de réunion!", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, getString(R.string.choose_a_room), Toast.LENGTH_LONG).show();
         return false;
 
     }
