@@ -22,6 +22,7 @@ public class RoomsAvailability {
 
         for (int position = 0; position < (hoursList.size()); position++) {
             availabilityPerHour = new AvailabilityPerHour(hoursList.get(position), new ArrayList<>(roomsList));
+
             mAvailableRoomsPerHour.add(availabilityPerHour);
         }
     }

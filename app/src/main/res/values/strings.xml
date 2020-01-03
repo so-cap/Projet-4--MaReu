@@ -10,6 +10,7 @@
     <string name="default_recyclerview_title">Réunion A - 14h00 - PEACH</string>
     <string name="delete_btn">delete_btn</string>
     <string name="meeting_icon">meeting_icon</string>
+
     <string name="create_new_meeting">CREER UNE NOUVELLE REUNION</string>
     <string name="rooms_available">Salles disponibles :</string>
     <string name="meeting_hour">Heure de la réunion :</string>
@@ -23,4 +24,12 @@
     <string name="short_title">Court titre:</string>
     <string name="meeting_details">DETAILS DE LA REUNION</string>
     <string name="choose_a_room">Choisissez votre salle de réunion!</string>
+    <string name="sort_list">sort list</string>
+    <string name="sort_by_roomname_default">"Filtrer par lieu (A - Z)   &#x2197;"</string>
+    <string name="sort_by_date_default">"Filtrer par heure      &#x2197;"</string>
+
+    <string name="sort_by_date">"Filtrer par heure   %s"</string>
+    <string name="sort_by_roomname">"Filtrer par lieu (A - Z)   %s"</string>
+    <string name="arrow_up">&#x2197;</string>
+    <string name="arrow_down">&#x2199;</string>
 </resources>

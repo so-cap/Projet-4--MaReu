@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * Created by SOPHIE on 30/12/2019.
  */
-public class Meeting implements Serializable {
+public class Meeting {
     private String mRoomName;
     private ArrayList<String> mParticipants;
     private String mHour;

@@ -3,7 +3,7 @@ package com.sophie.mareu.service;
 import com.sophie.mareu.model.Meeting;
 
 import java.util.ArrayList;
-// STAND BY
+
 public class MeetingsApi {
     private static ArrayList<Meeting> mMeetings = new ArrayList<>();
 
@@ -21,6 +21,10 @@ public class MeetingsApi {
 
     public static void clearMeetingList(){
         mMeetings.clear();
+    }
+
+    public static void updateListOrder(ArrayList<Meeting> meetings){
+        mMeetings = meetings;
     }
 
 }
