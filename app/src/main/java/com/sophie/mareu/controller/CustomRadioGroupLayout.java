@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 public class CustomRadioGroupLayout implements View.OnClickListener {
     private List<RadioButton> radios = new ArrayList<>();
@@ -39,5 +40,17 @@ public class CustomRadioGroupLayout implements View.OnClickListener {
         // select currently clicked RadioButton
         RadioButton rb = (RadioButton) v;
         rb.setChecked(true);
+    }
+
+    public void unselectButton(int checkedRadioButtonId) {
+        int i = 0;
+
+        if (checkedRadioButtonId >= 0) {
+            for (RadioButton rb : radios) {
+                if (radios.get(i++) == radios.get(checkedRadioButtonId)) {
+                    rb.setChecked(false);
+                }
+            }
+        }
     }
 }

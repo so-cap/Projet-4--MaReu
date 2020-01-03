@@ -24,7 +24,8 @@ import static com.sophie.mareu.controller.SortList.sortByRoomName;
 
 public class ListMeetingsActivity extends AppCompatActivity {
     private ListMeetingFragment mListMeetingFragment;
-    boolean ascendingDate, ascendingName = true;
+    boolean ascendingDate = true;
+    boolean ascendingName = true;
     @BindView(R.id.my_toolbar)
     Toolbar mToolbar;
 
@@ -54,18 +55,18 @@ public class ListMeetingsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sort_by_date:
-                if (!ascendingDate)
-                    item.setTitle(getString(R.string.sort_by_date, getString(R.string.arrow_up)));
-                else
+                if (ascendingDate)
                     item.setTitle(getString(R.string.sort_by_date, getString(R.string.arrow_down)));
+                else
+                    item.setTitle(getString(R.string.sort_by_date, getString(R.string.arrow_up)));
                 sortByHour(ascendingDate);
                 ascendingDate = !ascendingDate;
                 break;
             case R.id.sort_by_roomname_:
-                if (!ascendingName)
-                    item.setTitle(getString(R.string.sort_by_roomname, getString(R.string.arrow_up)));
-                else
+                if (ascendingName)
                     item.setTitle(getString(R.string.sort_by_roomname, getString(R.string.arrow_down)));
+                else
+                    item.setTitle(getString(R.string.sort_by_roomname, getString(R.string.arrow_up)));
                 sortByRoomName(ascendingName);
                 ascendingName = !ascendingName;
                 break;

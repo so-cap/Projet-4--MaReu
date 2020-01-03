@@ -29,7 +29,8 @@ import butterknife.ButterKnife;
 public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMeetingsRecyclerViewAdapter.ViewHolder> {
     private ArrayList<Meeting> mMeetings;
     private Context mContext;
-    public ListMeetingsRecyclerViewAdapter(ArrayList<Meeting> meetings, Context context) {
+
+    ListMeetingsRecyclerViewAdapter(ArrayList<Meeting> meetings, Context context) {
         mMeetings = meetings;
         mContext = context;
     }
@@ -52,7 +53,7 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.titleView)
         TextView mTitle;
         @BindView(R.id.participants)
@@ -62,23 +63,18 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
         @BindView(R.id.ic_delete)
         ImageButton mDeleteButton;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(Meeting meeting) {
+        void bind(Meeting meeting) {
             Resources res = mContext.getResources();
 
             mIcon.setImageDrawable(res.getDrawable(meeting.getIcon()));
-            mTitle.setText(res.getString(R.string.title_hour_room, meeting.getTitle(), meeting.getHour(), meeting.getRoomName()));
+            mTitle.setText(res.getString(R.string.title_hour_room, meeting.getTitle(), meeting.getHour().getValue(), meeting.getRoomName()));
             mParticipants.setText(meeting.getParticipants());
-            mDeleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EventBus.getDefault().post(new DeleteMeetingEvent(meeting));
-                }
-            });
+            mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteMeetingEvent(meeting)));
         }
     }
 }

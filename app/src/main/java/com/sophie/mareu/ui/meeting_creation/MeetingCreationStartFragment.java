@@ -27,6 +27,7 @@ import com.sophie.mareu.service.RoomsAvailability;
 import com.sophie.mareu.controller.AvailabilityPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -35,7 +36,8 @@ import butterknife.ButterKnife;
 public class MeetingCreationStartFragment extends Fragment implements View.OnClickListener {
     private ArrayList<AvailabilityPerHour> mAvailableHoursAndRooms;
     private ArrayList<String> mSpinnerArray;
-    private String mSelectedRoomName, mSelectedHour;
+    private AbstractMap.SimpleEntry<Integer, String> mSelectedHour;
+    private String mSelectedRoomName;
     private int mHourPosition;
     private Context mContext;
     private CustomRadioGroupLayout mCustomRadioGroup;
@@ -73,6 +75,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
                 mHourPosition = position;
                 mSelectedHour = mAvailableHoursAndRooms.get(mHourPosition).getHour();
                 initRadioGroup();
+                mCustomRadioGroup.unselectButton(mCustomRadioGroup.getCheckedRadioButtonId());
             }
 
             @Override
@@ -91,7 +94,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         String mHour;
 
         for (int position = 0; position < mAvailableHoursAndRooms.size(); position++) {
-            mHour = (mAvailableHoursAndRooms.get(position).getHour());
+            mHour = (mAvailableHoursAndRooms.get(position).getHour().getValue());
             mSpinnerArray.add(mHour);
         }
     }
@@ -192,7 +195,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             MeetingCreationEndFragment meetingCreationEndFragment = new MeetingCreationEndFragment();
 
             Bundle bundle = new Bundle();
-            bundle.putString("selected_hour", mSelectedHour);
+            bundle.putInt("selected_hour_key", mSelectedHour.getKey());
+            bundle.putString("selected_hour_value", mSelectedHour.getValue());
             bundle.putString("selected_room", mSelectedRoomName);
             bundle.putInt("hour_position", mHourPosition);
             bundle.putInt("room_position", mRoomPosition);
@@ -203,7 +207,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
                     .addToBackStack(null).commit();
         } else if (mSpinnerArray == null) {
             if (getActivity().getClass().equals(ListMeetingsActivity.class))
-                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             else
                 getActivity().finish();
         }

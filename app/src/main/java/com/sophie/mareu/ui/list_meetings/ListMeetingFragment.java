@@ -37,7 +37,6 @@ public class ListMeetingFragment extends Fragment {
     private Context context;
     private FloatingActionButton mFab;
     private TextView mNoNewMeetings;
-    RecyclerView.Adapter adapter;
 
     @Nullable
     @Override
@@ -66,10 +65,8 @@ public class ListMeetingFragment extends Fragment {
     }
 
     private void initList() {
-        adapter = new ListMeetingsRecyclerViewAdapter(mMeetings, context);
         mMeetings = MeetingsApi.getMeetingsList();
-        mRecyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings, context));
 
     }
 

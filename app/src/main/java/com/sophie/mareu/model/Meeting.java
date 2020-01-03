@@ -3,6 +3,7 @@ package com.sophie.mareu.model;
 import com.sophie.mareu.R;
 
 import java.io.Serializable;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -12,7 +13,7 @@ import java.util.Arrays;
 public class Meeting {
     private String mRoomName;
     private ArrayList<String> mParticipants;
-    private String mHour;
+    private AbstractMap.SimpleEntry<Integer, String> mHour;
     private String mTitle;
     private String mDetailSubject;
     private ArrayList mIconList =
@@ -24,12 +25,12 @@ public class Meeting {
     public Meeting() {
     }
 
-    public Meeting(String title, String hour, String roomName, ArrayList<String> participants, String subject) {
+    public Meeting(String title, AbstractMap.SimpleEntry<Integer, String> hour, String roomName, ArrayList<String> participants, String subject) {
         if(iconSelector == 3)
             iconSelector = 0;
 
         mTitle = title;
-        mHour = hour;
+        mHour = new AbstractMap.SimpleEntry<>(hour.getKey(), hour.getValue());
         mRoomName = roomName;
         mParticipants = participants;
         mDetailSubject = subject;
@@ -49,26 +50,26 @@ public class Meeting {
     }
 
     public String getParticipants() {
-        String participants = "";
+        StringBuilder participants = new StringBuilder();
         for (int i = 0; i < mParticipants.size(); i++) {
-            participants += mParticipants.get(i);
+            participants.append(mParticipants.get(i));
             //check if we reach the end of the list
             if ((i + 1) != mParticipants.size())
-                participants += ", ";
+                participants.append(", ");
         }
-        return participants;
+        return participants.toString();
     }
 
     public void setParticipants(ArrayList<String> participants) {
         mParticipants = participants;
     }
 
-    public String getHour() {
+    public AbstractMap.SimpleEntry<Integer, String> getHour() {
         return mHour;
     }
 
     public void setHour(String hour) {
-        mHour = hour;
+        mHour.setValue(hour);
     }
 
     public String getTitle() {

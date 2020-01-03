@@ -18,32 +18,19 @@ public class SortList {
 
     public static void sortByHour(Boolean ascending) {
         meetingsList = MeetingsApi.getMeetingsList();
-        if (ascending) {
-            Collections.sort(meetingsList, new Comparator<Meeting>() {
-                @Override
-                public int compare(Meeting meeting1, Meeting meeting2) {
-                    return meeting1.getHour().compareTo(meeting2.getHour());
-                }
-            });
-        } else {
-            Collections.reverse(meetingsList);
-        }
 
+        Collections.sort(meetingsList, (meeting1, meeting2) -> meeting1.getHour().getKey().compareTo(meeting2.getHour().getKey()));
+        if (!ascending)
+            Collections.reverse(meetingsList);
         MeetingsApi.updateListOrder(meetingsList);
     }
 
     public static void sortByRoomName(Boolean ascending) {
         meetingsList = MeetingsApi.getMeetingsList();
-        if (ascending) {
-            Collections.sort(meetingsList, new Comparator<Meeting>() {
-                @Override
-                public int compare(Meeting meeting1, Meeting meeting2) {
-                    return meeting1.getRoomName().compareTo(meeting2.getRoomName());
-                }
-            });
-        } else {
+
+        Collections.sort(meetingsList, (meeting1, meeting2) -> meeting1.getRoomName().compareTo(meeting2.getRoomName()));
+        if (!ascending)
             Collections.reverse(meetingsList);
-        }
         MeetingsApi.updateListOrder(meetingsList);
     }
 }

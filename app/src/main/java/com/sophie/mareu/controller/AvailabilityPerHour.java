@@ -14,8 +14,8 @@ public class AvailabilityPerHour{
         key++;
     }
 
-    public String getHour(){
-        return hour.getValue();
+    public AbstractMap.SimpleEntry<Integer, String> getHour(){
+        return hour;
     }
 
     public ArrayList<String> getRooms(){

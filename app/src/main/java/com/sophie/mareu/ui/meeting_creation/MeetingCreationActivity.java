@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -25,8 +26,7 @@ public class MeetingCreationActivity extends AppCompatActivity {
     }
 
     private void configureAndShowMeetingCreationStartFragment() {
-        MeetingCreationStartFragment meetingCreationStartFragment = (MeetingCreationStartFragment)
-                getSupportFragmentManager().findFragmentById(R.id.frame_setmeeting);
+        Fragment meetingCreationStartFragment = getSupportFragmentManager().findFragmentById(R.id.frame_setmeeting);
 
         if(meetingCreationStartFragment == null && findViewById(R.id.frame_setmeeting) != null){
                 meetingCreationStartFragment = new MeetingCreationStartFragment();
