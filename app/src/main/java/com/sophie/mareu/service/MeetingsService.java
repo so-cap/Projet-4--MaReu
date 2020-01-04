@@ -4,7 +4,7 @@ import com.sophie.mareu.model.Meeting;
 
 import java.util.ArrayList;
 
-public class MeetingsApi {
+public class MeetingsService {
     private static ArrayList<Meeting> mMeetings = new ArrayList<>();
 
     public static void addMeeting(Meeting meeting){

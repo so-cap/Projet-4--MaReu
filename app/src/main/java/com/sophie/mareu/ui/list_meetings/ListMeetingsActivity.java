@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.sophie.mareu.R;
-import com.sophie.mareu.service.MeetingsApi;
+import com.sophie.mareu.service.MeetingsService;
 import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
 
 
@@ -106,6 +106,6 @@ public class ListMeetingsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        MeetingsApi.clearMeetingList();
+        MeetingsService.clearMeetingList();
     }
 }

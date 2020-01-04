@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
-import com.sophie.mareu.service.RoomsAvailability;
+import com.sophie.mareu.service.RoomsAvailabilityService;
 import com.sophie.mareu.event.DeleteMeetingEvent;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.MeetingsApi;
+import com.sophie.mareu.service.MeetingsService;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -44,7 +44,7 @@ public class ListMeetingFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_list_meetings, container, false);
 
-        RoomsAvailability.initRoomsAndHours();
+        RoomsAvailabilityService.initRoomsAndHours();
         context = view.getContext();
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -65,7 +65,7 @@ public class ListMeetingFragment extends Fragment {
     }
 
     private void initList() {
-        mMeetings = MeetingsApi.getMeetingsList();
+        mMeetings = MeetingsService.getMeetingsList();
         mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings, context));
 
     }
@@ -88,7 +88,7 @@ public class ListMeetingFragment extends Fragment {
 
     @Subscribe
     public void onDeleteMeeting (DeleteMeetingEvent event){
-        MeetingsApi.deleteMeeting(event.meeting);
+        MeetingsService.deleteMeeting(event.meeting);
         initList();
 
         if(mMeetings.isEmpty())

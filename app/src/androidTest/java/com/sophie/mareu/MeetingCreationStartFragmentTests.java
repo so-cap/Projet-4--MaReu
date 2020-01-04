@@ -3,8 +3,8 @@ package com.sophie.mareu;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
-import com.sophie.mareu.service.RoomsAvailability;
-import com.sophie.mareu.controller.AvailabilityPerHour;
+import com.sophie.mareu.service.RoomsAvailabilityService;
+import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 
 import org.junit.Before;
@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @RunWith(AndroidJUnit4.class)
 public class MeetingCreationStartFragmentTests {
     private ListMeetingsActivity mActivity;
-    private ArrayList<AvailabilityPerHour> mRoomsAndHours = new ArrayList<>();
+    private ArrayList<RoomsPerHour> mRoomsAndHours = new ArrayList<>();
     private ArrayList<String> mRooms;
 
     @Rule
@@ -51,10 +51,10 @@ public class MeetingCreationStartFragmentTests {
         char A = 'A';
 
         mRooms = new ArrayList<>(Arrays.asList("PEACH","MARIO","WARIO"));
-        mRoomsAndHours.add(new AvailabilityPerHour("8h00", new ArrayList<>(mRooms)));
-        mRoomsAndHours.add(new AvailabilityPerHour("9h00",new ArrayList<>(mRooms)));
-        mRoomsAndHours.add(new AvailabilityPerHour("10h00",new ArrayList<>(mRooms)));
-        RoomsAvailability.updateAvailableHours(mRoomsAndHours);
+        mRoomsAndHours.add(new RoomsPerHour("8h00", new ArrayList<>(mRooms)));
+        mRoomsAndHours.add(new RoomsPerHour("9h00",new ArrayList<>(mRooms)));
+        mRoomsAndHours.add(new RoomsPerHour("10h00",new ArrayList<>(mRooms)));
+        RoomsAvailabilityService.updateAvailableHours(mRoomsAndHours);
 
 
         for (int i = 0; i < initialHoursAvailable; i++) {
@@ -75,9 +75,9 @@ public class MeetingCreationStartFragmentTests {
 
     @Test
     public void updateHoursAvailabilityReal(){
-        RoomsAvailability.initRoomsAndHours();
-        mRoomsAndHours = RoomsAvailability.getAvailableRoomsPerHour();
-        RoomsAvailability.updateAvailableHours(mRoomsAndHours);
+        RoomsAvailabilityService.initRoomsAndHours();
+        mRoomsAndHours = RoomsAvailabilityService.getRoomsPerHourList();
+        RoomsAvailabilityService.updateAvailableHours(mRoomsAndHours);
 
         int initialHoursAvailable = mRoomsAndHours.size();
         int j = 0;

@@ -23,8 +23,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.sophie.mareu.controller.CustomRadioGroupLayout;
 import com.sophie.mareu.R;
-import com.sophie.mareu.service.RoomsAvailability;
-import com.sophie.mareu.controller.AvailabilityPerHour;
+import com.sophie.mareu.service.RoomsAvailabilityService;
+import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 
 import java.util.AbstractMap;
@@ -34,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MeetingCreationStartFragment extends Fragment implements View.OnClickListener {
-    private ArrayList<AvailabilityPerHour> mAvailableHoursAndRooms;
+    private ArrayList<RoomsPerHour> mAvailableHoursAndRooms;
     private ArrayList<String> mSpinnerArray;
     private AbstractMap.SimpleEntry<Integer, String> mSelectedHour;
     private String mSelectedRoomName;
@@ -89,7 +89,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     public void initSpinner() {
-        mAvailableHoursAndRooms = RoomsAvailability.getAvailableRoomsPerHour();
+        mAvailableHoursAndRooms = RoomsAvailabilityService.getRoomsPerHourList();
         mSpinnerArray = new ArrayList<>();
         String mHour;
 

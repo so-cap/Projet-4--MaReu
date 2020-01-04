@@ -18,10 +18,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.sophie.mareu.R;
-import com.sophie.mareu.controller.AvailabilityPerHour;
+import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.MeetingsApi;
-import com.sophie.mareu.service.RoomsAvailability;
+import com.sophie.mareu.service.MeetingsService;
+import com.sophie.mareu.service.RoomsAvailabilityService;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -169,13 +169,13 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
 
     private void setMeeting() {
         Meeting meeting = new Meeting(mTitle, mHour, mRoomName, mParticipants, mDetailSubject);
-        MeetingsApi.addMeeting(meeting);
+        MeetingsService.addMeeting(meeting);
         updateRoomAvailability();
     }
 
     private void updateRoomAvailability() {
-        ArrayList<AvailabilityPerHour> roomsPerHour = RoomsAvailability.getAvailableRoomsPerHour();
+        ArrayList<RoomsPerHour> roomsPerHour = RoomsAvailabilityService.getRoomsPerHourList();
         roomsPerHour.get(mHourPosition).getRooms().remove(mRoomPosition);
-        RoomsAvailability.updateAvailableHours(roomsPerHour);
+        RoomsAvailabilityService.updateAvailableHours(roomsPerHour);
     }
 }
