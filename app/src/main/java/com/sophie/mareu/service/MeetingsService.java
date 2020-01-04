@@ -11,12 +11,12 @@ public class MeetingsService {
         mMeetings.add(meeting);
     }
 
-    public static ArrayList<Meeting> getMeetingsList(){
-        return mMeetings;
-    }
-
     public static void deleteMeeting(Meeting meeting){
         mMeetings.remove(meeting);
+    }
+
+    public static ArrayList<Meeting> getMeetingsList(){
+        return mMeetings;
     }
 
     public static void clearMeetingList(){
