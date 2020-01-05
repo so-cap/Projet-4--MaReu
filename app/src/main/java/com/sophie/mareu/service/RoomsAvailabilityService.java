@@ -3,15 +3,21 @@ package com.sophie.mareu.service;
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.controller.RoomsPerHour;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by SOPHIE on 30/12/2019.
  */
-public class RoomsAvailabilityService {
+public class RoomsAvailabilityService implements Serializable {
     private static ArrayList<RoomsPerHour> mRoomsPerHourList = new ArrayList<>();
 
-    public static void initRoomsAndHours(){
+
+    public RoomsAvailabilityService(){
+        initRoomsAndHours();
+    }
+
+    public void initRoomsAndHours(){
         // use tags for each hour view (get size of array, then loop to setTag on button.
         RoomsPerHour roomsPerHour;
         ArrayList<String> hoursList = DI.getNewHoursList();
@@ -27,11 +33,11 @@ public class RoomsAvailabilityService {
         }
     }
 
-    public static ArrayList<RoomsPerHour> getRoomsPerHourList(){
+    public ArrayList<RoomsPerHour> getRoomsPerHourList(){
         return mRoomsPerHourList;
     }
 
-    public static void updateAvailableHours(ArrayList<RoomsPerHour> availableHoursAndRooms) {
+    public void updateAvailableHours(ArrayList<RoomsPerHour> availableHoursAndRooms) {
         mRoomsPerHourList = availableHoursAndRooms;
 
         // delete hour availability if all the rooms are taken

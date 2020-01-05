@@ -21,7 +21,7 @@
     <string name="hint_subject">Quel(s) sujet(s) allez vous aborder ?</string>
     <string name="subject_title">Sujet:</string>
     <string name="hint_subject_title">mon titre</string>
-    <string name="short_title">Court titre:</string>
+    <string name="title">Titre:</string>
     <string name="meeting_details">DETAILS DE LA REUNION</string>
     <string name="choose_a_room">Choisissez votre salle de réunion!</string>
     <string name="sort_list">sort list</string>
@@ -32,4 +32,18 @@
     <string name="sort_by_roomname">"Filtrer par lieu (A - Z)   %s"</string>
     <string name="arrow_up">&#x2197;</string>
     <string name="arrow_down">&#x2199;</string>
+    <string name="select_date"><![CDATA[> Choisir une date de réunion <]]></string>
+
+    <string-array name="room_names">
+        <item>Peach</item>
+        <item>Luigi</item>
+        <item>Mario</item>
+        <item>Bowser</item>
+        <item>Waluigi</item>
+        <item>Daisy</item>
+        <item>Wario</item>
+        <item>Rosalina</item>
+        <item>Toad</item>
+        <item>Yoshi</item>
+    </string-array>
 </resources>

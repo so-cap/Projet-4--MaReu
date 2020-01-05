@@ -1,8 +1,12 @@
 package com.sophie.mareu.ui.meeting_creation;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +24,13 @@ import androidx.fragment.app.FragmentManager;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.service.AvailabilityByDate;
 import com.sophie.mareu.service.MeetingsService;
 import com.sophie.mareu.service.RoomsAvailabilityService;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +42,8 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     private ArrayList<String> mParticipants = new ArrayList<>();
     private Context mContext;
     private int mRoomPosition, mHourPosition;
+    private RoomsAvailabilityService mRoomsAvailabilityService;
+    private Date mSelectedDate;
 
     @BindView(R.id.meeting_title_input)
     EditText mTitleView;
@@ -70,24 +78,17 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
             mRoomName = getArguments().getString("selected_room");
             mHourPosition = getArguments().getInt("hour_position");
             mRoomPosition = getArguments().getInt("room_position");
+            mSelectedDate = (Date) getArguments().getSerializable("selected_date");
+            mRoomsAvailabilityService = (RoomsAvailabilityService) getArguments().
+                    getSerializable("rooms_availability_service");
         }
 
         mAddMoreEmail.setOnClickListener(this);
         mBtnEnd.setOnClickListener(this);
         mDeleteEmail.setOnClickListener(this);
+
+
         return view;
-    }
-
-    private void initParticipantsList() {
-        int emailsEntered = mEmailContainer.getChildCount();
-
-        for (int i = 0; i < emailsEntered; i++) {
-            if (!(((EditText) mEmailContainer.getChildAt(i)).getText().toString().isEmpty())) {
-                String emailAddress;
-                emailAddress = ((EditText) mEmailContainer.getChildAt(i)).getText().toString();
-                mParticipants.add(emailAddress);
-            }
-        }
     }
 
     @Override
@@ -106,28 +107,11 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         }
     }
 
-    private boolean checkIfValid() {
-        mTitle = mTitleView.getText().toString();
-        mDetailSubject = mDetailSubjectView.getText().toString();
-        initParticipantsList();
-
-        if (mTitle.isEmpty() || mParticipants.isEmpty()) {
-            if (mTitle.isEmpty())
-                mTitleView.setError("Remplissez ce champs");
-            if (mParticipants.isEmpty()) {
-                mEmailView.setError("Remplissez ce champs");
-            }
-            return false;
-        }
-        setMeeting();
-        return true;
-    }
-
     private void addEmailView(){
         EditText anotherEmail = new EditText(mContext);
 
         anotherEmail.setHint(getString(R.string.email_hint));
-        anotherEmail.setTextSize(16);
+        anotherEmail.setTextSize(20);
         anotherEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         mEmailContainer.addView(anotherEmail);
         mDeleteEmail.setVisibility(View.VISIBLE);
@@ -146,22 +130,75 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
             mAddMoreEmail.setVisibility(View.VISIBLE);
     }
 
+    private boolean checkIfValid() {
+        mTitle = mTitleView.getText().toString();
+        mDetailSubject = mDetailSubjectView.getText().toString();
+        initParticipantsList();
+
+        if ((!emailChecker()) || (mTitle.isEmpty() || mParticipants.isEmpty())) {
+            if (mTitle.isEmpty())
+                mTitleView.setError("Veuillez remplir ce champs");
+            if (mParticipants.isEmpty())
+                mEmailView.setError("Veuillez remplir ce champs");
+            return false;
+        }
+
+        setMeeting();
+        return true;
+    }
+
+    private boolean emailChecker(){
+        int emailsNbr = mEmailContainer.getChildCount();
+        int errors = 0;
+        EditText emailView;
+
+        for (int position = 0; position < emailsNbr; position++){
+            emailView = (EditText) mEmailContainer.getChildAt(position);
+            String emptyView = emailView.getText().toString();
+            if (!(Patterns.EMAIL_ADDRESS.matcher(emailView.getText().toString())).matches() && (!(emptyView.isEmpty()))){
+                emailView.setError("Addresse email invalide !");
+                errors++;
+            }
+        }
+        return errors == 0;
+    }
+
+    private void initParticipantsList() {
+        int emailsEntered = mEmailContainer.getChildCount();
+
+        for (int i = 0; i < emailsEntered; i++) {
+            if (!(((EditText) mEmailContainer.getChildAt(i)).getText().toString().isEmpty())) {
+                String emailAddress;
+                emailAddress = ((EditText) mEmailContainer.getChildAt(i)).getText().toString();
+                mParticipants.add(emailAddress);
+            }
+        }
+    }
+
     private void backToHomePage() {
-        if (getActivity().getClass().equals(MeetingCreationActivity.class)) {
-            getActivity().finish();
-        } else {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("selected_date",mSelectedDate);
+
+        if (getActivity()!= null) {
             Fragment listMeetingFragment = getActivity().getSupportFragmentManager().
                     findFragmentById(R.id.frame_listmeetings);
-
-            if (listMeetingFragment == null) {
+            if (getActivity().getClass().equals(MeetingCreationActivity.class)) {
+                intent.putExtras(bundle);
+                getActivity().setResult(Activity.RESULT_OK, intent);
                 getActivity().finish();
             } else {
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                //to update recycler view
-                listMeetingFragment.onStop();
-                listMeetingFragment.onStart();
-                listMeetingFragment.onResume();
+                if (listMeetingFragment == null) {
+                    getActivity().finish();
+                } else {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    //to update recycler view
+                    listMeetingFragment.onStop();
+                    listMeetingFragment.onStart();
+                    listMeetingFragment.setArguments(bundle);
+                    listMeetingFragment.onResume();
+                }
             }
         }
         Toast.makeText(mContext,"Réunion enregistrée !", Toast.LENGTH_LONG).show();
@@ -169,13 +206,15 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
 
     private void setMeeting() {
         Meeting meeting = new Meeting(mTitle, mHour, mRoomName, mParticipants, mDetailSubject);
-        MeetingsService.addMeeting(meeting);
+        AvailabilityByDate.addMeeting(meeting, mSelectedDate);
         updateRoomAvailability();
     }
 
     private void updateRoomAvailability() {
-        ArrayList<RoomsPerHour> roomsPerHour = RoomsAvailabilityService.getRoomsPerHourList();
+        ArrayList<RoomsPerHour> roomsPerHour = mRoomsAvailabilityService.getRoomsPerHourList();
         roomsPerHour.get(mHourPosition).getRooms().remove(mRoomPosition);
-        RoomsAvailabilityService.updateAvailableHours(roomsPerHour);
+        mRoomsAvailabilityService.updateAvailableHours(roomsPerHour);
+
+        AvailabilityByDate.updateAvailabilityByDate(mSelectedDate, mRoomsAvailabilityService);
     }
 }

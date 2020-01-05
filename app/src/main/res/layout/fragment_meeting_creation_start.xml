@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,16 +26,42 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/choose_hour_title"
+            android:id="@+id/choose_date_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="50dp"
-            android:text="@string/meeting_hour"
+            android:text="Date :"
             android:textColor="@android:color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/new_meeting_title" />
+
+
+        <TextView
+            android:id="@+id/select_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_date"
+            android:textStyle="italic"
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/choose_date_title"
+            app:layout_constraintStart_toEndOf="@+id/choose_date_title"
+            app:layout_constraintTop_toTopOf="@+id/choose_date_title"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/choose_hour_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/meeting_hour"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/choose_date_title" />
 
         <Spinner
             android:id="@+id/spinner_hour"
@@ -58,41 +85,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/choose_hour_title" />
 
-
-        <RelativeLayout
-            android:id="@+id/radio_button_group"
-            android:layout_width="wrap_content"
+        <com.adroitandroid.chipcloud.ChipCloud
+            android:id="@+id/chip_cloud"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            app:labels="@array/room_names"
+            app:textSize="20sp"
+            app:gravity="left"
+            app:selectMode="required"
+            app:verticalSpacing="10dp"
+            app:selectedColor="@color/colorPrimary"
+            app:selectedFontColor="@color/white"
+            app:deselectedColor="@color/light_grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/availablerooms_title">
-
-            <LinearLayout
-                android:id="@+id/linearlayout_column1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearlayout_column2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/linearlayout_column1"
-                android:orientation="horizontal">
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearlayout_column3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/linearlayout_column2"
-                android:orientation="horizontal">
-            </LinearLayout>
-        </RelativeLayout>
+        </com.adroitandroid.chipcloud.ChipCloud>
 
         <TextView
             android:id="@+id/all_meetings_full"
@@ -120,7 +131,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radio_button_group" />
+            app:layout_constraintTop_toBottomOf="@+id/chip_cloud" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

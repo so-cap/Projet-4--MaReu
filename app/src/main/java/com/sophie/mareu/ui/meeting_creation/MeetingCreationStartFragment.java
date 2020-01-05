@@ -1,5 +1,6 @@
 package com.sophie.mareu.ui.meeting_creation;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,8 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,37 +21,40 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.sophie.mareu.controller.CustomRadioGroupLayout;
+import com.adroitandroid.chipcloud.ChipCloud;
+import com.adroitandroid.chipcloud.ChipListener;
 import com.sophie.mareu.R;
+import com.sophie.mareu.service.AvailabilityByDate;
 import com.sophie.mareu.service.RoomsAvailabilityService;
 import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MeetingCreationStartFragment extends Fragment implements View.OnClickListener {
+public class MeetingCreationStartFragment extends Fragment implements View.OnClickListener, ChipListener, DatePickerDialog.OnDateSetListener {
     private ArrayList<RoomsPerHour> mAvailableHoursAndRooms;
     private ArrayList<String> mSpinnerArray;
     private AbstractMap.SimpleEntry<Integer, String> mSelectedHour;
     private String mSelectedRoomName;
     private int mHourPosition;
     private Context mContext;
-    private CustomRadioGroupLayout mCustomRadioGroup;
     private int mRoomPosition;
+    private Date mSelectedDate;
+    private RoomsAvailabilityService mRoomsAvailabilityService;
 
+    @BindView(R.id.select_date)
+    TextView mDateView;
     @BindView(R.id.spinner_hour)
     Spinner mSpinner;
-
-    @BindView(R.id.linearlayout_column1)
-    LinearLayout mRadioGrpRow1;
-    @BindView(R.id.linearlayout_column2)
-    LinearLayout mRadioGrpRow2;
-    @BindView(R.id.linearlayout_column3)
-    LinearLayout mRadioGrpRow3;
+    @BindView(R.id.chip_cloud)
+    ChipCloud mChipCloud;
 
     @BindView(R.id.all_meetings_full)
     TextView mMeetingsFull;
@@ -63,10 +66,12 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meeting_creation_start, container, false);
-
         mContext = getContext();
         ButterKnife.bind(this, view);
 
+        mRoomsAvailabilityService = AvailabilityByDate.getRoomsAvailabilityService(mSelectedDate);
+
+        mDateView.setOnClickListener(this);
         initSpinner();
         displaySpinner();
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -74,22 +79,21 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mHourPosition = position;
                 mSelectedHour = mAvailableHoursAndRooms.get(mHourPosition).getHour();
-                initRadioGroup();
-                mCustomRadioGroup.unselectButton(mCustomRadioGroup.getCheckedRadioButtonId());
+                initChipCloud();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
+        initChipCloud();
+        mChipCloud.setChipListener(this);
         mNextPage.setOnClickListener(this);
-        mCustomRadioGroup = new CustomRadioGroupLayout();
         return view;
     }
 
     public void initSpinner() {
-        mAvailableHoursAndRooms = RoomsAvailabilityService.getRoomsPerHourList();
+        mAvailableHoursAndRooms = mRoomsAvailabilityService.getRoomsPerHourList();
         mSpinnerArray = new ArrayList<>();
         String mHour;
 
@@ -111,111 +115,43 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         }
     }
 
-    private void initRadioGroup() {
-        int roomsAvailable = mAvailableHoursAndRooms.get(mHourPosition).getRooms().size();
-        int i = 0;
-
-        clearChildViews();
-
-        while (i < roomsAvailable) {
-            while (i < 4 && i < roomsAvailable) {
-                RadioButton radioButton = new RadioButton(mContext);
-                radioButton.setId(i);
-                radioButton.setText(mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(i));
-                mRadioGrpRow1.addView(radioButton);
-                i++;
-            }
-            while (i >= 4 && i < 7 && i < roomsAvailable) {
-                RadioButton radioButton = new RadioButton(mContext);
-                radioButton.setId(i);
-                radioButton.setText(mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(i));
-                mRadioGrpRow2.addView(radioButton);
-                i++;
-            }
-            while (i >= 7 && i < roomsAvailable) {
-                RadioButton radioButton = new RadioButton(mContext);
-                radioButton.setId(i);
-                radioButton.setText(mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(i));
-                mRadioGrpRow3.addView(radioButton);
-                i++;
-            }
-        }
-        initClickOnRadioButton();
-    }
-
-
-    private void clearChildViews() {
-        int nbrOfChildViews = mRadioGrpRow1.getChildCount();
-
-        if (nbrOfChildViews != 0) {
-            mRadioGrpRow1.removeAllViews();
-            mRadioGrpRow2.removeAllViews();
-            mRadioGrpRow3.removeAllViews();
-        }
-    }
-
-    private void initClickOnRadioButton() {
-        ArrayList<RadioButton> radioButtons = new ArrayList<>();
-        int childViews1 = mRadioGrpRow1.getChildCount();
-        int childViews2 = mRadioGrpRow2.getChildCount();
-        int childViews3 = mRadioGrpRow3.getChildCount();
-        int nbrOfRows;
-
-        if (childViews2 != 0)
-            nbrOfRows = 2;
-        else
-            nbrOfRows = 3;
-
-        if (childViews1 != 0) {
-            for (int i = 0; i < nbrOfRows; i++) {
-                int k = 0;
-                while (k < childViews1) {
-                    radioButtons.add((RadioButton) mRadioGrpRow1.getChildAt(k));
-                    k++;
-                }
-                int j = 0;
-                while (j < childViews2) {
-                    radioButtons.add((RadioButton) mRadioGrpRow2.getChildAt(j));
-                    j++;
-                }
-                int y = 0;
-                while (y < childViews3) {
-                    radioButtons.add((RadioButton) mRadioGrpRow3.getChildAt(y));
-                    y++;
-                }
-                i++;
-            }
-        }
-        mCustomRadioGroup.addRadioButtonToTracker(radioButtons);
+    private void initChipCloud() {
+        ArrayList<String> rooms = mAvailableHoursAndRooms.get(mHourPosition).getRooms();
+        //chipCloud only takes [] format
+        String[] roomsList = rooms.toArray(new String[0]);
+        mChipCloud.removeAllViews();
+        mChipCloud.addChips(roomsList);
     }
 
     @Override
     public void onClick(View v) {
-        if (checkIfValid() && mSpinnerArray != null) {
-            MeetingCreationEndFragment meetingCreationEndFragment = new MeetingCreationEndFragment();
-
-            Bundle bundle = new Bundle();
-            bundle.putInt("selected_hour_key", mSelectedHour.getKey());
-            bundle.putString("selected_hour_value", mSelectedHour.getValue());
-            bundle.putString("selected_room", mSelectedRoomName);
-            bundle.putInt("hour_position", mHourPosition);
-            bundle.putInt("room_position", mRoomPosition);
-            meetingCreationEndFragment.setArguments(bundle);
-
-            FragmentTransaction fm = getFragmentManager().beginTransaction();
-            fm.replace(R.id.frame_setmeeting, meetingCreationEndFragment)
-                    .addToBackStack(null).commit();
-        } else if (mSpinnerArray == null) {
-            if (getActivity().getClass().equals(ListMeetingsActivity.class))
-                getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            else
-                getActivity().finish();
+        switch (v.getId()) {
+            case R.id.next_page:
+                if (checkIfValid() && mSpinnerArray != null) {
+                    startNextFragment();
+                } else if (mSpinnerArray == null) {
+                    if (getActivity().getClass().equals(ListMeetingsActivity.class))
+                        getActivity().getSupportFragmentManager().popBackStack(null,
+                                FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    else
+                        getActivity().finish();
+                }
+                break;
+            case R.id.select_date:
+                showDatePickerDialog();
+                break;
         }
     }
 
-    private boolean checkIfValid() {
-        mRoomPosition = mCustomRadioGroup.getCheckedRadioButtonId();
+    private void showDatePickerDialog() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(mContext,
+                this, Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+    }
 
+    private boolean checkIfValid() {
         if (mRoomPosition >= 0) {
             mSelectedRoomName = mAvailableHoursAndRooms.get(mHourPosition).getRooms().get(mRoomPosition);
             return true;
@@ -228,5 +164,42 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     @VisibleForTesting
     public ArrayList<String> getSpinnerArray() {
         return mSpinnerArray;
+    }
+
+    private void startNextFragment() {
+        MeetingCreationEndFragment meetingCreationEndFragment = new MeetingCreationEndFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("selected_hour_key", mSelectedHour.getKey());
+        bundle.putString("selected_hour_value", mSelectedHour.getValue());
+        bundle.putString("selected_room", mSelectedRoomName);
+        bundle.putInt("hour_position", mHourPosition);
+        bundle.putInt("room_position", mRoomPosition);
+        bundle.putSerializable("selected_date", mSelectedDate);
+        bundle.putSerializable("rooms_availability_service", mRoomsAvailabilityService);
+        meetingCreationEndFragment.setArguments(bundle);
+
+        FragmentTransaction fm = getFragmentManager().beginTransaction();
+        fm.replace(R.id.frame_setmeeting, meetingCreationEndFragment)
+                .addToBackStack(null).commit();
+    }
+
+    @Override
+    public void chipSelected(int index) {
+        mRoomPosition = index;
+    }
+
+    @Override
+    public void chipDeselected(int index) {
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        mSelectedDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
+        mDateView.setText(mSelectedDate.toString());
+        mRoomsAvailabilityService = AvailabilityByDate.getRoomsAvailabilityService(mSelectedDate);
+        initSpinner();
+        displaySpinner();
+        initChipCloud();
     }
 }

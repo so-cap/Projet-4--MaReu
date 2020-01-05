@@ -12,9 +12,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.sophie.mareu.R;
+import com.sophie.mareu.service.AvailabilityByDate;
 import com.sophie.mareu.service.MeetingsService;
+import com.sophie.mareu.service.RoomsAvailabilityService;
 import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
 
+
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,8 +29,9 @@ import static com.sophie.mareu.controller.SortList.sortByRoomName;
 
 public class ListMeetingsActivity extends AppCompatActivity {
     private ListMeetingFragment mListMeetingFragment;
-    boolean ascendingDate = true;
-    boolean ascendingName = true;
+    private boolean ascendingDate = true;
+    private boolean ascendingName = true;
+
     @BindView(R.id.my_toolbar)
     Toolbar mToolbar;
 
@@ -36,6 +42,9 @@ public class ListMeetingsActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
+
+        Date date = Calendar.getInstance().getTime();
+        AvailabilityByDate.getRoomsAvailabilityService(date).initRoomsAndHours();
 
         mListMeetingFragment = (ListMeetingFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.frame_listmeetings);

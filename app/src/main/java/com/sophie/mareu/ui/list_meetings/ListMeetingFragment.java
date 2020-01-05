@@ -1,5 +1,6 @@
 package com.sophie.mareu.ui.list_meetings;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
+import com.sophie.mareu.service.AvailabilityByDate;
 import com.sophie.mareu.service.RoomsAvailabilityService;
 import com.sophie.mareu.event.DeleteMeetingEvent;
 import com.sophie.mareu.model.Meeting;
@@ -27,6 +29,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by SOPHIE on 30/12/2019.
@@ -37,6 +41,16 @@ public class ListMeetingFragment extends Fragment {
     private Context context;
     private FloatingActionButton mFab;
     private TextView mNoNewMeetings;
+    private Date mSelectedDate = Calendar.getInstance().getTime();
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK)
+            mSelectedDate = (Date)data.getSerializableExtra("selected_date");
+        }
+    }
 
     @Nullable
     @Override
@@ -44,8 +58,11 @@ public class ListMeetingFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_list_meetings, container, false);
 
-        RoomsAvailabilityService.initRoomsAndHours();
         context = view.getContext();
+
+        if(getArguments()!= null)
+        mSelectedDate = (Date) getArguments().getSerializable("selected_date");
+
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
@@ -58,14 +75,14 @@ public class ListMeetingFragment extends Fragment {
         if(mFab != null){
             mFab.setOnClickListener(v -> {
                 Intent intent = new Intent(getContext(), MeetingCreationActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             });
         }
         return view;
     }
 
     private void initList() {
-        mMeetings = MeetingsService.getMeetingsList();
+        mMeetings = AvailabilityByDate.getMeetings(mSelectedDate);
         mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings, context));
 
     }
@@ -81,8 +98,7 @@ public class ListMeetingFragment extends Fragment {
         super.onResume();
         initList();
 
-
-        if(!(mMeetings.isEmpty()))
+        if(mMeetings == null)
             mNoNewMeetings.setVisibility(View.GONE);
     }
 

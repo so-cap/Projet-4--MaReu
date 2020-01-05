@@ -19,6 +19,7 @@ import com.sophie.mareu.model.Meeting;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -49,7 +50,10 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
 
     @Override
     public int getItemCount() {
-        return mMeetings.size();
+        if (mMeetings == null)
+            return 0;
+        else
+            return mMeetings.size();
     }
 
 
