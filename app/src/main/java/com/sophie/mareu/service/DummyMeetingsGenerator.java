@@ -14,11 +14,11 @@ public abstract class DummyMeetingsGenerator {
 
     public static List<Meeting> DUMMY_MEETINGS = Arrays.asList(
             new Meeting("Réunion A",new AbstractMap.SimpleEntry<>(0, "14h00"), "PEACH",
-                    new ArrayList<>(Arrays.asList("maxime@lamzone.com","alex@lamzone.com")), null),
+                    new ArrayList<>(Arrays.asList("maxime@lamzone.com","alex@lamzone.com")), null, null),
             new Meeting("Réunion B",new AbstractMap.SimpleEntry<>(1, "16h00"), "Mario",
-                    new ArrayList<>(Arrays.asList("paul@lamzone.com","viviane@lamzone.com")), null),
+                    new ArrayList<>(Arrays.asList("paul@lamzone.com","viviane@lamzone.com")), null, null),
             new Meeting("Réunion C",new AbstractMap.SimpleEntry<>(2, "19h00"), "Luigi",
-                    new ArrayList<>(Arrays.asList("amandine@lamzone.com","luc@lamzone")), null));
+                    new ArrayList<>(Arrays.asList("amandine@lamzone.com","luc@lamzone")), null, null));
 
     public static ArrayList<Meeting> getDummyMeetings(){
         return new ArrayList<>(DUMMY_MEETINGS);

@@ -206,7 +206,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     }
 
     private void setMeeting() {
-        Meeting meeting = new Meeting(mTitle, mHour, mRoomName, mParticipants, mDetailSubject);
+        Meeting meeting = new Meeting(mTitle, mHour, mRoomName, mParticipants, mDetailSubject, mSelectedDate);
         AvailabilityByDate.addMeeting(meeting, mSelectedDate);
         updateRoomAvailability();
     }
@@ -216,5 +216,6 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         roomsPerHour.get(mHourPosition).getRooms().remove(mRoomPosition);
         mRoomsAvailabilityService.updateAvailableHours(roomsPerHour);
         AvailabilityByDate.updateAvailabilityByDate(mSelectedDate, mRoomsAvailabilityService);
+
     }
 }

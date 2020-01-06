@@ -120,8 +120,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
     private void initChipCloud() {
         ArrayList<String> rooms = mAvailableHoursAndRooms.get(mHourPosition).getRooms();
-        Log.d(TAG, "LOGGinitCHIP: ROOMS LIST ROUND :" + i++ + " VALUE = " + rooms.toString());
-
         //chipCloud only takes [] format
         String[] roomsList = rooms.toArray(new String[0]);
         mChipCloud.removeAllViews();

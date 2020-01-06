@@ -2,13 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:title="Filtrer les réunions">
-        <menu>
-            <item
-                android:id="@+id/filter"
-                android:title="@string/sort_by_roomname_default"
-                app:showAsAction="never" />
-        </menu>
+    <item
+        android:id="@+id/filter"
+        android:title="Filtrer les réunions"
+        app:showAsAction="never">
+
     </item>
 
     <item
@@ -16,8 +14,4 @@
         android:title="@string/sort_by_date_default"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/sort_by_roomname_"
-        android:title="@string/sort_by_roomname_default"
-        app:showAsAction="never" />
 </menu>

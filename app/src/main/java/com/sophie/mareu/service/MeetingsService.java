@@ -11,16 +11,8 @@ public class MeetingsService {
         mMeetings.add(meeting);
     }
 
-    public static void deleteMeeting(Meeting meeting){
-        mMeetings.remove(meeting);
-    }
-
     public static ArrayList<Meeting> getMeetingsList(){
         return mMeetings;
-    }
-
-    public static void clearMeetingList(){
-        mMeetings.clear();
     }
 
     public static void updateListOrder(ArrayList<Meeting> meetings){

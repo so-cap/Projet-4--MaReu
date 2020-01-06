@@ -43,6 +43,7 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
     private FloatingActionButton mFab;
     private TextView mNoNewMeetings;
     private Date mSelectedDate = Calendar.getInstance().getTime();
+    private boolean mFiltered = false;
 
     private static final String TAG = "LOGGListMeetingFragment";
 
@@ -54,7 +55,6 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
             if (resultCode == Activity.RESULT_OK)
                 if (data != null)
                     mSelectedDate = (Date) data.getSerializableExtra("selected_date");
-            Log.d(TAG, "LOGGonActivityResult: ACTIVITY RESULT OK" + (mSelectedDate!= null));
         }
     }
 
@@ -88,38 +88,35 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
     }
 
     private void initList() {
-        if (getArguments() != null)
-            mSelectedDate = (Date) getArguments().getSerializable("selected_date");
-        Log.d(TAG, "LOGGonCreateView: " + (getArguments() != null));
-
-        if (filtered == false) mMeetings = AvailabilityByDate.getMeetings(mSelectedDate);
+        if (!mFiltered) mMeetings = AvailabilityByDate.getMeetings(mSelectedDate);
         else mMeetings = AvailabilityByDate.getFilteredList();
-
         mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings, context));
+
+        if (!(mMeetings.isEmpty())) mNoNewMeetings.setVisibility(View.GONE);
+        else mNoNewMeetings.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        if (getArguments() != null) {
+            mSelectedDate = (Date) getArguments().getSerializable("selected_date");
+            mFiltered = getArguments().getBoolean("filter_state");
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         initList();
-
-        if (!(mMeetings.isEmpty()))
-            mNoNewMeetings.setVisibility(View.GONE);
     }
 
     @Subscribe
     public void onDeleteMeeting(DeleteMeetingEvent event) {
-        MeetingsService.deleteMeeting(event.meeting);
+        AvailabilityByDate.deleteMeeting(event.meeting);
         initList();
-
-        if (mMeetings.isEmpty())
-            mNoNewMeetings.setVisibility(View.VISIBLE);
+        if (mMeetings.isEmpty()) mNoNewMeetings.setVisibility(View.VISIBLE);
     }
 
     @Override

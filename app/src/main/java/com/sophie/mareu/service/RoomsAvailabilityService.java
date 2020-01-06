@@ -1,5 +1,7 @@
 package com.sophie.mareu.service;
 
+import android.util.Log;
+
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.controller.RoomsPerHour;
 
@@ -10,7 +12,7 @@ import java.util.ArrayList;
  * Created by SOPHIE on 30/12/2019.
  */
 public class RoomsAvailabilityService implements Serializable {
-    private static ArrayList<RoomsPerHour> mRoomsPerHourList = new ArrayList<>();
+    private ArrayList<RoomsPerHour> mRoomsPerHourList = new ArrayList<>();
 
 
     public RoomsAvailabilityService(){
@@ -37,11 +39,14 @@ public class RoomsAvailabilityService implements Serializable {
         return mRoomsPerHourList;
     }
 
+    private static final String TAG = "LOGGRoomsAvailability";
     public void updateAvailableHours(ArrayList<RoomsPerHour> availableHoursAndRooms) {
         mRoomsPerHourList = availableHoursAndRooms;
 
+        Log.d(TAG, "updateAvailableHours: " + availableHoursAndRooms.size());
+
         // delete hour availability if all the rooms are taken
-        for(int position = 0; position != mRoomsPerHourList.size(); position++) {
+        for(int position = 0; position < mRoomsPerHourList.size(); position++) {
             if (mRoomsPerHourList.get(position).getRooms().isEmpty()){
                 mRoomsPerHourList.remove(position);
                 break;

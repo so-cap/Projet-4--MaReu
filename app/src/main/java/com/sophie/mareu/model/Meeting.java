@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Created by SOPHIE on 30/12/2019.
@@ -16,6 +17,7 @@ public class Meeting {
     private AbstractMap.SimpleEntry<Integer, String> mHour;
     private String mTitle;
     private String mDetailSubject;
+    private Date mDate;
     private ArrayList mIconList =
             new ArrayList<>(Arrays.asList(R.drawable.ic_lightpink, R.drawable.ic_lightgreen, R.drawable.ic_darkergreen));
     private int mIcon;
@@ -25,7 +27,8 @@ public class Meeting {
     public Meeting() {
     }
 
-    public Meeting(String title, AbstractMap.SimpleEntry<Integer, String> hour, String roomName, ArrayList<String> participants, String subject) {
+    public Meeting(String title, AbstractMap.SimpleEntry<Integer, String> hour,
+                   String roomName, ArrayList<String> participants, String subject, Date date) {
         if(iconSelector == 3)
             iconSelector = 0;
 
@@ -34,6 +37,7 @@ public class Meeting {
         mRoomName = roomName;
         mParticipants = participants;
         mDetailSubject = subject;
+        mDate = date;
         mIcon = (int) mIconList.get(iconSelector++);
     }
 
@@ -74,6 +78,14 @@ public class Meeting {
 
     public String getTitle() {
         return mTitle;
+    }
+
+    public void setDate(Date date) {
+        mDate = date;
+    }
+
+    public Date getDate(){
+        return mDate;
     }
 
     public void setTitle(String title) {
