@@ -3,6 +3,7 @@ package com.sophie.mareu.ui.meeting_creation;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,9 +46,11 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     private String mSelectedRoomName;
     private int mHourPosition;
     private Context mContext;
-    private int mRoomPosition;
-    private Date mSelectedDate;
+    private int mRoomPosition = -1;
+    private Date mSelectedDate = Calendar.getInstance().getTime();
     private RoomsAvailabilityService mRoomsAvailabilityService;
+    int i = 0;
+
 
     @BindView(R.id.select_date)
     TextView mDateView;
@@ -61,6 +64,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     @BindView(R.id.next_page)
     Button mNextPage;
 
+    private static final String TAG = "LOGGCreationStart";
 
     @Nullable
     @Override
@@ -86,7 +90,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        initChipCloud();
         mChipCloud.setChipListener(this);
         mNextPage.setOnClickListener(this);
         return view;
@@ -117,6 +120,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
     private void initChipCloud() {
         ArrayList<String> rooms = mAvailableHoursAndRooms.get(mHourPosition).getRooms();
+        Log.d(TAG, "LOGGinitCHIP: ROOMS LIST ROUND :" + i++ + " VALUE = " + rooms.toString());
+
         //chipCloud only takes [] format
         String[] roomsList = rooms.toArray(new String[0]);
         mChipCloud.removeAllViews();
@@ -158,7 +163,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         } else
             Toast.makeText(mContext, getString(R.string.choose_a_room), Toast.LENGTH_LONG).show();
         return false;
-
     }
 
     @VisibleForTesting
@@ -195,9 +199,29 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        mSelectedDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
-        mDateView.setText(mSelectedDate.toString());
-        mRoomsAvailabilityService = AvailabilityByDate.getRoomsAvailabilityService(mSelectedDate);
+        String firstDays = "";
+        String firstMonths = "";
+        month += 1;
+
+        Date newDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
+        updateCurrentService(newDate);
+
+        if (dayOfMonth < 10) firstDays = "0" + dayOfMonth;
+        if (month < 11) firstMonths = "0" + month;
+
+        mDateView.setText(getString(R.string.date_selected,
+                (dayOfMonth < 10? firstDays : (""+dayOfMonth+""))
+                ,(month < 11 ? firstMonths : (""+month+"")),year));
+
+        if (!(mChipCloud.isShown())) {
+            mChipCloud.setVisibility(View.VISIBLE);
+            mNextPage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void updateCurrentService(Date newDate) {
+        mRoomsAvailabilityService = AvailabilityByDate.getRoomsAvailabilityService(newDate);
+        mSelectedDate = newDate;
         initSpinner();
         displaySpinner();
         initChipCloud();

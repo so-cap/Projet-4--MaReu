@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ import java.util.Date;
 /**
  * Created by SOPHIE on 30/12/2019.
  */
-public class ListMeetingFragment extends Fragment {
+public class ListMeetingFragment extends Fragment implements View.OnClickListener {
     private ArrayList<Meeting> mMeetings = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private Context context;
@@ -43,12 +44,17 @@ public class ListMeetingFragment extends Fragment {
     private TextView mNoNewMeetings;
     private Date mSelectedDate = Calendar.getInstance().getTime();
 
+    private static final String TAG = "LOGGListMeetingFragment";
+
+    // to get data when in portrait mode
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            if(resultCode == Activity.RESULT_OK)
-            mSelectedDate = (Date)data.getSerializableExtra("selected_date");
+            if (resultCode == Activity.RESULT_OK)
+                if (data != null)
+                    mSelectedDate = (Date) data.getSerializableExtra("selected_date");
+            Log.d(TAG, "LOGGonActivityResult: ACTIVITY RESULT OK" + (mSelectedDate!= null));
         }
     }
 
@@ -60,8 +66,7 @@ public class ListMeetingFragment extends Fragment {
 
         context = view.getContext();
 
-        if(getArguments()!= null)
-        mSelectedDate = (Date) getArguments().getSerializable("selected_date");
+        AvailabilityByDate.getRoomsAvailabilityService(mSelectedDate);
 
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -72,19 +77,25 @@ public class ListMeetingFragment extends Fragment {
             mFab = getActivity().findViewById(R.id.fab);
         }
 
-        if(mFab != null){
-            mFab.setOnClickListener(v -> {
-                Intent intent = new Intent(getContext(), MeetingCreationActivity.class);
-                startActivityForResult(intent, 1);
-            });
-        }
+        if (mFab != null) mFab.setOnClickListener(this);
         return view;
     }
 
-    private void initList() {
-        mMeetings = AvailabilityByDate.getMeetings(mSelectedDate);
-        mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings, context));
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(getContext(), MeetingCreationActivity.class);
+        startActivityForResult(intent, 1);
+    }
 
+    private void initList() {
+        if (getArguments() != null)
+            mSelectedDate = (Date) getArguments().getSerializable("selected_date");
+        Log.d(TAG, "LOGGonCreateView: " + (getArguments() != null));
+
+        if (filtered == false) mMeetings = AvailabilityByDate.getMeetings(mSelectedDate);
+        else mMeetings = AvailabilityByDate.getFilteredList();
+
+        mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings, context));
     }
 
     @Override
@@ -98,16 +109,16 @@ public class ListMeetingFragment extends Fragment {
         super.onResume();
         initList();
 
-        if(mMeetings == null)
+        if (!(mMeetings.isEmpty()))
             mNoNewMeetings.setVisibility(View.GONE);
     }
 
     @Subscribe
-    public void onDeleteMeeting (DeleteMeetingEvent event){
+    public void onDeleteMeeting(DeleteMeetingEvent event) {
         MeetingsService.deleteMeeting(event.meeting);
         initList();
 
-        if(mMeetings.isEmpty())
+        if (mMeetings.isEmpty())
             mNoNewMeetings.setVisibility(View.VISIBLE);
     }
 
@@ -116,5 +127,4 @@ public class ListMeetingFragment extends Fragment {
         super.onStop();
         EventBus.getDefault().unregister(this);
     }
-
 }

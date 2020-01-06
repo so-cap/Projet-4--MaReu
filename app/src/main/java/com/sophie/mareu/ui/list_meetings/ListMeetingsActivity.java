@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.sophie.mareu.R;
+import com.sophie.mareu.controller.SortList;
 import com.sophie.mareu.service.AvailabilityByDate;
 import com.sophie.mareu.service.MeetingsService;
 import com.sophie.mareu.service.RoomsAvailabilityService;
@@ -24,11 +25,11 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.sophie.mareu.controller.SortList.sortByHour;
-import static com.sophie.mareu.controller.SortList.sortByRoomName;
-
 public class ListMeetingsActivity extends AppCompatActivity {
     private ListMeetingFragment mListMeetingFragment;
+    private Date mCurrentDate = Calendar.getInstance().getTime();
+    private Date mSelectedDate = Calendar.getInstance().getTime();
+    private String mSelectedName = "";
     private boolean ascendingDate = true;
     private boolean ascendingName = true;
 
@@ -42,9 +43,6 @@ public class ListMeetingsActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
-
-        Date date = Calendar.getInstance().getTime();
-        AvailabilityByDate.getRoomsAvailabilityService(date).initRoomsAndHours();
 
         mListMeetingFragment = (ListMeetingFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.frame_listmeetings);
@@ -68,7 +66,7 @@ public class ListMeetingsActivity extends AppCompatActivity {
                     item.setTitle(getString(R.string.sort_by_date, getString(R.string.arrow_down)));
                 else
                     item.setTitle(getString(R.string.sort_by_date, getString(R.string.arrow_up)));
-                sortByHour(ascendingDate);
+                SortList.sortByHour(ascendingDate);
                 ascendingDate = !ascendingDate;
                 break;
             case R.id.sort_by_roomname_:
@@ -76,12 +74,20 @@ public class ListMeetingsActivity extends AppCompatActivity {
                     item.setTitle(getString(R.string.sort_by_roomname, getString(R.string.arrow_down)));
                 else
                     item.setTitle(getString(R.string.sort_by_roomname, getString(R.string.arrow_up)));
-                sortByRoomName(ascendingName);
+                SortList.sortByRoomName(ascendingName);
                 ascendingName = !ascendingName;
                 break;
         }
         refreshView();
         return true;
+    }
+
+    private void sortByDate(){
+        mSelectedDate = date selected;
+        if mSelectedDate = null
+
+        AvailabilityByDate.filterMeetingsList(mSelectedDate, mSelectedName);
+
     }
 
     public void refreshView() {

@@ -1,10 +1,12 @@
 package com.sophie.mareu.controller;
 
 import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.service.AvailabilityByDate;
 import com.sophie.mareu.service.MeetingsService;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * Created by SOPHIE on 03/01/2020.
@@ -29,5 +31,17 @@ public class SortList {
         if (!ascending)
             Collections.reverse(meetingsList);
         MeetingsService.updateListOrder(meetingsList);
+    }
+
+    public static void filterByDate(Date date,) {
+        AvailabilityByDate.getMeetings(date);
+    }
+
+    public static void filterByRoomName(){
+
+    }
+
+    public static void filterByDateAndRoom(){
+
     }
 }

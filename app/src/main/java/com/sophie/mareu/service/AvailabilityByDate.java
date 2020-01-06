@@ -2,11 +2,13 @@ package com.sophie.mareu.service;
 
 import com.sophie.mareu.model.Meeting;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by SOPHIE on 05/01/2020.
@@ -16,6 +18,7 @@ public class AvailabilityByDate {
     private static HashMap<Date, RoomsAvailabilityService> mAvailabilityByDateList = new HashMap<>();
     private static HashMap<Date, ArrayList<Meeting>> mMeetingsByDate = new HashMap<>();
     private static ArrayList<Meeting> mMeetings = new ArrayList<>();
+    private static ArrayList<Meeting> mFilteredList = new ArrayList<>();
     private static Meeting mMeeting;
 
     public static Date getDate(){
@@ -35,6 +38,7 @@ public class AvailabilityByDate {
     }
 
     public static void updateAvailabilityByDate(Date date, RoomsAvailabilityService roomsAvailabilityService){
+        mAvailabilityByDateList.remove(date);
         mAvailabilityByDateList.put(date,roomsAvailabilityService);
     }
 
@@ -53,6 +57,27 @@ public class AvailabilityByDate {
         if (mMeetingsByDate.get(date) != null)
             return mMeetingsByDate.get(date);
         else
-            return null;
+            return new ArrayList<>();
+    }
+
+    public static ArrayList<Meeting> filterMeetingsList(Date date, String roomName) {
+        Date today = Calendar.getInstance().getTime();
+
+        if (date == today && roomName.isEmpty()) {
+            mFilteredList = AvailabilityByDate.getMeetings(date);
+        } else if (!(roomName.isEmpty()) && date == null) {
+            for (Map.Entry<Date, ArrayList<Meeting>> meetings : mMeetingsByDate.entrySet()) {
+                for (int i = 0; i < meetings.getValue().size(); i++) {
+                    if (meetings.getValue().get(i).getRoomName().equals(roomName))
+                        mFilteredList.add(meetings.getValue().get(i));
+                }
+            }
+        } else
+
+    }
+
+
+    public static ArrayList<Meeting>  getFilteredList(){
+        return mFilteredList;
     }
 }
