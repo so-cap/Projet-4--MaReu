@@ -1,5 +1,7 @@
 package com.sophie.mareu.controller;
 
+import android.util.Log;
+
 import java.util.AbstractMap;
 import java.util.ArrayList;
 
@@ -11,11 +13,11 @@ public class RoomsPerHour {
     public RoomsPerHour() {
     }
 
+    private static final String TAG = "LOGGRoomsPerHour";
     public RoomsPerHour(String hour, ArrayList<String> rooms) {
-        this.hour = new AbstractMap.SimpleEntry<>(key, hour);
+        this.hour = new AbstractMap.SimpleEntry<>(key++, hour);
         this.rooms = rooms;
-        key++;
-        if (key == 11) key = 0;
+        if (key == 12) key = 0;
     }
 
     public AbstractMap.SimpleEntry<Integer, String> getHour() {

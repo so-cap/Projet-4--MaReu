@@ -42,8 +42,9 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     private Date mSelectedDate = null;
     private String mSelectedName = null;
     private boolean mAscendingDate = true;
+    private Bundle mBundle = new Bundle();
+    private DatePickerDialog mDatePickerDialog;
     private boolean mFiltered = false;
-    Bundle mBundle = new Bundle();
 
 
     @BindView(R.id.my_toolbar)
@@ -111,11 +112,11 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     }
 
     private void showDatePickerDialog() {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+        mDatePickerDialog = new DatePickerDialog(this,
                 this, Calendar.getInstance().get(Calendar.YEAR),
                 Calendar.getInstance().get(Calendar.MONTH),
                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.show();
+        mDatePickerDialog.show();
     }
 
     public void refreshView() {
@@ -123,7 +124,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         mListMeetingFragment.onStart();
         mListMeetingFragment.setArguments(mBundle);
         mListMeetingFragment.onResume();
-        mFiltered = false;
     }
 
     private void configureAndShowListMeetingFragment() {
@@ -179,7 +179,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
             case R.id.ok_filter:
                 if (mSelectedDate != null || !mSelectedName.isEmpty()) {
                     sendFilteredListToRecyclerView();
-                    mFiltered = true;
                     mFilerView.setVisibility(View.GONE);
                 }
                  else
@@ -192,8 +191,21 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     }
 
     private void sendFilteredListToRecyclerView() {
-        mBundle.putBoolean("filter_state", mFiltered);
+        mBundle.putBoolean("filter_state", true);
         AvailabilityByDate.filterMeetingsList(mSelectedDate, mSelectedName);
         refreshView();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mDatePickerDialog != null) mDatePickerDialog.dismiss();
+        mRoomsSpinner.resetPivot();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mBundle.putBoolean("filter_state", false);
     }
 }

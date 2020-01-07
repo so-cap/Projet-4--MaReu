@@ -88,8 +88,13 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
     }
 
     private void initList() {
-        if (!mFiltered) mMeetings = AvailabilityByDate.getMeetings(mSelectedDate);
-        else mMeetings = AvailabilityByDate.getFilteredList();
+        if (!mFiltered){
+            mMeetings = AvailabilityByDate.getMeetings(mSelectedDate);
+        }
+        else {
+            mMeetings = AvailabilityByDate.getFilteredList();
+            Log.d(TAG, "initList: FILTERED LIST SIZE" + mMeetings.size() + "boolean value :" + mFiltered);
+        }
         mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings, context));
 
         if (!(mMeetings.isEmpty())) mNoNewMeetings.setVisibility(View.GONE);

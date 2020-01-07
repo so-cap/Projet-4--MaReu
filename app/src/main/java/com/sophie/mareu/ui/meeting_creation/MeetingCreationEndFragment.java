@@ -158,6 +158,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
             String emptyView = emailView.getText().toString();
             if (!(Patterns.EMAIL_ADDRESS.matcher(emailView.getText().toString())).matches() && (!(emptyView.isEmpty()))){
                 emailView.setError("Addresse email invalide !");
+                mParticipants.clear();
                 errors++;
             }
         }
