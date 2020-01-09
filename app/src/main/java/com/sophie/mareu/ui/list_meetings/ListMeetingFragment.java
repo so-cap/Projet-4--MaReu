@@ -20,10 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
 import com.sophie.mareu.service.AvailabilityByDate;
-import com.sophie.mareu.service.RoomsAvailabilityService;
 import com.sophie.mareu.event.DeleteMeetingEvent;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.MeetingsService;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -108,6 +106,7 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         if (getArguments() != null) {
             mSelectedDate = (Date) getArguments().getSerializable("selected_date");
             mFiltered = getArguments().getBoolean("filter_state");
+            Log.d(TAG, "onStart: " + mFiltered);
         }
     }
 

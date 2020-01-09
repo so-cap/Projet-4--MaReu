@@ -1,8 +1,6 @@
 package com.sophie.mareu;
 
-import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.service.DummyMeetingsGenerator;
-import com.sophie.mareu.service.MeetingsService;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

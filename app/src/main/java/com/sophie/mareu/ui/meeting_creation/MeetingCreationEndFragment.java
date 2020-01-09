@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
 import android.util.Log;
 import android.util.Patterns;
@@ -26,7 +25,6 @@ import com.sophie.mareu.R;
 import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.service.AvailabilityByDate;
-import com.sophie.mareu.service.MeetingsService;
 import com.sophie.mareu.service.RoomsAvailabilityService;
 
 import java.util.AbstractMap;
@@ -63,6 +61,8 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     @BindView(R.id.btn_endsetup)
     Button mBtnEnd;
 
+    private static final String TAG = "LOGGCreationEndFragm";
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,6 +80,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
             mHourPosition = getArguments().getInt("hour_position");
             mRoomPosition = getArguments().getInt("room_position");
             mSelectedDate = (Date) getArguments().getSerializable("selected_date");
+            Log.d(TAG, "onCreateView: " + mSelectedDate);
             mRoomsAvailabilityService = (RoomsAvailabilityService) getArguments().
                     getSerializable("rooms_availability_service");
         }

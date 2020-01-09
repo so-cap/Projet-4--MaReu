@@ -199,13 +199,12 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         String firstDays = "";
         String firstMonths = "";
-        month += 1;
 
         Date newDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
         updateCurrentService(newDate);
 
         if (dayOfMonth < 10) firstDays = "0" + dayOfMonth;
-        if (month < 11) firstMonths = "0" + month;
+        if (month < 12) firstMonths = "0" + (month+1);
 
         mDateView.setText(getString(R.string.date_selected,
                 (dayOfMonth < 10? firstDays : (""+dayOfMonth+""))

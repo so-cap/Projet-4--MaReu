@@ -47,19 +47,20 @@ public class AvailabilityByDate {
     }
 
     public static void addMeeting(Meeting meeting, Date date) {
-        ArrayList<Meeting> newMeetingList = new ArrayList<>();
-
         if (mMeetingsByDate.get(date) != null)
             mMeetingsByDate.get(date).add(meeting);
         else {
+            ArrayList<Meeting> newMeetingList = new ArrayList<>();
             newMeetingList.add(meeting);
             mMeetingsByDate.put(date, newMeetingList);
         }
     }
 
     public static ArrayList<Meeting> getMeetings(Date date) {
-        if (mMeetingsByDate.get(date) != null)
+        if (mMeetingsByDate.get(date) != null) {
+            Log.d(TAG, "getMeetings: HERE");
             return mMeetingsByDate.get(date);
+        }
         else
             return new ArrayList<>();
     }
@@ -69,6 +70,7 @@ public class AvailabilityByDate {
         if (date != null && roomName.isEmpty()) {
             mFilteredList = AvailabilityByDate.getMeetings(date);
             Log.d(TAG, "filterMeetingsList: HERE" );
+            Log.d(TAG, "filterMeetingsList: SIZE" + mFilteredList.size());
         } else if (!(roomName.isEmpty()) && date == null) {
             for (Map.Entry<Date, ArrayList<Meeting>> meetings : mMeetingsByDate.entrySet()) {
                 for (int i = 0; i < meetings.getValue().size(); i++) {
