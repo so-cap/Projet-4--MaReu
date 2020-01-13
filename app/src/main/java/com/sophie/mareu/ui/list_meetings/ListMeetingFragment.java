@@ -85,6 +85,9 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         startActivityForResult(intent, 1);
     }
 
+    // TODO : créer une méthode qui va recevoir la liste filtrée pour l'afficher
+
+
     private void initList() {
         if (!mFiltered){
             mMeetings = AvailabilityByDate.getMeetings(mSelectedDate);
@@ -99,6 +102,8 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         else mNoNewMeetings.setVisibility(View.VISIBLE);
     }
 
+
+    // TODO: remplacer Eventbus par un listener  (Eventbus - >à ne jamais utiliser)
     @Override
     public void onStart() {
         super.onStart();

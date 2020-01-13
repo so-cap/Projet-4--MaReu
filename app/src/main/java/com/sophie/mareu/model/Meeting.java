@@ -1,8 +1,10 @@
 package com.sophie.mareu.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.sophie.mareu.R;
 
-import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +13,7 @@ import java.util.Date;
 /**
  * Created by SOPHIE on 30/12/2019.
  */
-public class Meeting {
+public class Meeting implements Parcelable {
     private String mRoomName;
     private ArrayList<String> mParticipants;
     private AbstractMap.SimpleEntry<Integer, String> mHour;
@@ -40,6 +42,26 @@ public class Meeting {
         mDate = date;
         mIcon = (int) mIconList.get(iconSelector++);
     }
+
+    protected Meeting(Parcel in) {
+        mRoomName = in.readString();
+        mParticipants = in.createStringArrayList();
+        mTitle = in.readString();
+        mDetailSubject = in.readString();
+        mIcon = in.readInt();
+    }
+
+    public static final Creator<Meeting> CREATOR = new Creator<Meeting>() {
+        @Override
+        public Meeting createFromParcel(Parcel in) {
+            return new Meeting(in);
+        }
+
+        @Override
+        public Meeting[] newArray(int size) {
+            return new Meeting[size];
+        }
+    };
 
     public String getRoomName() {
         return mRoomName;
@@ -98,5 +120,19 @@ public class Meeting {
 
     public void setSubject(String subject) {
         mDetailSubject = subject;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mRoomName);
+        dest.writeStringList(mParticipants);
+        dest.writeString(mTitle);
+        dest.writeString(mDetailSubject);
+        dest.writeInt(mIcon);
     }
 }

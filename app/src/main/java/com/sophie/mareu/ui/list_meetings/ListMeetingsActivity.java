@@ -119,6 +119,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         mDatePickerDialog.show();
     }
 
+    // TODO : changer par refreshList() qui appelle la methode appropriée dans ListMeetingFragment
     public void refreshView() {
         mBundle.putBoolean("filter_state", mFiltered);
         Log.d(TAG, "refreshView: filter" + mFiltered);

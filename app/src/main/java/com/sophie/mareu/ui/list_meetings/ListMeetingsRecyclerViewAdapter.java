@@ -1,6 +1,7 @@
 package com.sophie.mareu.ui.list_meetings;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +58,7 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
     }
 
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.titleView)
         TextView mTitle;
         @BindView(R.id.participants)
@@ -70,6 +71,7 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         void bind(Meeting meeting) {
@@ -79,6 +81,13 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
             mTitle.setText(res.getString(R.string.title_hour_room, meeting.getTitle(), meeting.getHour().getValue(), meeting.getRoomName()));
             mParticipants.setText(meeting.getParticipants());
             mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteMeetingEvent(meeting)));
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(mContext, DetailActivity.class);
+            intent.putExtra("meeting", mMeetings.get(getAdapterPosition()));
+            mContext.startActivity(intent);
         }
     }
 }
