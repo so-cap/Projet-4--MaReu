@@ -43,8 +43,6 @@ public class RoomsAvailabilityService implements Serializable {
     public void updateAvailableHours(ArrayList<RoomsPerHour> availableHoursAndRooms) {
         mRoomsPerHourList = availableHoursAndRooms;
 
-        Log.d(TAG, "updateAvailableHours: " + availableHoursAndRooms.size());
-
         // delete hour availability if all the rooms are taken
         for(int position = 0; position < mRoomsPerHourList.size(); position++) {
             if (mRoomsPerHourList.get(position).getRooms().isEmpty()){

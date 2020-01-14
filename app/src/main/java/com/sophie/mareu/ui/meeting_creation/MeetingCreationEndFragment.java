@@ -81,7 +81,6 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
             mHourPosition = getArguments().getInt("hour_position");
             mRoomPosition = getArguments().getInt("room_position");
             mSelectedDate = (Date) getArguments().getSerializable("selected_date");
-            Log.d(TAG, "onCreateView: " + mSelectedDate);
             mRoomsAvailabilityService = (RoomsAvailabilityService) getArguments().
                     getSerializable("rooms_availability_service");
         }

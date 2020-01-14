@@ -4,14 +4,30 @@
 
     <item
         android:id="@+id/filter"
-        android:title="Filtrer les réunions"
+        android:title="@string/filter_meetings_menu"
         app:showAsAction="never">
 
     </item>
 
     <item
-        android:id="@+id/sort_by_date"
-        android:title="@string/sort_by_date_default"
-        app:showAsAction="never" />
+        android:id="@+id/sort_by_hour"
+        android:title="@string/sort_by_hour"
+        app:showAsAction="never">
+
+        <menu>
+            <item
+                android:id="@+id/ascending"
+                android:title="@string/ascending" />
+
+            <item
+                android:id="@+id/descending"
+                android:title="@string/descending"/>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/display_all_meetings"
+        android:title="@string/display_all_meetings"
+        />
 
 </menu>

@@ -1,6 +1,5 @@
 package com.sophie.mareu.ui.list_meetings;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,42 +18,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
+import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.service.AvailabilityByDate;
-import com.sophie.mareu.event.DeleteMeetingEvent;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.FILTERED;
+import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.SORTED;
+import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.UNCHANGED;
 
 /**
  * Created by SOPHIE on 30/12/2019.
  */
-public class ListMeetingFragment extends Fragment implements View.OnClickListener {
+public class ListMeetingFragment extends Fragment implements View.OnClickListener, ListMeetingsRecyclerViewAdapter.OnDeleteMeetingListener {
     private ArrayList<Meeting> mMeetings = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private Context context;
     private FloatingActionButton mFab;
     private TextView mNoNewMeetings;
-    private Date mSelectedDate = Calendar.getInstance().getTime();
-    private boolean mFiltered = false;
+    private int listCurrentState = -1;
 
     private static final String TAG = "LOGGListMeetingFragment";
-
-    // to get data when in portrait mode
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK)
-                if (data != null)
-                    mSelectedDate = (Date) data.getSerializableExtra("selected_date");
-        }
-    }
 
     @Nullable
     @Override
@@ -63,9 +48,6 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         View view = inflater.inflate(R.layout.fragment_list_meetings, container, false);
 
         context = view.getContext();
-
-        AvailabilityByDate.getRoomsAvailabilityService(mSelectedDate);
-
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
@@ -74,63 +56,58 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
             mNoNewMeetings = getActivity().findViewById(R.id.no_new_meetings);
             mFab = getActivity().findViewById(R.id.fab);
         }
-
         if (mFab != null) mFab.setOnClickListener(this);
+
+       // initList(UNCHANGED);
         return view;
     }
 
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(getContext(), MeetingCreationActivity.class);
-        startActivityForResult(intent, 1);
+        startActivity(intent);
     }
 
-    // TODO : créer une méthode qui va recevoir la liste filtrée pour l'afficher
+    void initList(int listCurrentState) {
+        this.listCurrentState = listCurrentState;
 
-
-    private void initList() {
-        if (!mFiltered){
-            mMeetings = AvailabilityByDate.getMeetings(mSelectedDate);
+        if (listCurrentState == FILTERED) {
+            mMeetings = FilterAndSort.getFilteredList();
+            Log.d(TAG, "initList: filter" + mMeetings.size());
+        }else if (listCurrentState == SORTED) {
+            mMeetings = FilterAndSort.getSortedList();
+            Log.d(TAG, "initList: sorted"+ mMeetings.size());
         }
         else {
-            mMeetings = AvailabilityByDate.getFilteredList();
-            Log.d(TAG, "initList: FILTERED LIST SIZE" + mMeetings.size() + "boolean value :" + mFiltered);
+            mMeetings = AvailabilityByDate.getMeetings();
+            Log.d(TAG, "initList: allmeetings"+ mMeetings.size());
         }
+        mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings, context, this));
+
+        if (!(mMeetings.isEmpty())) mNoNewMeetings.setVisibility(View.GONE);
+        else mNoNewMeetings.setVisibility(View.VISIBLE);
+    }
+
+   /* void initList() {
+        mMeetings = AvailabilityByDate.getMeetings();
         mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings, context));
 
         if (!(mMeetings.isEmpty())) mNoNewMeetings.setVisibility(View.GONE);
         else mNoNewMeetings.setVisibility(View.VISIBLE);
     }
 
-
-    // TODO: remplacer Eventbus par un listener  (Eventbus - >à ne jamais utiliser)
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-        if (getArguments() != null) {
-            mSelectedDate = (Date) getArguments().getSerializable("selected_date");
-            mFiltered = getArguments().getBoolean("filter_state");
-            Log.d(TAG, "onStart: " + mFiltered);
-        }
-    }
+    */
 
     @Override
     public void onResume() {
         super.onResume();
-        initList();
-    }
-
-    @Subscribe
-    public void onDeleteMeeting(DeleteMeetingEvent event) {
-        AvailabilityByDate.deleteMeeting(event.meeting);
-        initList();
-        if (mMeetings.isEmpty()) mNoNewMeetings.setVisibility(View.VISIBLE);
+        initList(listCurrentState);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
+    public void onDeleteMeetingClick(Meeting meeting) {
+        AvailabilityByDate.deleteMeeting(meeting);
+        initList(listCurrentState);
+        if (mMeetings.isEmpty()) mNoNewMeetings.setVisibility(View.VISIBLE);
     }
 }

@@ -25,19 +25,21 @@
     <string name="meeting_details">DETAILS DE LA REUNION</string>
     <string name="choose_a_room">Choisissez votre salle de réunion</string>
     <string name="sort_list">sort list</string>
-    <string name="sort_by_date_default">"Lister par heure "</string>
+    <string name="sort_by_hour">"Lister par heure"</string>
 
-    <string name="sort_by_date">"Filtrer par heure   %s"</string>
-    <string name="sort_by_roomname">"Filtrer par lieu (A - Z)   %s"</string>
     <string name="select_date"><![CDATA[> Choisir une date de réunion <]]></string>
     <string name="choose_a_date">Choisissez une date de réunion</string>
     <string name="date_selected">"%1$s/%2$s/%3$d"</string>
     <string name="select"><![CDATA[>Selectionner<]]></string>
     <string name="by_room">Par salle :</string>
     <string name="previous">retour</string>
-    <string name="ok">ok</string>
+    <string name="ok">OK</string>
     <string name="by_date">Par date :</string>
     <string name="filter">Filtrer</string>
+    <string name="filter_meetings_menu">Filtrer les réunions</string>
+    <string name="ascending">croissante</string>
+    <string name="descending">décroissante</string>
+    <string name="display_all_meetings">Afficher toutes les réunions</string>
 
     <string-array name="room_names">
         <item>""</item>

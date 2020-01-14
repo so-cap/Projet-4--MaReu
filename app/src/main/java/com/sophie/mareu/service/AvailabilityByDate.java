@@ -1,12 +1,13 @@
 package com.sophie.mareu.service;
+
 import android.util.Log;
 
+import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.model.Meeting;
 
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,10 +19,7 @@ import java.util.Objects;
 public class AvailabilityByDate {
     private static Date mDate;
     private static HashMap<Date, RoomsAvailabilityService> mAvailabilityByDateList = new HashMap<>();
-    private static HashMap<Date, ArrayList<Meeting>> mMeetingsByDate = new HashMap<>();
-    private static ArrayList<Meeting> mMeetings = new ArrayList<>();
-    private static ArrayList<Meeting> mFilteredList = new ArrayList<>();
-    private static Meeting mMeeting;
+    public static HashMap<Date, ArrayList<Meeting>> mMeetingsByDate = new HashMap<>();
 
     public static Date getDate() {
         return mDate;
@@ -56,39 +54,14 @@ public class AvailabilityByDate {
         }
     }
 
-    public static ArrayList<Meeting> getMeetings(Date date) {
-        if (mMeetingsByDate.get(date) != null) {
-            Log.d(TAG, "getMeetings: HERE");
-            return mMeetingsByDate.get(date);
+    public static ArrayList<Meeting> getMeetings() {
+        ArrayList<Meeting> meetings = new ArrayList<>();
+        Log.d(TAG, "getMeetings: "+ mMeetingsByDate.size());
+        for (Map.Entry<Date, ArrayList<Meeting>> entry : mMeetingsByDate.entrySet()) {
+            meetings.addAll(entry.getValue());
+            Log.d(TAG, "getMeetings:SIZE "+ entry.getValue().size());
         }
-        else
-            return new ArrayList<>();
-    }
-
-    public static void filterMeetingsList(Date date, String roomName) {
-        mFilteredList.clear();
-        if (date != null && roomName.isEmpty()) {
-            mFilteredList = AvailabilityByDate.getMeetings(date);
-            Log.d(TAG, "filterMeetingsList: HERE" );
-            Log.d(TAG, "filterMeetingsList: SIZE" + mFilteredList.size());
-        } else if (!(roomName.isEmpty()) && date == null) {
-            for (Map.Entry<Date, ArrayList<Meeting>> meetings : mMeetingsByDate.entrySet()) {
-                for (int i = 0; i < meetings.getValue().size(); i++) {
-                    if (meetings.getValue().get(i).getRoomName().equals(roomName)) {
-                        mFilteredList.add(meetings.getValue().get(i));
-                    }
-                }
-            }
-        } else
-            for (int i = 0; i < AvailabilityByDate.getMeetings(date).size(); i++) {
-                if (AvailabilityByDate.getMeetings(date).get(i).getRoomName().equals(roomName))
-                    mFilteredList.add(AvailabilityByDate.getMeetings(date).get(i));
-
-            }
-    }
-
-    public static ArrayList<Meeting> getFilteredList() {
-        return mFilteredList;
+        return meetings;
     }
 
     public static void clearAllMeetings() {
@@ -96,36 +69,35 @@ public class AvailabilityByDate {
         mMeetingsByDate.clear();
     }
 
+
+    // TODO: deal with this
     public static void deleteMeeting(Meeting meeting) {
         RoomsAvailabilityService currentService = mAvailabilityByDateList.get(meeting.getDate());
         if (currentService != null) {
             ArrayList<RoomsPerHour> updateRooms = currentService.getRoomsPerHourList();
+            Integer meetingPosition = meeting.getHour().getKey();
 
-            // make hour available for new meeting again
-            if (meeting.getHour().getKey() > updateRooms.size() ||
-                    !updateRooms.get(meeting.getHour().getKey()).getHour().getKey().equals(meeting.getHour().getKey())) {
-                Log.d(TAG, "deleteMeeting: selected meeting hour key" + meeting.getHour().getKey());
-                Log.d(TAG, "deleteMeeting: service hour key" +updateRooms.get(meeting.getHour().getKey()).getHour().getKey());
+            // make hour available for a new meeting
+            if (!updateRooms.get(meetingPosition).getHour().getKey().equals(meetingPosition)) {
                 RoomsPerHour roomsPerHour = new RoomsPerHour();
-                roomsPerHour.setHour(meeting.getHour().getKey(), meeting.getHour().getValue());
-                updateRooms.add(roomsPerHour);
-                Log.d(TAG, "deleteMeeting: updateRooms INDEX" + updateRooms.indexOf(roomsPerHour));
-                Log.d(TAG, "deleteMeeting: AFTER service hour key" + meeting.getHour().getKey());
-
+                roomsPerHour.setHour(meetingPosition, meeting.getHour().getValue());
+                updateRooms.add(meetingPosition,roomsPerHour);
             }
 
             // make room available again
-            updateRooms.get(meeting.getHour().getKey()).getRooms().add(meeting.getRoomName());
-            Log.d(TAG, "deleteMeeting: DATE" + meeting.getDate());
-            Log.d(TAG, " HAS MEETING " + mMeetingsByDate.get(meeting.getDate()).get(0).equals(meeting) );
+            updateRooms.get(meeting.getHour().getKey()).addRoom(meeting.getRoomName());
 
             // finally, delete meeting from lists
-            Objects.requireNonNull(mMeetingsByDate.get(meeting.getDate())).remove(meeting);
-            if(mMeetingsByDate.get(meeting.getDate()).isEmpty())
-                mMeetingsByDate.remove(meeting.getDate());
-            mFilteredList.remove(meeting);
+            for (Map.Entry<Date, ArrayList<Meeting>> entry : mMeetingsByDate.entrySet()) {
+                        entry.getValue().remove(meeting);
+            }
+            Log.d(TAG, " HAS MEETING SIZE" + mMeetingsByDate.get(meeting.getDate()).size());
+            Log.d(TAG, "deleteMeeting: index" +mMeetingsByDate.get(meeting.getDate()).indexOf(meeting));
+            FilterAndSort.getFilteredList().remove(meeting);
+            FilterAndSort.getSortedList().remove(meeting);
 
-            Log.d(TAG, " UPDATED SERVICE 8h value" + updateRooms.get(0).getHour() );
+            if (mMeetingsByDate.get(meeting.getDate()) == null)
+                mMeetingsByDate.remove(meeting.getDate());
 
             // update service
             currentService.updateAvailableHours(updateRooms);

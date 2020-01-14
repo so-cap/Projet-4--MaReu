@@ -14,10 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sophie.mareu.R;
-import com.sophie.mareu.event.DeleteMeetingEvent;
 import com.sophie.mareu.model.Meeting;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -31,17 +28,20 @@ import butterknife.ButterKnife;
 public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMeetingsRecyclerViewAdapter.ViewHolder> {
     private ArrayList<Meeting> mMeetings;
     private Context mContext;
+    private OnDeleteMeetingListener mOnDeleteMeetingListener;
 
-    ListMeetingsRecyclerViewAdapter(ArrayList<Meeting> meetings, Context context) {
+    ListMeetingsRecyclerViewAdapter(ArrayList<Meeting> meetings, Context context,
+                                    OnDeleteMeetingListener onDeleteMeetingListener) {
         mMeetings = meetings;
         mContext = context;
+        mOnDeleteMeetingListener = onDeleteMeetingListener;
     }
 
     @NonNull
     @Override
     public ListMeetingsRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_meeting, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, mOnDeleteMeetingListener);
     }
 
     @Override
@@ -57,8 +57,7 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
             return mMeetings.size();
     }
 
-
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.titleView)
         TextView mTitle;
         @BindView(R.id.participants)
@@ -68,26 +67,36 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
         @BindView(R.id.ic_delete)
         ImageButton mDeleteButton;
 
-        ViewHolder(@NonNull View itemView) {
+        OnDeleteMeetingListener onDeleteMeetingListener;
+
+        ViewHolder(@NonNull View itemView, OnDeleteMeetingListener onDeleteMeetingListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+            this.onDeleteMeetingListener = onDeleteMeetingListener;
         }
 
         void bind(Meeting meeting) {
             Resources res = mContext.getResources();
-
             mIcon.setImageDrawable(res.getDrawable(meeting.getIcon()));
             mTitle.setText(res.getString(R.string.title_hour_room, meeting.getTitle(), meeting.getHour().getValue(), meeting.getRoomName()));
             mParticipants.setText(meeting.getParticipants());
-            mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteMeetingEvent(meeting)));
+            mDeleteButton.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(mContext, DetailActivity.class);
-            intent.putExtra("meeting", mMeetings.get(getAdapterPosition()));
-            mContext.startActivity(intent);
+           if (v.getId() == R.id.ic_delete)
+               onDeleteMeetingListener.onDeleteMeetingClick(mMeetings.get(getAdapterPosition()));
+               else{
+                Intent intent = new Intent(mContext, DetailActivity.class);
+                intent.putExtra("meeting", mMeetings.get(getAdapterPosition()));
+                mContext.startActivity(intent);
+            }
         }
+    }
+
+    public interface OnDeleteMeetingListener{
+        void onDeleteMeetingClick(Meeting meeting);
     }
 }

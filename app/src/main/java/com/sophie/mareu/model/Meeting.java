@@ -3,6 +3,8 @@ package com.sophie.mareu.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.Nullable;
+
 import com.sophie.mareu.R;
 
 import java.util.AbstractMap;
@@ -20,17 +22,29 @@ public class Meeting implements Parcelable {
     private String mTitle;
     private String mDetailSubject;
     private Date mDate;
-    private ArrayList mIconList =
-            new ArrayList<>(Arrays.asList(R.drawable.ic_lightpink, R.drawable.ic_lightgreen, R.drawable.ic_darkergreen));
     private int mIcon;
     private static int iconSelector;
-
 
     public Meeting() {
     }
 
+    public Meeting(Meeting meeting){
+        mTitle = meeting.getTitle();
+        mHour = meeting.getHour();
+        mRoomName = meeting.getRoomName();
+        mParticipants = meeting.getParticipantsArray();
+        mDetailSubject = meeting.getSubject();
+        mDate = meeting.getDate();
+        mIcon = meeting.getIcon();
+    }
+
     public Meeting(String title, AbstractMap.SimpleEntry<Integer, String> hour,
                    String roomName, ArrayList<String> participants, String subject, Date date) {
+
+        ArrayList iconList = new ArrayList<>(Arrays.asList(R.drawable.ic_lightpink, R.drawable.ic_lightgreen,
+                R.drawable.ic_darkergreen));
+
+        mIcon = (int) iconList.get(iconSelector++);
         if(iconSelector == 3)
             iconSelector = 0;
 
@@ -40,7 +54,6 @@ public class Meeting implements Parcelable {
         mParticipants = participants;
         mDetailSubject = subject;
         mDate = date;
-        mIcon = (int) mIconList.get(iconSelector++);
     }
 
     protected Meeting(Parcel in) {
@@ -84,6 +97,10 @@ public class Meeting implements Parcelable {
                 participants.append(", ");
         }
         return participants.toString();
+    }
+
+    public ArrayList<String> getParticipantsArray(){
+        return mParticipants;
     }
 
     public void setParticipants(ArrayList<String> participants) {
@@ -134,5 +151,15 @@ public class Meeting implements Parcelable {
         dest.writeString(mTitle);
         dest.writeString(mDetailSubject);
         dest.writeInt(mIcon);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return super.equals(obj);
     }
 }

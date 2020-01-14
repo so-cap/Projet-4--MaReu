@@ -9,25 +9,27 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
-import com.sophie.mareu.controller.SortList;
+import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.service.AvailabilityByDate;
 import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
 
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -39,11 +41,11 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     private ListMeetingFragment mListMeetingFragment;
     private Date mSelectedDate = null;
     private String mSelectedName = null;
-    private boolean mAscendingDate = true;
-    private Bundle mBundle = new Bundle();
-    private DatePickerDialog mDatePickerDialog;
-    private boolean mFiltered = false;
-
+    public static final int ASCENDING = 0;
+    public static final int DESCENDING = 1;
+    public static final int FILTERED = 0;
+    public static final int SORTED = 1;
+    public static final int UNCHANGED = -1;
 
     @BindView(R.id.my_toolbar)
     Toolbar mToolbar;
@@ -56,7 +58,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     @BindView(R.id.spinner_filter)
     Spinner mRoomsSpinner;
     @BindView(R.id.filter_activity)
-    CardView mFilerView;
+    CardView mFilterView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         configureAndShowListMeetingFragment();
         configureAndShowHomeStartMeetingCreationFragment();
 
-        mFiltered = false;
         mBackBtn.setOnClickListener(this);
         mOkButton.setOnClickListener(this);
         mDateView.setOnClickListener(this);
@@ -99,34 +100,44 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.sort_by_date:
-                SortList.sortByHour(mAscendingDate);
-                mAscendingDate = !mAscendingDate;
+            case R.id.ascending:
+                FilterAndSort.sortList(ASCENDING);
+                mListMeetingFragment.initList(SORTED);
+                break;
+            case R.id.descending:
+                FilterAndSort.sortList(DESCENDING);
+                mListMeetingFragment.initList(SORTED);
                 break;
             case R.id.filter:
-                mFilerView.setVisibility(View.VISIBLE);
+                initSpinner();
+                mFilterView.setVisibility(View.VISIBLE);
+                break;
+            case R.id.display_all_meetings:
+                mListMeetingFragment.initList(UNCHANGED);
+                FilterAndSort.getSortedList().clear();
+                FilterAndSort.getFilteredList().clear();
                 break;
         }
         return true;
     }
 
+    private void initSpinner() {
+        ArrayList<String> spinnerArray = new ArrayList<>();
+        spinnerArray.add("");
+        spinnerArray.addAll(DI.getNewRoomsList());
+        ArrayAdapter<String> spinnerAdapter =
+                new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, spinnerArray);
+        spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        mRoomsSpinner.setAdapter(spinnerAdapter);
+    }
+
     private void showDatePickerDialog() {
-        mDatePickerDialog = new DatePickerDialog(this,
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 this, Calendar.getInstance().get(Calendar.YEAR),
                 Calendar.getInstance().get(Calendar.MONTH),
                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-        mDatePickerDialog.onContentChanged();
-        mDatePickerDialog.show();
-    }
-
-    // TODO : changer par refreshList() qui appelle la methode appropriée dans ListMeetingFragment
-    public void refreshView() {
-        mBundle.putBoolean("filter_state", mFiltered);
-        Log.d(TAG, "refreshView: filter" + mFiltered);
-        mListMeetingFragment.onStop();
-        mListMeetingFragment.setArguments(mBundle);
-        mListMeetingFragment.onStart();
-        mListMeetingFragment.onResume();
+        datePickerDialog.onContentChanged();
+        datePickerDialog.show();
     }
 
     private void configureAndShowListMeetingFragment() {
@@ -152,14 +163,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        AvailabilityByDate.clearAllMeetings();
-    }
-
-
-
-    @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         String firstDays = "";
         String firstMonths = "";
@@ -167,47 +170,52 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         mSelectedDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
 
         if (dayOfMonth < 10) firstDays = "0" + dayOfMonth;
-        if (month < 11) firstMonths = "0" + (month+1);
+        if (month < 11) firstMonths = "0" + (month + 1);
 
         mDateView.setText(getString(R.string.date_selected,
-                (dayOfMonth < 10? firstDays : (""+dayOfMonth+""))
-                ,(month < 11 ? firstMonths : (""+month+"")),year));
+                (dayOfMonth < 10 ? firstDays : ("" + dayOfMonth + ""))
+                , (month < 11 ? firstMonths : ("" + month + "")), year));
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.choose_date:
                 showDatePickerDialog();
                 break;
             case R.id.ok_filter:
                 if (mSelectedDate != null || !mSelectedName.isEmpty()) {
-                    mFiltered = true;
-                    Log.d(TAG, "onClick: FILTER");
-                    Log.d(TAG, "onClick: " + mSelectedDate);
-                    AvailabilityByDate.filterMeetingsList(mSelectedDate, mSelectedName);
-                    mFilerView.setVisibility(View.GONE);
-                    refreshView();
-                }
-                 else
-                    Toast.makeText(this,"Choisissez une date et/ou une salle",Toast.LENGTH_LONG).show();
+                    FilterAndSort.filterMeetingsList(mSelectedDate, mSelectedName);
+                    mFilterView.setVisibility(View.GONE);
+                    mListMeetingFragment.initList(FILTERED);
+                    resetFilterView();
+                } else
+                    Toast.makeText(this, "Choisissez une date et/ou une salle", Toast.LENGTH_LONG).show();
                 break;
             case R.id.cancel_filter:
-                mFilerView.setVisibility(View.GONE);
+                mFilterView.setVisibility(View.GONE);
+                resetFilterView();
                 break;
         }
+    }
+
+    private void resetFilterView() {
+        mDateView.setText(getResources().getString(R.string.select));
+        mSelectedDate = null;
+        mSelectedName = "";
+        mRoomsSpinner.setSelection(0);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        mFilterView.setVisibility(View.GONE);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mRoomsSpinner.resetPivot();
-        if (mDatePickerDialog != null) mDatePickerDialog.dismiss();
-        Log.d(TAG, "onStart: " + mSelectedDate);
+    protected void onDestroy() {
+        super.onDestroy();
+        AvailabilityByDate.clearAllMeetings();
     }
 }
+
