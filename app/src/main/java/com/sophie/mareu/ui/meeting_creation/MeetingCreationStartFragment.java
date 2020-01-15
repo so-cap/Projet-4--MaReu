@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -147,6 +148,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     private void showDatePickerDialog() {
+        Locale.setDefault(Locale.FRANCE);
         DatePickerDialog datePickerDialog = new DatePickerDialog(mContext,
                 this, Calendar.getInstance().get(Calendar.YEAR),
                 Calendar.getInstance().get(Calendar.MONTH),

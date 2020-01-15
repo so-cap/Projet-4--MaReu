@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
@@ -55,7 +56,9 @@ public class DetailFragment extends Fragment {
             meeting = getArguments().getParcelable("meeting");
             initMeetingPage();
         }
-        toolbar.setNavigationOnClickListener(v -> activity.getSupportFragmentManager().popBackStack());
+        toolbar.setNavigationOnClickListener(v -> activity.getSupportFragmentManager()
+                .popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE));
+
         return view;
     }
 

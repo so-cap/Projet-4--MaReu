@@ -27,9 +27,6 @@ import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.FILTERED;
 import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.SORTED;
 
@@ -82,7 +79,7 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         startActivity(intent);
     }
 
-    void initList(int listCurrentState) {
+    public void initList(int listCurrentState) {
         this.listCurrentState = listCurrentState;
 
         if (listCurrentState == FILTERED) {

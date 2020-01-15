@@ -94,7 +94,7 @@
             android:layout_marginStart="16dp"
             app:labels="@array/room_names"
             app:textSize="20sp"
-            app:gravity="left"
+            app:gravity="center"
             app:selectMode="required"
             app:verticalSpacing="10dp"
             app:selectedColor="@color/colorPrimary"

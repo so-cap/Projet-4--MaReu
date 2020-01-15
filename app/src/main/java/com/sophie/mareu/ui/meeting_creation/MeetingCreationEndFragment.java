@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.sophie.mareu.R;
@@ -27,6 +28,7 @@ import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.service.AvailabilityByDate;
 import com.sophie.mareu.service.RoomsAvailabilityService;
+import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -34,6 +36,8 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.UNCHANGED;
 
 
 public class MeetingCreationEndFragment extends Fragment implements View.OnClickListener {
@@ -180,28 +184,19 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     }
 
     private void backToHomePage() {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("selected_date",mSelectedDate);
-
-        if (getActivity()!= null) {
-            Fragment listMeetingFragment = getActivity().getSupportFragmentManager().
-                    findFragmentById(R.id.frame_listmeetings);
-            if (getActivity().getClass().equals(MeetingCreationActivity.class)) {
-                intent.putExtras(bundle);
-                getActivity().setResult(Activity.RESULT_OK, intent);
-                getActivity().finish();
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            if (activity.getClass().equals(MeetingCreationActivity.class)) {
+                activity.finish();
             } else {
+                ListMeetingFragment listMeetingFragment = (ListMeetingFragment) activity.getSupportFragmentManager().
+                        findFragmentById(R.id.frame_listmeetings);
                 if (listMeetingFragment == null) {
-                    getActivity().finish();
+                    activity.finish();
                 } else {
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    FragmentManager fm = activity.getSupportFragmentManager();
                     fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    //to update recycler view
-                    listMeetingFragment.onStop();
-                    listMeetingFragment.onStart();
-                    listMeetingFragment.setArguments(bundle);
-                    listMeetingFragment.onResume();
+                    listMeetingFragment.initList(UNCHANGED);
                 }
             }
         }
