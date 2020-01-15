@@ -41,6 +41,12 @@
         android:id="@+id/frame_setmeeting"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="60"/>
+        android:layout_weight="60">
+
+        <include
+            android:visibility="gone"
+            android:id="@+id/filter_activity"
+            layout="@layout/filter_fragment"/>
+    </FrameLayout>
 </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

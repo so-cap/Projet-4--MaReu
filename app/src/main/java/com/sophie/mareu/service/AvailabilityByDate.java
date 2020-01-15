@@ -56,10 +56,8 @@ public class AvailabilityByDate {
 
     public static ArrayList<Meeting> getMeetings() {
         ArrayList<Meeting> meetings = new ArrayList<>();
-        Log.d(TAG, "getMeetings: "+ mMeetingsByDate.size());
         for (Map.Entry<Date, ArrayList<Meeting>> entry : mMeetingsByDate.entrySet()) {
             meetings.addAll(entry.getValue());
-            Log.d(TAG, "getMeetings:SIZE "+ entry.getValue().size());
         }
         return meetings;
     }
@@ -69,15 +67,13 @@ public class AvailabilityByDate {
         mMeetingsByDate.clear();
     }
 
-
-    // TODO: deal with this
     public static void deleteMeeting(Meeting meeting) {
         RoomsAvailabilityService currentService = mAvailabilityByDateList.get(meeting.getDate());
         if (currentService != null) {
             ArrayList<RoomsPerHour> updateRooms = currentService.getRoomsPerHourList();
             Integer meetingPosition = meeting.getHour().getKey();
 
-            // make hour available for a new meeting
+            // make hour available again if it wasn't anymore
             if (!updateRooms.get(meetingPosition).getHour().getKey().equals(meetingPosition)) {
                 RoomsPerHour roomsPerHour = new RoomsPerHour();
                 roomsPerHour.setHour(meetingPosition, meeting.getHour().getValue());
@@ -88,11 +84,7 @@ public class AvailabilityByDate {
             updateRooms.get(meeting.getHour().getKey()).addRoom(meeting.getRoomName());
 
             // finally, delete meeting from lists
-            for (Map.Entry<Date, ArrayList<Meeting>> entry : mMeetingsByDate.entrySet()) {
-                        entry.getValue().remove(meeting);
-            }
-            Log.d(TAG, " HAS MEETING SIZE" + mMeetingsByDate.get(meeting.getDate()).size());
-            Log.d(TAG, "deleteMeeting: index" +mMeetingsByDate.get(meeting.getDate()).indexOf(meeting));
+            Objects.requireNonNull(mMeetingsByDate.get(meeting.getDate())).remove(meeting);
             FilterAndSort.getFilteredList().remove(meeting);
             FilterAndSort.getSortedList().remove(meeting);
 
@@ -103,5 +95,4 @@ public class AvailabilityByDate {
             currentService.updateAvailableHours(updateRooms);
         }
     }
-
 }

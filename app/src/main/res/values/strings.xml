@@ -19,7 +19,7 @@
     <string name="add_more_email">add more email</string>
     <string name="participants_email">Emails des participants :</string>
     <string name="hint_subject">Quel(s) sujet(s) allez vous aborder ?</string>
-    <string name="subject_title">Sujet:</string>
+    <string name="subject_title">Objectif:</string>
     <string name="hint_subject_title">mon titre</string>
     <string name="title">Titre:</string>
     <string name="meeting_details">DETAILS DE LA REUNION</string>
@@ -40,6 +40,20 @@
     <string name="ascending">croissante</string>
     <string name="descending">décroissante</string>
     <string name="display_all_meetings">Afficher toutes les réunions</string>
+    <string name="dummy_subject">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Phasellus et nisi suscipit, pulvinar lectus vitae, sagittis tortor.
+        Nullam sit amet felis euismod, facilisis sem quis.
+    </string>
+
+    <string name="emails">maxime@lamzone.com\nalex@lamzone.com\nviviane@lamzone.com</string>
+    <string name="participants">Participants:</string>
+    <string name="dummy_room">Salle Peach</string>
+    <string name="dummy_meeting_name">Réunion A</string>
+    <string name="dummy_hour">à 8h00</string>
+    <string name="dummy_date">le 18 Avril 2020\n à 8h00</string>
+
+    <string name="detail_date_hour">le %1$s\nà %2$s</string>
+    <string name="detail_room">Salle %s</string>
 
     <string-array name="room_names">
         <item>""</item>

@@ -32,7 +32,7 @@ public class ListMeetingFragmentTests {
 
     @Test
     public void getStringFromParticipantsListWithSuccess(){
-            mMeeting.getParticipants();
-            assertThat(mMeeting.getParticipants(), equalTo("pop@gmail.com, kikou@swag.com, yessai@email.fr"));
+            mMeeting.getParticipantsInOneString();
+            assertThat(mMeeting.getParticipantsInOneString(), equalTo("pop@gmail.com, kikou@swag.com, yessai@email.fr"));
     }
 }

@@ -7,10 +7,15 @@ import androidx.annotation.Nullable;
 
 import com.sophie.mareu.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Created by SOPHIE on 30/12/2019.
@@ -62,6 +67,8 @@ public class Meeting implements Parcelable {
         mTitle = in.readString();
         mDetailSubject = in.readString();
         mIcon = in.readInt();
+        mHour = new AbstractMap.SimpleEntry<>(in.readInt(), in.readString());
+        mDate = new Date(in.readLong());
     }
 
     public static final Creator<Meeting> CREATOR = new Creator<Meeting>() {
@@ -88,7 +95,7 @@ public class Meeting implements Parcelable {
         return mIcon;
     }
 
-    public String getParticipants() {
+    public String getParticipantsInOneString() {
         StringBuilder participants = new StringBuilder();
         for (int i = 0; i < mParticipants.size(); i++) {
             participants.append(mParticipants.get(i));
@@ -127,6 +134,11 @@ public class Meeting implements Parcelable {
         return mDate;
     }
 
+    public String getDateInStringFormat(Date date){
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);
+        return dateFormat.format(date);
+    }
+
     public void setTitle(String title) {
         mTitle = title;
     }
@@ -151,15 +163,30 @@ public class Meeting implements Parcelable {
         dest.writeString(mTitle);
         dest.writeString(mDetailSubject);
         dest.writeInt(mIcon);
+        dest.writeInt(mHour.getKey());
+        dest.writeString(mHour.getValue());
+        dest.writeLong(mDate.getTime());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) return true;
+        if (!(o instanceof Meeting)) return false;
+
+        Meeting meeting = (Meeting) o;
+        return Objects.equals(mTitle, meeting.getTitle()) &&
+                Objects.equals(mDate, meeting.getDate()) &&
+                Objects.equals(mRoomName, meeting.getRoomName()) &&
+                Objects.equals(mParticipants, meeting.getParticipantsArray()) &&
+                Objects.equals(mDetailSubject, meeting.getSubject()) &&
+                Objects.equals(mIcon, meeting.getIcon()) &&
+                Objects.equals(mHour, meeting.getHour());
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
-    }
+        return Objects.hash(mRoomName, mParticipants,mTitle,mDetailSubject,mIcon, mHour);
 
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        return super.equals(obj);
     }
 }

@@ -11,10 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.ui.meeting_creation.MeetingCreationStartFragment;
 
 import java.util.ArrayList;
 
@@ -80,7 +84,7 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
             Resources res = mContext.getResources();
             mIcon.setImageDrawable(res.getDrawable(meeting.getIcon()));
             mTitle.setText(res.getString(R.string.title_hour_room, meeting.getTitle(), meeting.getHour().getValue(), meeting.getRoomName()));
-            mParticipants.setText(meeting.getParticipants());
+            mParticipants.setText(meeting.getParticipantsInOneString());
             mDeleteButton.setOnClickListener(this);
         }
 
@@ -89,9 +93,19 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
            if (v.getId() == R.id.ic_delete)
                onDeleteMeetingListener.onDeleteMeetingClick(mMeetings.get(getAdapterPosition()));
                else{
-                Intent intent = new Intent(mContext, DetailActivity.class);
-                intent.putExtra("meeting", mMeetings.get(getAdapterPosition()));
-                mContext.startActivity(intent);
+                   Fragment fragment = (Fragment) v.getParent();
+                   Fragment landFragment = fragment.getActivity().getSupportFragmentManager()
+                           .findFragmentById(R.id.frame_setmeeting);
+
+                   if(landFragment == null) {
+                   Intent intent = new Intent(mContext, DetailActivity.class);
+                   intent.putExtra("meeting", mMeetings.get(getAdapterPosition()));
+                   mContext.startActivity(intent);
+               } else
+                   landFragment.getFragmentManager().beginTransaction().add(R.id.frame_listmeetings,R.id);
+               FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
+               fm.add(R.id.frame_listmeetings, mListMeetingFragment).commit();
+
             }
         }
     }
