@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,7 +37,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ListMeetingsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener {
-    private ListMeetingFragment mListMeetingFragment;
+    private ListMeetingFragment listMeetingFragment = new ListMeetingFragment();
+    private Fragment listMeetingFrame;
     private Date mSelectedDate = null;
     private String mSelectedName = null;
     public static final int ASCENDING = 0;
@@ -68,7 +68,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
 
-        mListMeetingFragment = (ListMeetingFragment) getSupportFragmentManager()
+        listMeetingFrame = getSupportFragmentManager()
                 .findFragmentById(R.id.frame_listmeetings);
         configureAndShowListMeetingFragment();
         configureAndShowHomeStartMeetingCreationFragment();
@@ -102,18 +102,18 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         switch (item.getItemId()) {
             case R.id.ascending:
                 FilterAndSort.sortList(ASCENDING);
-                mListMeetingFragment.initList(SORTED);
+                listMeetingFragment.initList(SORTED);
                 break;
             case R.id.descending:
                 FilterAndSort.sortList(DESCENDING);
-                mListMeetingFragment.initList(SORTED);
+                listMeetingFragment.initList(SORTED);
                 break;
             case R.id.filter:
                 initSpinner();
                 mFilterView.setVisibility(View.VISIBLE);
                 break;
             case R.id.display_all_meetings:
-                mListMeetingFragment.initList(UNCHANGED);
+                listMeetingFragment.initList(UNCHANGED);
                 FilterAndSort.getSortedList().clear();
                 FilterAndSort.getFilteredList().clear();
                 break;
@@ -141,11 +141,11 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     }
 
     private void configureAndShowListMeetingFragment() {
-        if (mListMeetingFragment == null) {
-            mListMeetingFragment = new ListMeetingFragment();
-            FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
-            fm.add(R.id.frame_listmeetings, mListMeetingFragment).commit();
-        }
+        FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
+        if (listMeetingFrame == null) {
+            fm.add(R.id.frame_listmeetings, listMeetingFragment).commit();
+        } else // in case we previously were in landscape mode.
+            fm.replace(R.id.frame_listmeetings, listMeetingFragment).commit();
     }
 
     private void configureAndShowHomeStartMeetingCreationFragment() {
@@ -187,7 +187,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                 if (mSelectedDate != null || !mSelectedName.isEmpty()) {
                     FilterAndSort.filterMeetingsList(mSelectedDate, mSelectedName);
                     mFilterView.setVisibility(View.GONE);
-                    mListMeetingFragment.initList(FILTERED);
+                    listMeetingFragment.initList(FILTERED);
                     resetFilterView();
                 } else
                     Toast.makeText(this, "Choisissez une date et/ou une salle", Toast.LENGTH_LONG).show();

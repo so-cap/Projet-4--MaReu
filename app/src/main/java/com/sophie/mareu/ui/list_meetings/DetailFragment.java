@@ -1,26 +1,28 @@
 package com.sophie.mareu.ui.list_meetings;
 
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailFragment extends Fragment {
     private Meeting meeting;
+    private FragmentActivity activity;
 
     @BindView(R.id.detail_date_hour)
     TextView dateAndHour;
@@ -36,28 +38,35 @@ public class DetailActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_detail, container, false);
+        ButterKnife.bind(this, view);
 
-        ButterKnife.bind(this);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-
-        if (getIntent().hasExtra("meeting")) {
-            meeting = getIntent().getParcelableExtra("meeting");
+        activity = getActivity();
+        if (activity != null) {
+            Toolbar mainToolbar = activity.findViewById(R.id.my_toolbar);
+            FloatingActionButton fabMain = activity.findViewById(R.id.fab);
+            if (fabMain != null) {
+                fabMain.hide();
+                mainToolbar.setVisibility(View.GONE);
+            } else mainToolbar.setVisibility(View.VISIBLE);
+        }
+        if (getArguments() != null) {
+            meeting = getArguments().getParcelable("meeting");
             initMeetingPage();
         }
-
+        toolbar.setNavigationOnClickListener(v -> activity.getSupportFragmentManager().popBackStack());
+        return view;
     }
 
     private void initMeetingPage() {
         Drawable icon;
         if (meeting.getIcon() == R.drawable.ic_lightgreen)
-            icon = getDrawable(R.drawable.gradient_lightgreen);
+            icon = activity.getDrawable(R.drawable.gradient_lightgreen);
         else if (meeting.getIcon() == R.drawable.ic_darkergreen)
-            icon = getDrawable(R.drawable.gradient_darkgreen);
+            icon = activity.getDrawable(R.drawable.gradient_darkgreen);
         else
-            icon = getDrawable(R.drawable.gradient_pink);
+            icon = activity.getDrawable(R.drawable.gradient_pink);
 
         toolbar.setBackground(icon);
         dateAndHour.setText(getString(R.string.detail_date_hour, meeting.getDateInStringFormat(meeting.getDate()),
@@ -71,10 +80,5 @@ public class DetailActivity extends AppCompatActivity {
             emailsList.append(emails).append("\n");
         }
         participantsEmails.setText(emailsList);
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
     }
 }

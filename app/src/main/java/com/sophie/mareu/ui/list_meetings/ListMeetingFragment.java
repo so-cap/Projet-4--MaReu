@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,9 +25,13 @@ import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.FILTERED;
 import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.SORTED;
-import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.UNCHANGED;
 
 /**
  * Created by SOPHIE on 30/12/2019.
@@ -47,6 +52,8 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_list_meetings, container, false);
 
+        Toolbar mainToolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.my_toolbar);
+        mainToolbar.setVisibility(View.VISIBLE);
         context = view.getContext();
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -56,10 +63,17 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
             mNoNewMeetings = getActivity().findViewById(R.id.no_new_meetings);
             mFab = getActivity().findViewById(R.id.fab);
         }
-        if (mFab != null) mFab.setOnClickListener(this);
-
-       // initList(UNCHANGED);
+        if (mFab != null) {
+            mFab.setOnClickListener(this);
+            mFab.show();
+        }
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initList(listCurrentState);
     }
 
     @Override
@@ -86,22 +100,6 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
 
         if (!(mMeetings.isEmpty())) mNoNewMeetings.setVisibility(View.GONE);
         else mNoNewMeetings.setVisibility(View.VISIBLE);
-    }
-
-   /* void initList() {
-        mMeetings = AvailabilityByDate.getMeetings();
-        mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings, context));
-
-        if (!(mMeetings.isEmpty())) mNoNewMeetings.setVisibility(View.GONE);
-        else mNoNewMeetings.setVisibility(View.VISIBLE);
-    }
-
-    */
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        initList(listCurrentState);
     }
 
     @Override

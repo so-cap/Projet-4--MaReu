@@ -3,6 +3,7 @@ package com.sophie.mareu.ui.list_meetings;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationStartFragment;
@@ -61,7 +64,7 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
             return mMeetings.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.titleView)
         TextView mTitle;
         @BindView(R.id.participants)
@@ -90,27 +93,32 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
 
         @Override
         public void onClick(View v) {
-           if (v.getId() == R.id.ic_delete)
-               onDeleteMeetingListener.onDeleteMeetingClick(mMeetings.get(getAdapterPosition()));
-               else{
-                   Fragment fragment = (Fragment) v.getParent();
-                   Fragment landFragment = fragment.getActivity().getSupportFragmentManager()
-                           .findFragmentById(R.id.frame_setmeeting);
-
-                   if(landFragment == null) {
-                   Intent intent = new Intent(mContext, DetailActivity.class);
-                   intent.putExtra("meeting", mMeetings.get(getAdapterPosition()));
-                   mContext.startActivity(intent);
-               } else
-                   landFragment.getFragmentManager().beginTransaction().add(R.id.frame_listmeetings,R.id);
-               FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
-               fm.add(R.id.frame_listmeetings, mListMeetingFragment).commit();
-
+            if (v.getId() == R.id.ic_delete)
+                onDeleteMeetingListener.onDeleteMeetingClick(mMeetings.get(getAdapterPosition()));
+            else {
+                startDetailFragment();
             }
+        }
+
+        private void startDetailFragment() {
+            AppCompatActivity activity = (AppCompatActivity) mContext;
+            FragmentTransaction fm = activity.getSupportFragmentManager().beginTransaction();
+            Fragment detailFragmentFrame = activity.getSupportFragmentManager()
+                    .findFragmentById(R.id.frame_setmeeting);
+            DetailFragment detailFragment = new DetailFragment();
+            FloatingActionButton fab = activity.findViewById(R.id.fab);
+
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("meeting", mMeetings.get(getAdapterPosition()));
+            detailFragment.setArguments(bundle);
+
+            if (detailFragmentFrame == null || fab != null)
+                fm.replace(R.id.frame_listmeetings, detailFragment).addToBackStack(null).commit();
+            else fm.replace(R.id.frame_setmeeting, detailFragment).addToBackStack(null).commit();
         }
     }
 
-    public interface OnDeleteMeetingListener{
+    public interface OnDeleteMeetingListener {
         void onDeleteMeetingClick(Meeting meeting);
     }
 }
