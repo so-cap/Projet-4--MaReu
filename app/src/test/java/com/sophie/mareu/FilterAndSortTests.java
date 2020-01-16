@@ -71,7 +71,7 @@ public class FilterAndSortTests {
     public void filterListByDateAndRoomWithSuccess(){
         String room = meetingC.getRoomName();
         Date date = meetingC.getDate();
-        Date differentDate = meetingB.getDate();
+        Date differentDate = meetingD.getDate();
 
         expectedList.add(meetingC);
         FilterAndSort.filterMeetingsList(date, room);

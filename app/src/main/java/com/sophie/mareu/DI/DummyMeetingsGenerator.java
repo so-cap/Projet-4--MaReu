@@ -15,7 +15,7 @@ import java.util.List;
  */
 public abstract class DummyMeetingsGenerator {
     private static Date dateA = Calendar.getInstance().getTime();
-    private static Date dateB = new GregorianCalendar(2020, 3, 23).getTime();
+    private static Date dateB = new GregorianCalendar(2020, 7, 23).getTime();
     private static Date dateC = new GregorianCalendar(2020, 4, 3).getTime();
     private static Date dateD = new GregorianCalendar(2020, 9, 23).getTime();
 

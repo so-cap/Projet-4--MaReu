@@ -32,12 +32,10 @@ public class FilterAndSort {
                     }
                 }
             }
-        } else // TODO : pourquoi la date change lorsque 2 noms de salles sont identiques mais pourtant pas enregistré
-                // à la même date ?
-            for (int i = 0; i < getMeetings(date).size(); i++) {
-                if(getMeetings(date).get(i).getRoomName().equals(roomName)) {
-                    mFilteredList.add(new Meeting(getMeetings(date).get(i)));
-                    System.out.println(date);
+        } else
+            for (Meeting entry : getMeetings(date)) {
+                if (entry.getRoomName().equals(roomName) && entry.getDate() == date) {
+                    mFilteredList.add(new Meeting(entry));
                 }
             }
     }
