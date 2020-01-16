@@ -1,7 +1,7 @@
 package com.sophie.mareu;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.service.RoomsAvailabilityService;
+import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
 import com.sophie.mareu.controller.RoomsPerHour;
 
 import org.junit.Before;
@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 @RunWith(JUnit4.class)
 public class RoomsAvailabilityServiceTests {
     private ArrayList<RoomsPerHour> mRoomsPerHour = new ArrayList<>();
+    private RoomsAvailabilityByHourImpl availabilityByHourService;
 
     // for expected data
     private ArrayList<String>  mHoursList = DI.getNewHoursList();
@@ -26,12 +27,12 @@ public class RoomsAvailabilityServiceTests {
 
     @Before
     public void setup(){
-        RoomsAvailabilityService.initRoomsAndHours();
+        availabilityByHourService = new RoomsAvailabilityByHourImpl();
     }
 
     @Test
-    public void getHoursAndRoomsAvailabilityWithSuccess(){
-        mRoomsPerHour = RoomsAvailabilityService.getRoomsPerHourList();
+    public void getRoomsAvailabilityWithSuccess(){
+        mRoomsPerHour = availabilityByHourService.getRoomsPerHourList();
         assertThat(mRoomsPerHour.get(0).getHour().getValue(), equalTo(mHoursList.get(0)));
         assertThat(mRoomsPerHour.get(11).getHour().getValue(), equalTo(mHoursList.get(11)));
 
@@ -41,11 +42,10 @@ public class RoomsAvailabilityServiceTests {
 
     @Test
     public void updateHoursAvailabilityWithSuccess(){
-        mRoomsPerHour = RoomsAvailabilityService.getRoomsPerHourList();
+        mRoomsPerHour = availabilityByHourService.getRoomsPerHourList();
 
         // Index 2 = "10h00" beforehand
         assertThat(mRoomsPerHour.get(2).getHour().getValue(), equalTo("10h00"));
-
 
         //deleting all the rooms at index 2
         while(mRoomsPerHour.get(2).getRooms().size() > 0){
@@ -53,7 +53,7 @@ public class RoomsAvailabilityServiceTests {
         }
 
         // Updating list
-        RoomsAvailabilityService.updateAvailableHours(mRoomsPerHour);
+        availabilityByHourService.updateAvailableHours(mRoomsPerHour);
 
         //Index 2 = "11h00" after removing hour availability
         assertThat(mRoomsPerHour.get(2).getHour().getValue(), equalTo("11h00"));

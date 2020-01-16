@@ -1,7 +1,6 @@
 package com.sophie.mareu.ui.list_meetings;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,14 +13,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.ui.meeting_creation.MeetingCreationStartFragment;
 
 import java.util.ArrayList;
 

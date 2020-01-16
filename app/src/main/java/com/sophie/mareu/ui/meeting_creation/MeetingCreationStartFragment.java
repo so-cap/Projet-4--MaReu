@@ -3,7 +3,6 @@ package com.sophie.mareu.ui.meeting_creation;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +24,13 @@ import androidx.fragment.app.FragmentTransaction;
 import com.adroitandroid.chipcloud.ChipCloud;
 import com.adroitandroid.chipcloud.ChipListener;
 import com.sophie.mareu.R;
-import com.sophie.mareu.service.AvailabilityByDate;
-import com.sophie.mareu.service.RoomsAvailabilityService;
+import com.sophie.mareu.controller.AvailabilityByDate;
+import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
 import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
+import com.sophie.mareu.service.RoomsAvailabilityService;
 
+import java.text.DateFormat;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,9 +50,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     private Context mContext;
     private int mRoomPosition = -1;
     private Date mSelectedDate = Calendar.getInstance().getTime();
-    private RoomsAvailabilityService mRoomsAvailabilityService;
-    int i = 0;
-
+    private RoomsAvailabilityService mRoomsAvailabilityService = new RoomsAvailabilityByHourImpl();
 
     @BindView(R.id.select_date)
     TextView mDateView;
@@ -59,13 +58,10 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     Spinner mSpinner;
     @BindView(R.id.chip_cloud)
     ChipCloud mChipCloud;
-
     @BindView(R.id.all_meetings_full)
     TextView mMeetingsFull;
     @BindView(R.id.next_page)
     Button mNextPage;
-
-    private static final String TAG = "LOGGCreationStart";
 
     @Nullable
     @Override
@@ -74,8 +70,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         mContext = getContext();
         ButterKnife.bind(this, view);
 
-        mRoomsAvailabilityService = AvailabilityByDate.getRoomsAvailabilityService(mSelectedDate);
-
+        //mRoomsAvailabilityService = AvailabilityByDate.getRoomsAvailabilityService(mSelectedDate);
         mDateView.setOnClickListener(this);
         initSpinner();
         displaySpinner();
@@ -96,7 +91,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         return view;
     }
 
-    public void initSpinner() {
+    private void initSpinner() {
         mAvailableHoursAndRooms = mRoomsAvailabilityService.getRoomsPerHourList();
         mSpinnerArray = new ArrayList<>();
         String mHour;
@@ -109,8 +104,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
     private void displaySpinner() {
         if (!(mSpinnerArray.isEmpty())) {
-            ArrayAdapter<String> spinnerAdapter =
-                    new ArrayAdapter<>(mContext, R.layout.support_simple_spinner_dropdown_item, mSpinnerArray);
+            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.support_simple_spinner_dropdown_item, mSpinnerArray);
             spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             mSpinner.setAdapter(spinnerAdapter);
         } else {
@@ -120,11 +114,9 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     private void initChipCloud() {
-        ArrayList<String> rooms = mAvailableHoursAndRooms.get(mHourPosition).getRooms();
-        //chipCloud only takes [] format
-        String[] roomsList = rooms.toArray(new String[0]);
+        String[] rooms = mAvailableHoursAndRooms.get(mHourPosition).getRooms().toArray(new String[0]);
         mChipCloud.removeAllViews();
-        mChipCloud.addChips(roomsList);
+        mChipCloud.addChips(rooms);
     }
 
     @Override
@@ -133,10 +125,9 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             case R.id.next_page:
                 if (checkIfValid() && mSpinnerArray != null) {
                     startNextFragment();
-                } else if (mSpinnerArray == null) {
+                } else if (mSpinnerArray == null && getActivity() != null) {
                     if (getActivity().getClass().equals(ListMeetingsActivity.class))
-                        getActivity().getSupportFragmentManager().popBackStack(null,
-                                FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     else
                         getActivity().finish();
                 }
@@ -165,14 +156,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         return false;
     }
 
-    @VisibleForTesting
-    public ArrayList<String> getSpinnerArray() {
-        return mSpinnerArray;
-    }
-
     private void startNextFragment() {
         MeetingCreationEndFragment meetingCreationEndFragment = new MeetingCreationEndFragment();
-
         Bundle bundle = new Bundle();
         bundle.putInt("selected_hour_key", mSelectedHour.getKey());
         bundle.putString("selected_hour_value", mSelectedHour.getValue());
@@ -183,9 +168,10 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         bundle.putSerializable("rooms_availability_service", mRoomsAvailabilityService);
         meetingCreationEndFragment.setArguments(bundle);
 
-        FragmentTransaction fm = getFragmentManager().beginTransaction();
-        fm.replace(R.id.frame_setmeeting, meetingCreationEndFragment)
-                .addToBackStack(null).commit();
+        if (getFragmentManager() != null) {
+            FragmentTransaction fm = getFragmentManager().beginTransaction();
+            fm.replace(R.id.frame_setmeeting, meetingCreationEndFragment).addToBackStack(null).commit();
+        }
     }
 
     @Override
@@ -199,23 +185,15 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        String firstDays = "";
-        String firstMonths = "";
-
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE);
         Date newDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
-        updateCurrentService(newDate);
-
-        if (dayOfMonth < 10) firstDays = "0" + dayOfMonth;
-        if (month < 12) firstMonths = "0" + (month+1);
-
-        mDateView.setText(getString(R.string.date_selected,
-                (dayOfMonth < 10? firstDays : (""+dayOfMonth+""))
-                ,(month < 11 ? firstMonths : (""+month+"")),year));
+        mDateView.setText(df.format(newDate));
 
         if (!(mChipCloud.isShown())) {
             mChipCloud.setVisibility(View.VISIBLE);
             mNextPage.setVisibility(View.VISIBLE);
         }
+        updateCurrentService(newDate);
     }
 
     private void updateCurrentService(Date newDate) {
@@ -224,5 +202,15 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         initSpinner();
         displaySpinner();
         initChipCloud();
+    }
+
+    @VisibleForTesting
+    public ArrayList<String> getSpinnerArray() {
+        return mSpinnerArray;
+    }
+
+    @VisibleForTesting
+    public void initSpinnerTest() {
+        initSpinner();
     }
 }

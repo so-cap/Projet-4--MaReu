@@ -1,10 +1,8 @@
-package com.sophie.mareu.service;
+package com.sophie.mareu.controller;
 
-import android.util.Log;
-
-import com.sophie.mareu.controller.FilterAndSort;
-import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
+import com.sophie.mareu.service.RoomsAvailabilityService;
 
 
 import java.util.ArrayList;
@@ -17,31 +15,26 @@ import java.util.Objects;
  * Created by SOPHIE on 05/01/2020.
  */
 public class AvailabilityByDate {
-    private static Date mDate;
-    private static HashMap<Date, RoomsAvailabilityService> mAvailabilityByDateList = new HashMap<>();
     public static HashMap<Date, ArrayList<Meeting>> mMeetingsByDate = new HashMap<>();
+    public static HashMap<Date, RoomsAvailabilityService> serviceByDate = new HashMap<>();
 
-    public static Date getDate() {
-        return mDate;
-    }
-
-    public void setDate(Date date) {
-        mDate = date;
-    }
-
-    private static final String TAG = "LOGGAvailabilityByDate";
+    private static final String TAG = "LOGIAvailabilityByDate";
 
     public static RoomsAvailabilityService getRoomsAvailabilityService(Date date) {
-        for (int position = 0; position < mAvailabilityByDateList.size(); position++) {
-            if (mAvailabilityByDateList.containsKey(date))
-                return mAvailabilityByDateList.get(date);
+        for (int position = 0; position < serviceByDate.size(); position++) {
+            if (serviceByDate.containsKey(date))
+                return serviceByDate.get(date);
         }
-        return new RoomsAvailabilityService();
+        return getNewService();
+    }
+
+    private static RoomsAvailabilityService getNewService() {
+        return new RoomsAvailabilityByHourImpl();
     }
 
     public static void updateAvailabilityByDate(Date date, RoomsAvailabilityService roomsAvailabilityService) {
-        mAvailabilityByDateList.remove(date);
-        mAvailabilityByDateList.put(date, roomsAvailabilityService);
+        serviceByDate.remove(date);
+        serviceByDate.put(date, roomsAvailabilityService);
     }
 
     public static void addMeeting(Meeting meeting, Date date) {
@@ -62,24 +55,29 @@ public class AvailabilityByDate {
         return meetings;
     }
 
+    public static ArrayList<Meeting> getMeetings(Date date) {
+        if (AvailabilityByDate.mMeetingsByDate.get(date) != null) {
+            return AvailabilityByDate.mMeetingsByDate.get(date);
+        } else
+            return new ArrayList<>();
+    }
+
     public static void clearAllMeetings() {
-        mAvailabilityByDateList.clear();
+        serviceByDate.clear();
         mMeetingsByDate.clear();
     }
 
     public static void deleteMeeting(Meeting meeting) {
-        RoomsAvailabilityService currentService = mAvailabilityByDateList.get(meeting.getDate());
+        RoomsAvailabilityService currentService = serviceByDate.get(meeting.getDate());
         if (currentService != null) {
             ArrayList<RoomsPerHour> updateRooms = currentService.getRoomsPerHourList();
             Integer meetingPosition = meeting.getHour().getKey();
-
             // make hour available again if it wasn't anymore
             if (!updateRooms.get(meetingPosition).getHour().getKey().equals(meetingPosition)) {
                 RoomsPerHour roomsPerHour = new RoomsPerHour();
                 roomsPerHour.setHour(meetingPosition, meeting.getHour().getValue());
                 updateRooms.add(meetingPosition,roomsPerHour);
             }
-
             // make room available again
             updateRooms.get(meeting.getHour().getKey()).addRoom(meeting.getRoomName());
 

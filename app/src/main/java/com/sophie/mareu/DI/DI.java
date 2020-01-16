@@ -1,8 +1,11 @@
 package com.sophie.mareu.DI;
 
+import com.sophie.mareu.model.Meeting;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 /**
  * Created by SOPHIE on 31/12/2019.
@@ -12,6 +15,7 @@ public class DI {
             "15h00","16h00","17h00","18h00","19h00");
     private static List<String> mInitialRoomsList = Arrays.asList("Peach","Luigi","Mario","Bowser","Waluigi","Daisy",
             "Wario","Rosalina","Toad","Yoshi");
+    private static List<Meeting> dummyMeetings = DummyMeetingsGenerator.getDummyMeetings();
 
     public static ArrayList<String> getNewHoursList(){
         return new ArrayList<>(mInitialHoursList);
@@ -19,5 +23,9 @@ public class DI {
 
     public static ArrayList<String> getNewRoomsList(){
         return new ArrayList<>(mInitialRoomsList);
+    }
+
+    public static List<Meeting> getDummyMeetings(){
+        return dummyMeetings;
     }
 }

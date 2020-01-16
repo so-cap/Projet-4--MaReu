@@ -3,7 +3,6 @@ package com.sophie.mareu.ui.list_meetings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
-import com.sophie.mareu.service.AvailabilityByDate;
+import com.sophie.mareu.controller.AvailabilityByDate;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
 
@@ -82,17 +81,12 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
     public void initList(int listCurrentState) {
         this.listCurrentState = listCurrentState;
 
-        if (listCurrentState == FILTERED) {
+        if (listCurrentState == FILTERED)
             mMeetings = FilterAndSort.getFilteredList();
-            Log.d(TAG, "initList: filter" + mMeetings.size());
-        }else if (listCurrentState == SORTED) {
+        else if (listCurrentState == SORTED)
             mMeetings = FilterAndSort.getSortedList();
-            Log.d(TAG, "initList: sorted"+ mMeetings.size());
-        }
-        else {
+        else
             mMeetings = AvailabilityByDate.getMeetings();
-            Log.d(TAG, "initList: allmeetings"+ mMeetings.size());
-        }
         mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings, context, this));
 
         if (!(mMeetings.isEmpty())) mNoNewMeetings.setVisibility(View.GONE);

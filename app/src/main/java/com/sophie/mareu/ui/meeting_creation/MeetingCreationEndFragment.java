@@ -1,11 +1,8 @@
 package com.sophie.mareu.ui.meeting_creation;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +23,10 @@ import androidx.fragment.app.FragmentManager;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.AvailabilityByDate;
-import com.sophie.mareu.service.RoomsAvailabilityService;
+import com.sophie.mareu.controller.AvailabilityByDate;
+import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
 import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
+import com.sophie.mareu.service.RoomsAvailabilityService;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -46,7 +44,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     private ArrayList<String> mParticipants = new ArrayList<>();
     private Context mContext;
     private int mRoomPosition, mHourPosition;
-    private RoomsAvailabilityService mRoomsAvailabilityService;
+    private RoomsAvailabilityService mService;
     private Date mSelectedDate;
 
     @BindView(R.id.meeting_title_input)
@@ -85,15 +83,13 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
             mHourPosition = getArguments().getInt("hour_position");
             mRoomPosition = getArguments().getInt("room_position");
             mSelectedDate = (Date) getArguments().getSerializable("selected_date");
-            mRoomsAvailabilityService = (RoomsAvailabilityService) getArguments().
+            mService = (RoomsAvailabilityByHourImpl) getArguments().
                     getSerializable("rooms_availability_service");
         }
 
         mAddMoreEmail.setOnClickListener(this);
         mBtnEnd.setOnClickListener(this);
         mDeleteEmail.setOnClickListener(this);
-
-
         return view;
     }
 
@@ -149,7 +145,6 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
                 mEmailView.setError("Veuillez remplir ce champs");
             return false;
         }
-
         setMeeting();
         return true;
     }
@@ -210,10 +205,9 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     }
 
     private void updateRoomAvailability() {
-        ArrayList<RoomsPerHour> roomsPerHour = mRoomsAvailabilityService.getRoomsPerHourList();
+        ArrayList<RoomsPerHour> roomsPerHour = mService.getRoomsPerHourList();
         roomsPerHour.get(mHourPosition).getRooms().remove(mRoomPosition);
-        mRoomsAvailabilityService.updateAvailableHours(roomsPerHour);
-        AvailabilityByDate.updateAvailabilityByDate(mSelectedDate, mRoomsAvailabilityService);
-
+        mService.updateAvailableHours(roomsPerHour);
+        AvailabilityByDate.updateAvailabilityByDate(mSelectedDate, mService);
     }
 }

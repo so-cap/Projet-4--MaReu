@@ -28,12 +28,12 @@ public class Meeting implements Parcelable {
     private String mDetailSubject;
     private Date mDate;
     private int mIcon;
-    private static int iconSelector;
+    public static int iconSelector;
 
     public Meeting() {
     }
 
-    public Meeting(Meeting meeting){
+    public Meeting(Meeting meeting) {
         mTitle = meeting.getTitle();
         mHour = meeting.getHour();
         mRoomName = meeting.getRoomName();
@@ -50,7 +50,7 @@ public class Meeting implements Parcelable {
                 R.drawable.ic_darkergreen));
 
         mIcon = (int) iconList.get(iconSelector++);
-        if(iconSelector == 3)
+        if (iconSelector == 3)
             iconSelector = 0;
 
         mTitle = title;
@@ -106,7 +106,7 @@ public class Meeting implements Parcelable {
         return participants.toString();
     }
 
-    public ArrayList<String> getParticipantsArray(){
+    public ArrayList<String> getParticipantsArray() {
         return mParticipants;
     }
 
@@ -118,8 +118,8 @@ public class Meeting implements Parcelable {
         return mHour;
     }
 
-    public void setHour(String hour) {
-        mHour.setValue(hour);
+    public void setHour(Integer key, String hour) {
+        mHour = new AbstractMap.SimpleEntry<>(key, hour);
     }
 
     public String getTitle() {
@@ -130,11 +130,11 @@ public class Meeting implements Parcelable {
         mDate = date;
     }
 
-    public Date getDate(){
+    public Date getDate() {
         return mDate;
     }
 
-    public String getDateInStringFormat(Date date){
+    public String getDateInStringFormat(Date date) {
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);
         return dateFormat.format(date);
     }
@@ -186,7 +186,7 @@ public class Meeting implements Parcelable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(mRoomName, mParticipants,mTitle,mDetailSubject,mIcon, mHour);
+        return Objects.hash(mRoomName, mParticipants, mTitle, mDetailSubject, mIcon, mHour);
 
     }
 }

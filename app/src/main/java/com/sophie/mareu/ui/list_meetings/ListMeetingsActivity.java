@@ -24,10 +24,11 @@ import android.widget.Toast;
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
-import com.sophie.mareu.service.AvailabilityByDate;
+import com.sophie.mareu.controller.AvailabilityByDate;
 import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
 
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,6 +37,8 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.sophie.mareu.model.Meeting.iconSelector;
 
 public class ListMeetingsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener {
     private ListMeetingFragment listMeetingFragment = new ListMeetingFragment();
@@ -166,17 +169,9 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        String firstDays = "";
-        String firstMonths = "";
-
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE);
         mSelectedDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
-
-        if (dayOfMonth < 10) firstDays = "0" + dayOfMonth;
-        if (month < 11) firstMonths = "0" + (month + 1);
-
-        mDateView.setText(getString(R.string.date_selected,
-                (dayOfMonth < 10 ? firstDays : ("" + dayOfMonth + ""))
-                , (month < 11 ? firstMonths : ("" + month + "")), year));
+        mDateView.setText(df.format(mSelectedDate));
     }
 
     @Override
@@ -218,6 +213,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     protected void onDestroy() {
         super.onDestroy();
         AvailabilityByDate.clearAllMeetings();
+        iconSelector = 0;
     }
 }
 

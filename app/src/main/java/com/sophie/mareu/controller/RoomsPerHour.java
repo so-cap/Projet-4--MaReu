@@ -12,16 +12,14 @@ public class RoomsPerHour {
     private ArrayList<String> rooms = new ArrayList<>();
     private static int key = 0;
 
-    public RoomsPerHour() {
-    }
+    public RoomsPerHour() {}
 
-    private static final String TAG = "LOGGRoomsPerHour";
     public RoomsPerHour(String hour, ArrayList<String> rooms) {
         this.hour = new AbstractMap.SimpleEntry<>(key++, hour);
         this.rooms = rooms;
         if (key == DI.getNewHoursList().size()) key = 0;
     }
-    
+
     public AbstractMap.SimpleEntry<Integer, String> getHour() {
         return hour;
     }

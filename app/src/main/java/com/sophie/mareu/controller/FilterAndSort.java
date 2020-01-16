@@ -3,13 +3,13 @@ package com.sophie.mareu.controller;
 import android.util.Log;
 
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.AvailabilityByDate;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
+import static com.sophie.mareu.controller.AvailabilityByDate.getMeetings;
 import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.ASCENDING;
 import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.DESCENDING;
 
@@ -22,9 +22,9 @@ public class FilterAndSort {
 
     public static void filterMeetingsList(Date date, String roomName) {
         mFilteredList.clear();
-        if (date != null && roomName.isEmpty()) {
+        if (date != null && roomName.isEmpty())
             mFilteredList = new ArrayList<>(getMeetings(date));
-        } else if (!(roomName.isEmpty()) && date == null) {
+         else if (!(roomName.isEmpty()) && date == null) {
             for (Map.Entry<Date, ArrayList<Meeting>> meetings : AvailabilityByDate.mMeetingsByDate.entrySet()) {
                 for (int i = 0; i < meetings.getValue().size(); i++) {
                     if (meetings.getValue().get(i).getRoomName().equals(roomName)) {
@@ -32,25 +32,20 @@ public class FilterAndSort {
                     }
                 }
             }
-        } else
+        } else // TODO : pourquoi la date change lorsque 2 noms de salles sont identiques mais pourtant pas enregistré
+                // à la même date ?
             for (int i = 0; i < getMeetings(date).size(); i++) {
-                if (getMeetings(date).get(i).getRoomName().equals(roomName)) {
+                if(getMeetings(date).get(i).getRoomName().equals(roomName)) {
                     mFilteredList.add(new Meeting(getMeetings(date).get(i)));
+                    System.out.println(date);
                 }
             }
-    }
-
-    private static ArrayList<Meeting> getMeetings(Date date) {
-        if (AvailabilityByDate.mMeetingsByDate.get(date) != null) {
-            return AvailabilityByDate.mMeetingsByDate.get(date);
-        } else
-            return new ArrayList<>();
     }
 
     public static void sortList(int listOrder) {
         if (listOrder == ASCENDING || listOrder == DESCENDING) {
             if (mFilteredList.isEmpty())
-                mSortedList = AvailabilityByDate.getMeetings();
+                mSortedList = getMeetings();
             else
                 mSortedList = mFilteredList;
             Collections.sort(mSortedList, (meeting1, meeting2) -> meeting1.getHour().getKey().compareTo(meeting2.getHour().getKey()));

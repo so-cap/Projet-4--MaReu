@@ -3,7 +3,7 @@ package com.sophie.mareu;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
-import com.sophie.mareu.service.RoomsAvailabilityService;
+import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
 import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 
@@ -34,6 +34,7 @@ public class MeetingCreationStartFragmentTests {
     private ListMeetingsActivity mActivity;
     private ArrayList<RoomsPerHour> mRoomsAndHours = new ArrayList<>();
     private ArrayList<String> mRooms;
+    private RoomsAvailabilityByHourImpl availabilityByHourService;
 
     @Rule
     public ActivityTestRule<ListMeetingsActivity> mActivityRule =
@@ -54,7 +55,7 @@ public class MeetingCreationStartFragmentTests {
         mRoomsAndHours.add(new RoomsPerHour("8h00", new ArrayList<>(mRooms)));
         mRoomsAndHours.add(new RoomsPerHour("9h00",new ArrayList<>(mRooms)));
         mRoomsAndHours.add(new RoomsPerHour("10h00",new ArrayList<>(mRooms)));
-        RoomsAvailabilityService.updateAvailableHours(mRoomsAndHours);
+        availabilityByHourService.updateAvailableHours(mRoomsAndHours);
 
 
         for (int i = 0; i < initialHoursAvailable; i++) {
@@ -75,9 +76,9 @@ public class MeetingCreationStartFragmentTests {
 
     @Test
     public void updateHoursAvailabilityReal(){
-        RoomsAvailabilityService.initRoomsAndHours();
-        mRoomsAndHours = RoomsAvailabilityService.getRoomsPerHourList();
-        RoomsAvailabilityService.updateAvailableHours(mRoomsAndHours);
+        availabilityByHourService.initRoomsAndHours();
+        mRoomsAndHours = availabilityByHourService.getRoomsPerHourList();
+        availabilityByHourService.updateAvailableHours(mRoomsAndHours);
 
         int initialHoursAvailable = mRoomsAndHours.size();
         int j = 0;
