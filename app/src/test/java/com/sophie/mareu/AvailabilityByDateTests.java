@@ -37,6 +37,7 @@ public class AvailabilityByDateTests {
 
     @Before
     public void setup(){
+        AvailabilityByDate.clearAllMeetings();
         mService = new RoomsAvailabilityByHourImpl();
         List<Meeting> meetings = DI.getDummyMeetings();
 

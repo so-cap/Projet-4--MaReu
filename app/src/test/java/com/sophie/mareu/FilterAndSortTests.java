@@ -38,6 +38,9 @@ public class FilterAndSortTests {
 
     @Before
     public void setup(){
+        AvailabilityByDate.clearAllMeetings();
+        FilterAndSort.getFilteredList().clear();
+
         for (Meeting entry : meetings){
             AvailabilityByDate.addMeeting(entry, entry.getDate());
         }
@@ -71,6 +74,7 @@ public class FilterAndSortTests {
     public void filterListByDateAndRoomWithSuccess(){
         String room = meetingC.getRoomName();
         Date date = meetingC.getDate();
+        
         Date differentDate = meetingD.getDate();
 
         expectedList.add(meetingC);
