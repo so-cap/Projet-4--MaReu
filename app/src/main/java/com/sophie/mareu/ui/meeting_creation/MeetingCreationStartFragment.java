@@ -93,7 +93,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
     private void initSpinner() {
         mAvailableHoursAndRooms = mRoomsAvailabilityService.getRoomsPerHourList();
-        System.out.println(mAvailableHoursAndRooms.size());
         mSpinnerArray = new ArrayList<>();
         String mHour;
 

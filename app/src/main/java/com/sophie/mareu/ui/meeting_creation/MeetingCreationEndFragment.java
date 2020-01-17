@@ -186,13 +186,16 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
             } else {
                 ListMeetingFragment listMeetingFragment = (ListMeetingFragment) activity.getSupportFragmentManager().
                         findFragmentById(R.id.frame_listmeetings);
-                if (listMeetingFragment == null) {
+              /*  if (listMeetingFragment == null) {
                     activity.finish();
                 } else {
+               */
                     FragmentManager fm = activity.getSupportFragmentManager();
                     fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                if (listMeetingFragment != null) {
                     listMeetingFragment.initList(UNCHANGED);
                 }
+                //}
             }
         }
         Toast.makeText(mContext,"Réunion enregistrée !", Toast.LENGTH_LONG).show();

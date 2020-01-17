@@ -58,7 +58,6 @@ public class DetailFragment extends Fragment {
         }
         toolbar.setNavigationOnClickListener(v -> activity.getSupportFragmentManager()
                 .popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE));
-
         return view;
     }
 

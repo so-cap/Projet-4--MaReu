@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -98,5 +99,16 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         AvailabilityByDate.deleteMeeting(meeting);
         initList(listCurrentState);
         if (mMeetings.isEmpty()) mNoNewMeetings.setVisibility(View.VISIBLE);
+
+        Fragment detailFragment = null;
+        if (getFragmentManager() != null)
+            detailFragment = getFragmentManager().findFragmentById(R.id.frame_setmeeting);
+
+        if(detailFragment != null && detailFragment.getClass() == DetailFragment.class)
+            if (detailFragment.getFragmentManager() != null) {
+                if (detailFragment.getArguments() != null
+                        && Objects.equals(detailFragment.getArguments().getParcelable("meeting"), meeting))
+                    detailFragment.getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
     }
 }

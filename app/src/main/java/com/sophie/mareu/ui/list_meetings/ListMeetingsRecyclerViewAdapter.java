@@ -98,9 +98,8 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
         public void onClick(View v) {
             if (v.getId() == R.id.delete_meeting_btn)
                 onDeleteMeetingListener.onDeleteMeetingClick(mMeetings.get(getAdapterPosition()));
-            else {
+            else
                 startDetailFragment();
-            }
         }
 
         private void startDetailFragment() {
