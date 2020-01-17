@@ -78,6 +78,7 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
         ImageButton mDeleteButton;
 
         OnDeleteMeetingListener onDeleteMeetingListener;
+        Resources res = mContext.getResources();
 
         ViewHolder(@NonNull View itemView, OnDeleteMeetingListener onDeleteMeetingListener) {
             super(itemView);
@@ -87,7 +88,6 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
         }
 
         void bind(Meeting meeting) {
-            Resources res = mContext.getResources();
             mIcon.setImageDrawable(res.getDrawable(meeting.getIcon()));
             mTitle.setText(res.getString(R.string.title_hour_room, meeting.getTitle(), meeting.getHour().getValue(), meeting.getRoomName()));
             mParticipants.setText(meeting.getParticipantsInOneString());
@@ -111,9 +111,10 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
             bundle.putParcelable("meeting", mMeetings.get(getAdapterPosition()));
             detailFragment.setArguments(bundle);
 
-            if (ORIENTATION == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+            if (ORIENTATION == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    && !res.getString(R.string.screen_type).equals("tablet")) {
                 fm.replace(R.id.frame_listmeetings, detailFragment).addToBackStack(null).commit();
-            }else fm.replace(R.id.frame_setmeeting, detailFragment).addToBackStack(null).commit();
+            } else fm.replace(R.id.frame_setmeeting, detailFragment).addToBackStack(null).commit();
         }
     }
 

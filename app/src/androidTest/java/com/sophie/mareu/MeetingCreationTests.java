@@ -74,7 +74,6 @@ public class MeetingCreationTests {
 
     @Test
     public void addNewMeetingWithSuccess() {
-
         addMeeting(0);
         onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(1));
     }
