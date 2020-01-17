@@ -74,6 +74,7 @@ public class MeetingCreationTests {
 
     @Test
     public void addNewMeetingWithSuccess() {
+
         addMeeting(0);
         onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(1));
     }
@@ -109,11 +110,12 @@ public class MeetingCreationTests {
     }
 
     @Test
-    public void deleteAllMeetingsOnPhoneRotationWithSuccess(){
+    public void deleteAllMeetingsOnPhoneRotationWithSuccess() throws InterruptedException {
         for (int position = 2; position != 0; position--)
             addMeeting(position);
         onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(2));
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        Thread.sleep(2000);
         onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(0));
     }
 
