@@ -2,6 +2,7 @@ package com.sophie.mareu.ui.meeting_creation;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +50,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     private int mHourPosition;
     private Context mContext;
     private int mRoomPosition = -1;
-    private Date mSelectedDate = Calendar.getInstance().getTime();
+    private Date mSelectedDate;
     private RoomsAvailabilityService mRoomsAvailabilityService = new RoomsAvailabilityByHourImpl();
 
     @BindView(R.id.select_date)
@@ -70,7 +71,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         mContext = getContext();
         ButterKnife.bind(this, view);
 
-        //mRoomsAvailabilityService = AvailabilityByDate.getRoomsAvailabilityService(mSelectedDate);
         mDateView.setOnClickListener(this);
         initSpinner();
         displaySpinner();
@@ -93,6 +93,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
     private void initSpinner() {
         mAvailableHoursAndRooms = mRoomsAvailabilityService.getRoomsPerHourList();
+        System.out.println(mAvailableHoursAndRooms.size());
         mSpinnerArray = new ArrayList<>();
         String mHour;
 
@@ -107,9 +108,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(mContext, R.layout.support_simple_spinner_dropdown_item, mSpinnerArray);
             spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             mSpinner.setAdapter(spinnerAdapter);
-        } else {
-            mMeetingsFull.setVisibility(View.VISIBLE);
-            mNextPage.setText(getString(R.string.previous_page));
         }
     }
 
@@ -145,6 +143,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
                 Calendar.getInstance().get(Calendar.MONTH),
                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
+        Button okButton = datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        okButton.setId(R.id.ok_button);
     }
 
     private boolean checkIfValid() {
@@ -197,11 +197,18 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     private void updateCurrentService(Date newDate) {
-        mRoomsAvailabilityService = AvailabilityByDate.getRoomsAvailabilityService(newDate);
-        mSelectedDate = newDate;
-        initSpinner();
-        displaySpinner();
-        initChipCloud();
+        mRoomsAvailabilityService = AvailabilityByDate.setCurrentService(newDate);
+        if (mRoomsAvailabilityService.getRoomsPerHourList().isEmpty()) {
+            System.out.println("update" + mRoomsAvailabilityService.getRoomsPerHourList().size());
+            mMeetingsFull.setVisibility(View.VISIBLE);
+            mChipCloud.setVisibility(View.GONE);
+            mNextPage.setVisibility(View.GONE);
+        } else {
+            mSelectedDate = newDate;
+            initSpinner();
+            displaySpinner();
+            initChipCloud();
+        }
     }
 
     @VisibleForTesting

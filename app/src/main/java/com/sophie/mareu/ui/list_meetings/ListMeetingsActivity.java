@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.DatePickerDialog;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +51,8 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     public static final int FILTERED = 0;
     public static final int SORTED = 1;
     public static final int UNCHANGED = -1;
+    public static int ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+    ;
 
     @BindView(R.id.my_toolbar)
     Toolbar mToolbar;
@@ -156,7 +159,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     private void configureAndShowHomeStartMeetingCreationFragment() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_setmeeting);
         FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
-
         if (findViewById(R.id.frame_setmeeting) != null) {
             if (fragment == null)
                 fm.add(R.id.frame_setmeeting, new HomeStartMeetingCreationFragment()).commit();
@@ -207,6 +209,12 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     protected void onStop() {
         super.onStop();
         mFilterView.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ListMeetingsActivity.ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     }
 
     @Override

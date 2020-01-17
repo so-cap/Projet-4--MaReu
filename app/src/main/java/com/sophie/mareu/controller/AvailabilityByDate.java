@@ -20,7 +20,7 @@ public class AvailabilityByDate {
 
     private static final String TAG = "LOGIAvailabilityByDate";
 
-    public static RoomsAvailabilityService getRoomsAvailabilityService(Date date) {
+    public static RoomsAvailabilityService setCurrentService(Date date) {
         for (int position = 0; position < serviceByDate.size(); position++) {
             if (serviceByDate.containsKey(date))
                 return serviceByDate.get(date);

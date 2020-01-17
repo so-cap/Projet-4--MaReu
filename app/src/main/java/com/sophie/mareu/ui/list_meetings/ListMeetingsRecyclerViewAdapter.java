@@ -1,6 +1,8 @@
 package com.sophie.mareu.ui.list_meetings;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,11 +21,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
+import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.ORIENTATION;
 
 /**
  * Created by SOPHIE on 28/12/2019.
@@ -68,7 +74,7 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
         TextView mParticipants;
         @BindView(R.id.meeting_icon)
         ImageView mIcon;
-        @BindView(R.id.ic_delete)
+        @BindView(R.id.delete_meeting_btn)
         ImageButton mDeleteButton;
 
         OnDeleteMeetingListener onDeleteMeetingListener;
@@ -90,7 +96,7 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
 
         @Override
         public void onClick(View v) {
-            if (v.getId() == R.id.ic_delete)
+            if (v.getId() == R.id.delete_meeting_btn)
                 onDeleteMeetingListener.onDeleteMeetingClick(mMeetings.get(getAdapterPosition()));
             else {
                 startDetailFragment();
@@ -100,18 +106,14 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
         private void startDetailFragment() {
             AppCompatActivity activity = (AppCompatActivity) mContext;
             FragmentTransaction fm = activity.getSupportFragmentManager().beginTransaction();
-            Fragment detailFragmentFrame = activity.getSupportFragmentManager()
-                    .findFragmentById(R.id.frame_setmeeting);
             DetailFragment detailFragment = new DetailFragment();
-            FloatingActionButton fab = activity.findViewById(R.id.fab);
-
             Bundle bundle = new Bundle();
             bundle.putParcelable("meeting", mMeetings.get(getAdapterPosition()));
             detailFragment.setArguments(bundle);
 
-            if (detailFragmentFrame == null || fab != null)
+            if (ORIENTATION == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
                 fm.replace(R.id.frame_listmeetings, detailFragment).addToBackStack(null).commit();
-            else fm.replace(R.id.frame_setmeeting, detailFragment).addToBackStack(null).commit();
+            }else fm.replace(R.id.frame_setmeeting, detailFragment).addToBackStack(null).commit();
         }
     }
 

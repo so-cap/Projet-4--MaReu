@@ -1,7 +1,7 @@
 package com.sophie.mareu.ui.meeting_creation;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +14,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
+import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
+import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +33,8 @@ public class HomeStartMeetingCreationFragment extends Fragment implements View.O
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_start_meeting_creation, container, false);
         ButterKnife.bind(this, view);
+
+        ListMeetingsActivity.ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 
         if (getActivity() != null) filterView = getActivity().findViewById(R.id.filter_activity);
         mFab.setOnClickListener(this);

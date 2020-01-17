@@ -4,7 +4,6 @@ import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.controller.AvailabilityByDate;
-import com.sophie.mareu.DI.DummyMeetingsGenerator;
 import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
 import com.sophie.mareu.service.RoomsAvailabilityService;
 
