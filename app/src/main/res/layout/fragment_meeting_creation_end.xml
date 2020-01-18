@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:id="@+id/detail_fragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_yellow">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/meeting_end_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_arrow_back_black_24dp"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+<ScrollView android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -15,9 +32,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:textSize="20sp"
+        android:textStyle="italic|bold"
         android:text="@string/meeting_details"
         android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
@@ -131,10 +149,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="40dp"
         android:background="@null"
         android:contentDescription="@string/add_more_email"
-        app:layout_constraintBottom_toTopOf="@+id/btn_endsetup"
+        app:layout_constraintBottom_toBottomOf="@+id/email_container"
         app:layout_constraintStart_toEndOf="@+id/email_container"
         app:srcCompat="@drawable/ic_add_box_black_24dp" />
 
@@ -149,19 +166,16 @@
         app:layout_constraintStart_toEndOf="@id/add_more_email"
         app:layout_constraintTop_toTopOf="@+id/add_more_email"
         app:srcCompat="@drawable/ic_minus_24dp" />
-
-    <Button
-        android:id="@+id/btn_endsetup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:background="#e3d3ca"
-        android:text="@string/validate"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_container" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+    <Button
+        android:id="@+id/save_meeting_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@null"
+        android:text="@string/save_meeting"
+        android:contentDescription="@string/next_page"
+        android:layout_gravity="bottom|end"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

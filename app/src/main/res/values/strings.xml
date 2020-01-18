@@ -6,7 +6,7 @@
     <string name="previous_page">RETOUR</string>
     <string name="no_new_meetings">Aucune réunion de prévue</string>
     <string name="all_meetings_full">Plus de salles disponibles!\nVeuillez choisir une autre date.</string>
-    <string name="next_page">Suivant</string>
+    <string name="next_page">page suivante</string>
     <string name="default_recyclerview_title">Réunion A - 14h00 - PEACH</string>
     <string name="delete_btn">delete_btn</string>
     <string name="meeting_icon">meeting_icon</string>
@@ -27,7 +27,7 @@
     <string name="sort_list">sort list</string>
     <string name="sort_by_hour">"Lister par heure"</string>
 
-    <string name="select_date"><![CDATA[> Choisir une date de réunion <]]></string>
+    <string name="select_date">"    Choisir une date    "</string>
     <string name="choose_a_date">Choisissez une date de réunion</string>
     <string name="date_selected">"%1$s/%2$s/%3$d"</string>
     <string name="select"><![CDATA[>Selectionner<]]></string>
@@ -54,6 +54,8 @@
 
     <string name="detail_date_hour">le %1$s\nà %2$s</string>
     <string name="detail_room">Salle %s</string>
+    <string name="date_title">Date :</string>
+    <string name="save_meeting">Enregistrer</string>
 
     <string-array name="room_names">
         <item>""</item>

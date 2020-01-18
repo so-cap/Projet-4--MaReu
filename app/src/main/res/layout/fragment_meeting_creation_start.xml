@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/detail_fragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_yellow">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/meeting_start_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_arrow_back_black_24dp"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,10 +34,11 @@
             android:id="@+id/new_meeting_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:text="@string/new_meeting"
+            android:textColor="@android:color/black"
             android:textSize="20sp"
-            android:textStyle="bold"
+            android:textStyle="bold|italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,25 +50,28 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="50dp"
-            android:text="Date :"
+            android:text="@string/date_title"
             android:textColor="@android:color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/new_meeting_title" />
 
 
-        <TextView
+        <Button
             android:id="@+id/select_date"
+            style="@style/Widget.AppCompat.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/select_date"
+            android:textColor="@color/colorPrimaryDark"
             android:textStyle="italic"
-            android:textSize="16sp"
-            android:layout_marginStart="16dp"
+            android:textSize="14sp"
+            android:background="@null"
+            android:layout_marginStart="5dp"
             app:layout_constraintBottom_toBottomOf="@+id/choose_date_title"
             app:layout_constraintStart_toEndOf="@+id/choose_date_title"
             app:layout_constraintTop_toTopOf="@+id/choose_date_title"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.46" />
 
         <TextView
             android:id="@+id/choose_hour_title"
@@ -120,20 +143,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/availablerooms_title" />
-
-        <Button
-            android:visibility="gone"
-            android:id="@+id/next_page"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="40dp"
-            android:background="#e3d3ca"
-            android:text="@string/next_page"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chip_cloud" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+    <ImageButton
+        android:id="@+id/next_page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@null"
+        android:src="@drawable/ic_arrow_forward_black_24dp"
+        android:contentDescription="@string/next_page"
+        android:layout_gravity="bottom|end"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

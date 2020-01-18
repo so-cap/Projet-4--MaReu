@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,7 +55,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     private RoomsAvailabilityService mRoomsAvailabilityService = new RoomsAvailabilityByHourImpl();
 
     @BindView(R.id.select_date)
-    TextView mDateView;
+    Button mDateView;
     @BindView(R.id.spinner_hour)
     Spinner mSpinner;
     @BindView(R.id.chip_cloud)
@@ -62,7 +63,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     @BindView(R.id.all_meetings_full)
     TextView mMeetingsFull;
     @BindView(R.id.next_page)
-    Button mNextPage;
+    ImageButton mNextPage;
 
     @Nullable
     @Override
@@ -72,8 +73,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         ButterKnife.bind(this, view);
 
         mDateView.setOnClickListener(this);
-        initSpinner();
-        displaySpinner();
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -81,7 +80,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
                 mSelectedHour = mAvailableHoursAndRooms.get(mHourPosition).getHour();
                 initChipCloud();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -187,6 +185,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE);
         Date newDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
         mDateView.setText(df.format(newDate));
+        mDateView.setTextColor(getResources().getColor(R.color.dark_grey));
 
         if (!(mChipCloud.isShown())) {
             mChipCloud.setVisibility(View.VISIBLE);

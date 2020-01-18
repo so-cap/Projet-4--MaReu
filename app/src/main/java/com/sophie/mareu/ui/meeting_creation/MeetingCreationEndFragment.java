@@ -61,7 +61,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     @BindView(R.id.delete_mail)
     ImageButton mDeleteEmail;
 
-    @BindView(R.id.btn_endsetup)
+    @BindView(R.id.save_meeting_btn)
     Button mBtnEnd;
 
     @Nullable
@@ -100,7 +100,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
             case R.id.delete_mail:
                 deleteEmailView();
                 break;
-            case R.id.btn_endsetup:
+            case R.id.save_meeting_btn:
                 if (checkIfValid())
                     backToHomePage();
                 break;

@@ -171,6 +171,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE);
         mSelectedDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
         mDateView.setText(df.format(mSelectedDate));
+
     }
 
     @Override

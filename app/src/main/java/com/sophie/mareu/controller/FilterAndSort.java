@@ -32,7 +32,7 @@ public class FilterAndSort {
             }
         } else
             for (Meeting entry : getMeetings(date)) {
-                if (entry.getRoomName().equals(roomName) && entry.getDate() == date) {
+                if (entry.getRoomName().equals(roomName) && entry.getDate().equals(date)) {
                     mFilteredList.add(new Meeting(entry));
                 }
             }
