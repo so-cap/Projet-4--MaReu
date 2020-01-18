@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.controller.RoomsPerHour;

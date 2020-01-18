@@ -28,7 +28,7 @@ public class Meeting implements Parcelable {
     private String mDetailSubject;
     private Date mDate;
     private int mIcon;
-    public static int iconSelector;
+    public static int iconSelector = 0;
 
     public Meeting() {
     }

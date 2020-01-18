@@ -26,6 +26,7 @@ import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.controller.AvailabilityByDate;
+import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
 
 
@@ -51,7 +52,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     public static final int FILTERED = 0;
     public static final int SORTED = 1;
     public static final int UNCHANGED = -1;
-    public static int orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     private Menu menu;
 
     @BindView(R.id.my_toolbar)
@@ -76,6 +76,11 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         setSupportActionBar(mToolbar);
 
         listMeetingFrame = getSupportFragmentManager().findFragmentById(R.id.frame_listmeetings);
+        
+        /* Add DummyMeeting for presentation (to not use when launching tests):
+        Meeting dummyMeeting = DI.getDummyMeetings().get(3);
+        AvailabilityByDate.addMeeting(dummyMeeting, dummyMeeting.getDate());
+        */
 
         configureAndShowListMeetingFragment();
         configureAndShowHomeStartMeetingCreationFragment();
@@ -218,12 +223,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     protected void onStop() {
         super.onStop();
         mFilterView.setVisibility(View.GONE);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     }
 
     @Override

@@ -27,6 +27,7 @@ import java.util.Date;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -152,6 +153,7 @@ public class MeetingCreationTests {
         onView(withText(mRooms.get(roomPosition))).perform(click());
         onView(withId(R.id.next_page)).perform(click());
         onView(withId(R.id.meeting_title_input)).perform(typeText("Reunion " + A++));
+        onView(withId(R.id.meeting_subjectdetail_input)).perform(scrollTo()).perform(replaceText("Sujet de réunion"));
         onView(withId(R.id.email_one)).perform(scrollTo()).perform(typeText("email@address.com"));
         onView(withId(R.id.save_meeting_btn)).perform(click());
     }

@@ -104,8 +104,7 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
             bundle.putParcelable("meeting", mMeetings.get(getAdapterPosition()));
             detailFragment.setArguments(bundle);
 
-            if (ListMeetingsActivity.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                    && !res.getString(R.string.screen_type).equals("tablet")) {
+            if ((activity.findViewById((R.id.frame_setmeeting)) == null && !res.getString(R.string.screen_type).equals("tablet"))) {
                 fm.replace(R.id.frame_listmeetings, detailFragment).addToBackStack(null).commit();
             } else fm.replace(R.id.frame_setmeeting, detailFragment).addToBackStack(null).commit();
         }

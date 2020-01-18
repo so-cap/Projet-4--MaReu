@@ -11,7 +11,7 @@
     <string name="delete_btn">delete_btn</string>
     <string name="meeting_icon">meeting_icon</string>
 
-    <string name="create_new_meeting">CREER UNE NOUVELLE REUNION</string>
+    <string name="create_new_meeting">"     CREER UNE NOUVELLE REUNION      "</string>
     <string name="rooms_available">Salles disponibles :</string>
     <string name="meeting_hour">Heure de la réunion :</string>
     <string name="new_meeting">NOUVELLE REUNION</string>

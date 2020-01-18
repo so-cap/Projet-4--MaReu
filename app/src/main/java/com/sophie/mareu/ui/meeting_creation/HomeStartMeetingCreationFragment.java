@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,15 +26,13 @@ import butterknife.ButterKnife;
 public class HomeStartMeetingCreationFragment extends Fragment implements View.OnClickListener {
     private CardView filterView;
     @BindView(R.id.fab_home)
-    FloatingActionButton mFab;
+    Button mFab;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_start_meeting_creation, container, false);
         ButterKnife.bind(this, view);
-
-        ListMeetingsActivity.orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 
         if (getActivity() != null) filterView = getActivity().findViewById(R.id.filter_activity);
         mFab.setOnClickListener(this);
