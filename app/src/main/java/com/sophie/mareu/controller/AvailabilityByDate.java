@@ -63,6 +63,8 @@ public class AvailabilityByDate {
     public static void clearAllMeetings() {
         serviceByDate.clear();
         mMeetingsByDate.clear();
+        FilterAndSort.getFilteredList().clear();
+        FilterAndSort.getSortedList().clear();
     }
 
     public static void deleteMeeting(Meeting meeting) {

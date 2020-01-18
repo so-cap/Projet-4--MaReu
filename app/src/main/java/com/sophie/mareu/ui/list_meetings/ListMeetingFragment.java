@@ -29,6 +29,7 @@ import java.util.Objects;
 
 import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.FILTERED;
 import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.SORTED;
+import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.UNCHANGED;
 
 /**
  * Created by SOPHIE on 30/12/2019.
@@ -68,7 +69,12 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        initList(listCurrentState);
+        if (FilterAndSort.getFilteredList().isEmpty() && FilterAndSort.getSortedList().isEmpty())
+            initList(UNCHANGED);
+        else if(!FilterAndSort.getSortedList().isEmpty() && FilterAndSort.getFilteredList().isEmpty())
+            initList(SORTED);
+        else
+            initList(FILTERED);
     }
 
     @Override
@@ -102,7 +108,7 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         if (getFragmentManager() != null)
             detailFragment = getFragmentManager().findFragmentById(R.id.frame_setmeeting);
 
-        if(detailFragment != null && detailFragment.getClass() == DetailFragment.class)
+        if (detailFragment != null && detailFragment.getClass() == DetailFragment.class)
             if (detailFragment.getFragmentManager() != null) {
                 if (detailFragment.getArguments() != null
                         && Objects.equals(detailFragment.getArguments().getParcelable("meeting"), meeting))

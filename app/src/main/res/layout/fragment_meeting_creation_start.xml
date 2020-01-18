@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/detail_fragment"
@@ -10,7 +9,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/gradient_yellow">
+        android:background="@drawable/gradient_white">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/meeting_start_toolbar"
@@ -116,13 +115,13 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             app:labels="@array/room_names"
-            app:textSize="20sp"
+            app:textSize="24sp"
             app:gravity="center"
             app:selectMode="required"
             app:verticalSpacing="10dp"
             app:selectedColor="@color/colorPrimary"
             app:selectedFontColor="@color/white"
-            app:deselectedColor="@color/light_grey"
+            app:deselectedColor="@color/light_blue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/availablerooms_title">

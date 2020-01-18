@@ -32,7 +32,6 @@
     <string name="date_selected">"%1$s/%2$s/%3$d"</string>
     <string name="select"><![CDATA[>Selectionner<]]></string>
     <string name="by_room">Par salle :</string>
-    <string name="previous">retour</string>
     <string name="ok">OK</string>
     <string name="by_date">Par date :</string>
     <string name="filter">Filtrer</string>

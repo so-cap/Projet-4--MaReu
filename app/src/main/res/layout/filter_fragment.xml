@@ -1,92 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
     app:cardUseCompatPadding="true">
 
-   <androidx.constraintlayout.widget.ConstraintLayout
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:layout_marginTop="10dp"
-       android:layout_marginStart="16dp"
-       android:layout_marginEnd="16dp"
-       android:layout_marginBottom="10dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="10dp">
 
-       <TextView
-           android:id="@+id/filter"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="@string/filter"
-           android:textColor="@android:color/black"
-           android:textSize="16sp"
-           app:layout_constraintEnd_toEndOf="parent"
-           app:layout_constraintStart_toStartOf="parent"
-           app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-       <TextView
-           android:id="@+id/by_date"
-           android:layout_width="wrap_content"
-           android:layout_height="match_parent"
-           android:text="@string/by_date"
-           android:textColor="@android:color/black"
-           android:layout_marginTop="16dp"
-           app:layout_constraintStart_toStartOf="parent"
-           app:layout_constraintTop_toBottomOf="@+id/filter" />
+        <TextView
+            android:id="@+id/by_date"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:text="@string/by_date"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filter" />
 
-       <TextView
-           android:id="@+id/choose_date"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="@string/select"
-           android:layout_marginStart="10dp"
-           android:textStyle="italic"
-           app:layout_constraintBottom_toBottomOf="@+id/by_date"
-           app:layout_constraintStart_toEndOf="@+id/by_date"
-           app:layout_constraintTop_toTopOf="@+id/by_date"
-           app:layout_constraintVertical_bias="1.0" />
+        <Button
+            android:id="@+id/choose_date"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:text="@string/select_date"
+            android:textSize="14sp"
+            android:textColor="@color/dark_grey"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="@+id/by_date"
+            app:layout_constraintStart_toEndOf="@+id/by_date"
+            app:layout_constraintTop_toTopOf="@+id/by_date"
+            app:layout_constraintVertical_bias="0.47" />
 
-       <TextView
-           android:id="@+id/by_roomname"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="@string/by_room"
-           android:layout_marginStart="15dp"
-           android:textColor="@android:color/black"
-           app:layout_constraintBottom_toBottomOf="@+id/choose_date"
-           app:layout_constraintStart_toEndOf="@+id/choose_date"
-           app:layout_constraintTop_toTopOf="@+id/choose_date" />
+        <TextView
+            android:id="@+id/by_roomname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/by_room"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/by_date"
+            app:layout_constraintVertical_bias="0.5" />
 
-       <Spinner
-           android:id="@+id/spinner_filter"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           app:layout_constraintBottom_toBottomOf="@+id/by_roomname"
-           app:layout_constraintStart_toEndOf="@+id/by_roomname"
-           app:layout_constraintTop_toTopOf="@+id/by_roomname" />
+        <Spinner
+            android:id="@+id/spinner_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/by_roomname"
+            app:layout_constraintStart_toEndOf="@+id/by_roomname"
+            app:layout_constraintTop_toTopOf="@+id/by_roomname" />
 
-       <Button
-           android:id="@+id/cancel_filter"
-           style="@style/Widget.AppCompat.Button.Colored"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_marginTop="16dp"
-           android:text="@string/previous"
-           app:layout_constraintEnd_toStartOf="@+id/ok_filter"
-           app:layout_constraintTop_toBottomOf="@id/by_date" />
+        <ImageButton
+            android:id="@+id/cancel_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/previous_page" />
 
-       <Button
-           android:id="@+id/ok_filter"
-           style="@style/Widget.AppCompat.Button.Colored"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="@string/ok"
-           app:layout_constraintBottom_toBottomOf="@+id/cancel_filter"
-           app:layout_constraintEnd_toEndOf="parent"
-           app:layout_constraintTop_toTopOf="@+id/cancel_filter" />
+        <Button
+            android:id="@+id/ok_filter"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ok"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/choose_date"
+            app:layout_constraintVertical_bias="0.8"/>
 
-   </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

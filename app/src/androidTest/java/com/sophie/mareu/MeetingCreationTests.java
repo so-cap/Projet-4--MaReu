@@ -79,7 +79,7 @@ public class MeetingCreationTests {
     }
 
     @Test
-    public void addNewMeetingInLandscapeModeWithSuccess(){
+    public void addNewMeetingInLandscapeModeWithSuccess() {
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         try {
             Thread.sleep(2000);
@@ -102,10 +102,10 @@ public class MeetingCreationTests {
     }
 
     @Test
-    public void openDetailsWithSuccess_OnClickOnMeeting(){
+    public void openDetailsWithSuccess_OnClickOnMeeting() {
         addMeeting(0);
         onView(ViewMatchers.withId(R.id.meetings_list))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
     }
 
     @Test
@@ -144,16 +144,15 @@ public class MeetingCreationTests {
 
     public void addMeeting(int roomPosition) {
         if (mActivity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-        onView(withId(R.id.fab)).perform(click());
-        else {
+            onView(withId(R.id.fab)).perform(click());
+        else
             onView(withId(R.id.fab_home)).perform(click());
-        }
         onView(withId(R.id.select_date)).perform(click());
         onView(withId(R.id.ok_button)).perform(click());
         onView(withText(mRooms.get(roomPosition))).perform(click());
-        onView(withText("SUIVANT")).perform(scrollTo()).perform(click());
+        onView(withId(R.id.next_page)).perform(click());
         onView(withId(R.id.meeting_title_input)).perform(typeText("Reunion " + A++));
         onView(withId(R.id.email_one)).perform(scrollTo()).perform(typeText("email@address.com"));
-        onView(withText("VALIDER")).perform(scrollTo()).perform(click());
+        onView(withId(R.id.save_meeting_btn)).perform(click());
     }
 }

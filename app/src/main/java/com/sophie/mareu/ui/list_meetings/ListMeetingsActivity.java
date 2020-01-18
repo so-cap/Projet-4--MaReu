@@ -18,8 +18,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sophie.mareu.DI.DI;
@@ -51,14 +51,15 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     public static final int FILTERED = 0;
     public static final int SORTED = 1;
     public static final int UNCHANGED = -1;
-    public static int ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+    public static int orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+    private Menu menu;
 
     @BindView(R.id.my_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.choose_date)
-    TextView mDateView;
+    Button mDateView;
     @BindView(R.id.cancel_filter)
-    Button mBackBtn;
+    ImageButton mBackBtn;
     @BindView(R.id.ok_filter)
     Button mOkButton;
     @BindView(R.id.spinner_filter)
@@ -74,8 +75,8 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
 
-        listMeetingFrame = getSupportFragmentManager()
-                .findFragmentById(R.id.frame_listmeetings);
+        listMeetingFrame = getSupportFragmentManager().findFragmentById(R.id.frame_listmeetings);
+
         configureAndShowListMeetingFragment();
         configureAndShowHomeStartMeetingCreationFragment();
 
@@ -96,8 +97,19 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     }
 
     @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        super.onMenuOpened(featureId, menu);
+        if (mFilterView.isShown()) {
+            mFilterView.setVisibility(View.GONE);
+            this.menu.close();
+        }
+        return true;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_filter, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -154,12 +166,12 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     }
 
     private void configureAndShowHomeStartMeetingCreationFragment() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_setmeeting);
+        Fragment meetingCreationFrame = getSupportFragmentManager().findFragmentById(R.id.frame_setmeeting);
         FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
         if (findViewById(R.id.frame_setmeeting) != null) {
-            if (fragment == null)
+            if (meetingCreationFrame == null) {
                 fm.add(R.id.frame_setmeeting, new HomeStartMeetingCreationFragment()).commit();
-            else if (!(fragment.getClass().equals(HomeStartMeetingCreationFragment.class))) {
+            } else if (!(meetingCreationFrame.getClass().equals(HomeStartMeetingCreationFragment.class))) {
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 fm.replace(R.id.frame_setmeeting, new HomeStartMeetingCreationFragment()).commit();
             }
@@ -171,7 +183,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE);
         mSelectedDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
         mDateView.setText(df.format(mSelectedDate));
-
     }
 
     @Override
@@ -197,7 +208,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     }
 
     private void resetFilterView() {
-        mDateView.setText(getResources().getString(R.string.select));
+        mDateView.setText(getResources().getString(R.string.select_date));
         mSelectedDate = null;
         mSelectedName = "";
         mRoomsSpinner.setSelection(0);
@@ -212,14 +223,23 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     @Override
     protected void onStart() {
         super.onStart();
-        ListMeetingsActivity.ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+        orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        AvailabilityByDate.clearAllMeetings();
         iconSelector = 0;
+        AvailabilityByDate.clearAllMeetings();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment detailFragment = getSupportFragmentManager().findFragmentById(R.id.frame_setmeeting);
+        if (detailFragment != null && detailFragment.getClass().equals(DetailFragment.class)) {
+            if (detailFragment.getFragmentManager() != null)
+                detailFragment.getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        } else
+            super.onBackPressed();
     }
 }
-

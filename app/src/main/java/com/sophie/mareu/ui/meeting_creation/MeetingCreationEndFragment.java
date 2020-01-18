@@ -16,17 +16,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.sophie.mareu.R;
+import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.controller.AvailabilityByDate;
 import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
-import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
 import com.sophie.mareu.service.RoomsAvailabilityService;
+import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
+import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -36,7 +39,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.UNCHANGED;
-
 
 public class MeetingCreationEndFragment extends Fragment implements View.OnClickListener {
     private String mTitle, mRoomName, mDetailSubject;
@@ -53,6 +55,8 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     EditText mDetailSubjectView;
     @BindView(R.id.email_one)
     EditText mEmailView;
+    @BindView(R.id.meeting_end_toolbar)
+    Toolbar toolbar;
 
     @BindView(R.id.email_container)
     LinearLayout mEmailContainer;
@@ -72,10 +76,13 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         ButterKnife.bind(this, view);
         mContext = getContext();
 
+        if (getActivity() != null)
+            toolbar.setNavigationOnClickListener(v -> getActivity().getSupportFragmentManager()
+                    .popBackStack());
+
         if (getArguments() != null) {
             int key = (getArguments().getInt("selected_hour_key"));
             String hourValue = (getArguments().getString("selected_hour_value"));
-
             mHour = new AbstractMap.SimpleEntry<>(key, hourValue);
             mRoomName = getArguments().getString("selected_room");
             mHourPosition = getArguments().getInt("hour_position");
@@ -84,7 +91,6 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
             mService = (RoomsAvailabilityByHourImpl) getArguments().
                     getSerializable("rooms_availability_service");
         }
-
         mAddMoreEmail.setOnClickListener(this);
         mBtnEnd.setOnClickListener(this);
         mDeleteEmail.setOnClickListener(this);
@@ -107,7 +113,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         }
     }
 
-    private void addEmailView(){
+    private void addEmailView() {
         EditText anotherEmail = new EditText(mContext);
 
         anotherEmail.setHint(getString(R.string.email_hint));
@@ -117,11 +123,11 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         mEmailContainer.addView(anotherEmail);
         mDeleteEmail.setVisibility(View.VISIBLE);
 
-        if(mEmailContainer.getChildCount() == 5)
+        if (mEmailContainer.getChildCount() == 5)
             mAddMoreEmail.setVisibility(View.INVISIBLE);
     }
 
-    private void deleteEmailView(){
+    private void deleteEmailView() {
         int emailViews = mEmailContainer.getChildCount();
         if (emailViews > 1)
             mEmailContainer.removeViewAt(emailViews - 1);
@@ -147,15 +153,15 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         return true;
     }
 
-    private boolean emailChecker(){
+    private boolean emailChecker() {
         int emailsNbr = mEmailContainer.getChildCount();
         int errors = 0;
         EditText emailView;
 
-        for (int position = 0; position < emailsNbr; position++){
+        for (int position = 0; position < emailsNbr; position++) {
             emailView = (EditText) mEmailContainer.getChildAt(position);
             String emptyView = emailView.getText().toString();
-            if (!(Patterns.EMAIL_ADDRESS.matcher(emailView.getText().toString())).matches() && (!(emptyView.isEmpty()))){
+            if (!(Patterns.EMAIL_ADDRESS.matcher(emailView.getText().toString())).matches() && (!(emptyView.isEmpty()))) {
                 emailView.setError("Addresse email invalide !");
                 mParticipants.clear();
                 errors++;
@@ -178,25 +184,22 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
 
     private void backToHomePage() {
         FragmentActivity activity = getActivity();
+        FilterAndSort.getFilteredList().clear();
+        FilterAndSort.getSortedList().clear();
+
         if (activity != null) {
             if (activity.getClass().equals(MeetingCreationActivity.class)) {
                 activity.finish();
             } else {
-                ListMeetingFragment listMeetingFragment = (ListMeetingFragment) activity.getSupportFragmentManager().
-                        findFragmentById(R.id.frame_listmeetings);
-              /*  if (listMeetingFragment == null) {
-                    activity.finish();
-                } else {
-               */
-                    FragmentManager fm = activity.getSupportFragmentManager();
-                    fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                if (listMeetingFragment != null) {
+              ListMeetingFragment listMeetingFragment = (ListMeetingFragment) activity.getSupportFragmentManager().
+                       findFragmentById(R.id.frame_listmeetings);
+                FragmentManager fm = activity.getSupportFragmentManager();
+                fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                if (listMeetingFragment != null)
                     listMeetingFragment.initList(UNCHANGED);
-                }
-                //}
             }
         }
-        Toast.makeText(mContext,"Réunion enregistrée !", Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, "Réunion enregistrée !", Toast.LENGTH_LONG).show();
     }
 
     private void setMeeting() {

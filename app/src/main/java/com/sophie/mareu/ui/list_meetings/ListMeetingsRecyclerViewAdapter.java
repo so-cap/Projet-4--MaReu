@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.ORIENTATION;
-
 /**
  * Created by SOPHIE on 28/12/2019.
  */
@@ -106,7 +104,7 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
             bundle.putParcelable("meeting", mMeetings.get(getAdapterPosition()));
             detailFragment.setArguments(bundle);
 
-            if (ORIENTATION == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            if (ListMeetingsActivity.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                     && !res.getString(R.string.screen_type).equals("tablet")) {
                 fm.replace(R.id.frame_listmeetings, detailFragment).addToBackStack(null).commit();
             } else fm.replace(R.id.frame_setmeeting, detailFragment).addToBackStack(null).commit();

@@ -19,8 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.adroitandroid.chipcloud.ChipCloud;
@@ -64,6 +64,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     TextView mMeetingsFull;
     @BindView(R.id.next_page)
     ImageButton mNextPage;
+    @BindView(R.id.meeting_start_toolbar)
+    Toolbar toolbar;
 
     @Nullable
     @Override
@@ -72,6 +74,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         mContext = getContext();
         ButterKnife.bind(this, view);
 
+        setUpBackButton();
         mDateView.setOnClickListener(this);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -80,6 +83,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
                 mSelectedHour = mAvailableHoursAndRooms.get(mHourPosition).getHour();
                 initChipCloud();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -87,6 +91,22 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         mChipCloud.setChipListener(this);
         mNextPage.setOnClickListener(this);
         return view;
+    }
+
+    private void setUpBackButton() {
+        if (getActivity() != null)
+            toolbar.setNavigationOnClickListener(v -> {
+                if (getActivity().getClass().equals(ListMeetingsActivity.class))
+                    getActivity().getSupportFragmentManager().popBackStack();
+                else
+                    getActivity().onBackPressed();
+            });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mRoomPosition = -1;
     }
 
     private void initSpinner() {
@@ -118,14 +138,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.next_page:
-                if (checkIfValid() && mSpinnerArray != null) {
+                if (checkIfValid())
                     startNextFragment();
-                } else if (mSpinnerArray == null && getActivity() != null) {
-                    if (getActivity().getClass().equals(ListMeetingsActivity.class))
-                        getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    else
-                        getActivity().finish();
-                }
                 break;
             case R.id.select_date:
                 showDatePickerDialog();
@@ -197,7 +211,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     private void updateCurrentService(Date newDate) {
         mRoomsAvailabilityService = AvailabilityByDate.setCurrentService(newDate);
         if (mRoomsAvailabilityService.getRoomsPerHourList().isEmpty()) {
-            System.out.println("update" + mRoomsAvailabilityService.getRoomsPerHourList().size());
             mMeetingsFull.setVisibility(View.VISIBLE);
             mChipCloud.setVisibility(View.GONE);
             mNextPage.setVisibility(View.GONE);

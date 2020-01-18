@@ -33,7 +33,7 @@ public class HomeStartMeetingCreationFragment extends Fragment implements View.O
         View view = inflater.inflate(R.layout.fragment_home_start_meeting_creation, container, false);
         ButterKnife.bind(this, view);
 
-        ListMeetingsActivity.ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+        ListMeetingsActivity.orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 
         if (getActivity() != null) filterView = getActivity().findViewById(R.id.filter_activity);
         mFab.setOnClickListener(this);
