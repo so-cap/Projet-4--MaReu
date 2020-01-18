@@ -76,7 +76,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         setSupportActionBar(mToolbar);
 
         listMeetingFrame = getSupportFragmentManager().findFragmentById(R.id.frame_listmeetings);
-        
+
         /* Add DummyMeeting for presentation (to not use when launching tests):
         Meeting dummyMeeting = DI.getDummyMeetings().get(3);
         AvailabilityByDate.addMeeting(dummyMeeting, dummyMeeting.getDate());
