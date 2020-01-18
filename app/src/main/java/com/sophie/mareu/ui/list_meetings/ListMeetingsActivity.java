@@ -27,6 +27,7 @@ import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.controller.AvailabilityByDate;
 import com.sophie.mareu.model.Meeting;
+import static com.sophie.mareu.Constants.*;
 import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
 
 
@@ -47,11 +48,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     private Fragment listMeetingFrame;
     private Date mSelectedDate = null;
     private String mSelectedName = null;
-    public static final int ASCENDING = 0;
-    public static final int DESCENDING = 1;
-    public static final int FILTERED = 0;
-    public static final int SORTED = 1;
-    public static final int UNCHANGED = -1;
     private Menu menu;
 
     @BindView(R.id.my_toolbar)
@@ -203,7 +199,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                     listMeetingFragment.initList(FILTERED);
                     resetFilterView();
                 } else
-                    Toast.makeText(this, "Choisissez une date et/ou une salle", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.choose_date_or_room), Toast.LENGTH_LONG).show();
                 break;
             case R.id.cancel_filter:
                 mFilterView.setVisibility(View.GONE);

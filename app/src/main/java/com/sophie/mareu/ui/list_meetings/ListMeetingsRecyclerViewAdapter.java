@@ -1,7 +1,6 @@
 package com.sophie.mareu.ui.list_meetings;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
+import static com.sophie.mareu.Constants.*;
 
 
 import java.util.ArrayList;
@@ -101,7 +101,7 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
             FragmentTransaction fm = activity.getSupportFragmentManager().beginTransaction();
             DetailFragment detailFragment = new DetailFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable("meeting", mMeetings.get(getAdapterPosition()));
+            bundle.putParcelable(ARGUMENT_MEETING, mMeetings.get(getAdapterPosition()));
             detailFragment.setArguments(bundle);
 
             if ((activity.findViewById((R.id.frame_setmeeting)) == null && !res.getString(R.string.screen_type).equals("tablet"))) {

@@ -8,8 +8,7 @@ import java.util.Date;
 import java.util.Map;
 
 import static com.sophie.mareu.controller.AvailabilityByDate.getMeetings;
-import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.ASCENDING;
-import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.DESCENDING;
+import static com.sophie.mareu.Constants.*;
 
 /**
  * Created by SOPHIE on 13/01/2020.

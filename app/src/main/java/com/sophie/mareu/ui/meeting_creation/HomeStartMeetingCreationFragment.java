@@ -1,6 +1,5 @@
 package com.sophie.mareu.ui.meeting_creation;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
-import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

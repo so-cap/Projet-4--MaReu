@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.controller.RoomsPerHour;
@@ -38,7 +37,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.UNCHANGED;
+import static com.sophie.mareu.Constants.*;
 
 public class MeetingCreationEndFragment extends Fragment implements View.OnClickListener {
     private String mTitle, mRoomName, mDetailSubject;
@@ -81,15 +80,14 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
                     .popBackStack());
 
         if (getArguments() != null) {
-            int key = (getArguments().getInt("selected_hour_key"));
-            String hourValue = (getArguments().getString("selected_hour_value"));
+            int key = (getArguments().getInt(ARGUMENT_HOUR_KEY));
+            String hourValue = (getArguments().getString(ARGUMENT_HOUR_VALUE));
             mHour = new AbstractMap.SimpleEntry<>(key, hourValue);
-            mRoomName = getArguments().getString("selected_room");
-            mHourPosition = getArguments().getInt("hour_position");
-            mRoomPosition = getArguments().getInt("room_position");
-            mSelectedDate = (Date) getArguments().getSerializable("selected_date");
-            mService = (RoomsAvailabilityByHourImpl) getArguments().
-                    getSerializable("rooms_availability_service");
+            mRoomName = getArguments().getString(ARGUMENT_ROOM);
+            mHourPosition = getArguments().getInt(ARGUMENT_HOUR_POSITION);
+            mRoomPosition = getArguments().getInt(ARGUMENT_ROOM_POSITION);
+            mSelectedDate = (Date) getArguments().getSerializable(ARGUMENT_DATE);
+            mService = (RoomsAvailabilityByHourImpl) getArguments().getSerializable(ARGUMENT_SERVICE);
         }
         mAddMoreEmail.setOnClickListener(this);
         mBtnEnd.setOnClickListener(this);
@@ -144,11 +142,11 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
 
         if ((!emailChecker()) || (mTitle.isEmpty() || mParticipants.isEmpty()) || mDetailSubject.isEmpty()) {
             if (mTitle.isEmpty())
-                mTitleView.setError("Veuillez remplir ce champs");
+                mTitleView.setError(getResources().getString(R.string.write_in_this_area));
             if (mParticipants.isEmpty())
-                mEmailView.setError("Veuillez remplir ce champs");
+                mEmailView.setError(getResources().getString(R.string.write_in_this_area));
             if (mDetailSubject.isEmpty())
-                mDetailSubjectView.setError("Veuillez remplir ce champs");
+                mDetailSubjectView.setError(getResources().getString(R.string.write_in_this_area));
             return false;
         }
         setMeeting();
@@ -164,7 +162,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
             emailView = (EditText) mEmailContainer.getChildAt(position);
             String emptyView = emailView.getText().toString();
             if (!(Patterns.EMAIL_ADDRESS.matcher(emailView.getText().toString())).matches() && (!(emptyView.isEmpty()))) {
-                emailView.setError("Addresse email invalide !");
+                emailView.setError(getResources().getString(R.string.invalid_email));
                 mParticipants.clear();
                 errors++;
             }
@@ -201,7 +199,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
                     listMeetingFragment.initList(UNCHANGED);
             }
         }
-        Toast.makeText(mContext, "Réunion enregistrée !", Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, getResources().getString(R.string.meeting_saved), Toast.LENGTH_LONG).show();
     }
 
     private void setMeeting() {

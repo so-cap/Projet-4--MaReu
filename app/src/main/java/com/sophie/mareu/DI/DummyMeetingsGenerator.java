@@ -18,8 +18,6 @@ abstract class DummyMeetingsGenerator {
     private static Date dateB = new GregorianCalendar(2020, 7, 23).getTime();
     private static Date dateC = new GregorianCalendar(2020, 4, 3).getTime();
     private static Date dateD = new GregorianCalendar(2020, 9, 23).getTime();
-    private static Date dummyDate = Calendar.getInstance().getTime();
-
 
     // each Integer is at the position where it has been added in ascending order
     // when initialising the hours availability

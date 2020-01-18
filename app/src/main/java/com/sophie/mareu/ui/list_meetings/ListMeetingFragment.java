@@ -27,9 +27,7 @@ import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.FILTERED;
-import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.SORTED;
-import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.UNCHANGED;
+import static com.sophie.mareu.Constants.*;
 
 /**
  * Created by SOPHIE on 30/12/2019.
@@ -108,10 +106,11 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         if (getFragmentManager() != null)
             detailFragment = getFragmentManager().findFragmentById(R.id.frame_setmeeting);
 
+        // To hide only the detailview of the deleted meeting.
         if (detailFragment != null && detailFragment.getClass() == DetailFragment.class)
             if (detailFragment.getFragmentManager() != null) {
                 if (detailFragment.getArguments() != null
-                        && Objects.equals(detailFragment.getArguments().getParcelable("meeting"), meeting))
+                        && Objects.equals(detailFragment.getArguments().getParcelable(ARGUMENT_MEETING), meeting))
                     detailFragment.getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
     }

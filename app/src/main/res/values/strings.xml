@@ -55,6 +55,10 @@
     <string name="detail_room">Salle %s</string>
     <string name="date_title">Date :</string>
     <string name="save_meeting">Enregistrer</string>
+    <string name="write_in_this_area">Veuillez remplir ce champs</string>
+    <string name="invalid_email">Addresse email invalide !</string>
+    <string name="meeting_saved">Réunion enregistrée !</string>
+    <string name="choose_date_or_room">Choisissez une date et/ou une salle</string>
 
     <string-array name="room_names">
         <item>""</item>

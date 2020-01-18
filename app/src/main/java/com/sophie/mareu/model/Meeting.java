@@ -2,17 +2,12 @@ package com.sophie.mareu.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import androidx.annotation.Nullable;
-
 import com.sophie.mareu.R;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;

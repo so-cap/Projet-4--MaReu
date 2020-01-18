@@ -20,6 +20,7 @@ import com.sophie.mareu.model.Meeting;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.sophie.mareu.Constants.*;
 
 public class DetailFragment extends Fragment {
     private Meeting meeting;
@@ -53,7 +54,7 @@ public class DetailFragment extends Fragment {
             } else mainToolbar.setVisibility(View.VISIBLE);
         }
         if (getArguments() != null) {
-            meeting = getArguments().getParcelable("meeting");
+            meeting = getArguments().getParcelable(ARGUMENT_MEETING);
             initMeetingPage();
         }
         toolbar.setNavigationOnClickListener(v -> activity.getSupportFragmentManager()

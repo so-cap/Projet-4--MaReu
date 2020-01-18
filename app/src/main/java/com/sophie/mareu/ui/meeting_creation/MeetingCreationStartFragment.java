@@ -31,6 +31,7 @@ import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
 import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 import com.sophie.mareu.service.RoomsAvailabilityService;
+import static com.sophie.mareu.Constants.*;
 
 import java.text.DateFormat;
 import java.util.AbstractMap;
@@ -170,13 +171,13 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     private void startNextFragment() {
         MeetingCreationEndFragment meetingCreationEndFragment = new MeetingCreationEndFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("selected_hour_key", mSelectedHour.getKey());
-        bundle.putString("selected_hour_value", mSelectedHour.getValue());
-        bundle.putString("selected_room", mSelectedRoomName);
-        bundle.putInt("hour_position", mHourPosition);
-        bundle.putInt("room_position", mRoomPosition);
-        bundle.putSerializable("selected_date", mSelectedDate);
-        bundle.putSerializable("rooms_availability_service", mRoomsAvailabilityService);
+        bundle.putInt(ARGUMENT_HOUR_KEY, mSelectedHour.getKey());
+        bundle.putString(ARGUMENT_HOUR_VALUE, mSelectedHour.getValue());
+        bundle.putInt(ARGUMENT_HOUR_POSITION, mHourPosition);
+        bundle.putString(ARGUMENT_ROOM, mSelectedRoomName);
+        bundle.putInt(ARGUMENT_ROOM_POSITION, mRoomPosition);
+        bundle.putSerializable(ARGUMENT_DATE, mSelectedDate);
+        bundle.putSerializable(ARGUMENT_SERVICE, mRoomsAvailabilityService);
         meetingCreationEndFragment.setArguments(bundle);
 
         if (getFragmentManager() != null) {
