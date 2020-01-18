@@ -24,16 +24,20 @@ abstract class DummyMeetingsGenerator {
     // when initialising the hours availability
     private static List<Meeting> DUMMY_MEETINGS = Arrays.asList(
             new Meeting("Réunion A",new AbstractMap.SimpleEntry<>(6, "14h00"), "Peach",
-                    new ArrayList<>(Arrays.asList("maxime@lamzone.com","alex@lamzone.com")), null, dateA),
+                    new ArrayList<>(Arrays.asList("maxime@lamzone.com","alex@lamzone.com")), getSubject(), dateA),
             new Meeting("Réunion B",new AbstractMap.SimpleEntry<>(8, "16h00"), "Mario",
-                    new ArrayList<>(Arrays.asList("paul@lamzone.com","viviane@lamzone.com")), null, dateB),
+                    new ArrayList<>(Arrays.asList("paul@lamzone.com","viviane@lamzone.com")), getSubject(), dateB),
             new Meeting("Réunion C",new AbstractMap.SimpleEntry<>(11, "19h00"), "Mario",
-                    new ArrayList<>(Arrays.asList("amandine@lamzone.com","luc@lamzone")), null, dateC),
+                    new ArrayList<>(Arrays.asList("amandine@lamzone.com","luc@lamzone")), getSubject(), dateC),
             new Meeting("Réunion D",new AbstractMap.SimpleEntry<>(7, "15h00"), "Waluigi",
                     null, null, dateD));
 
     static ArrayList<Meeting> getDummyMeetings(){
         return new ArrayList<>(DUMMY_MEETINGS);
+    }
+
+    private static String getSubject(){
+        return "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
     }
 
 }

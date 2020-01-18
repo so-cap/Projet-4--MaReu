@@ -29,7 +29,6 @@ import com.sophie.mareu.controller.AvailabilityByDate;
 import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
 import com.sophie.mareu.service.RoomsAvailabilityService;
 import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
-import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -131,7 +130,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         int emailViews = mEmailContainer.getChildCount();
         if (emailViews > 1)
             mEmailContainer.removeViewAt(emailViews - 1);
-        if (emailViews == 2)
+        if (emailViews == 3)
             mDeleteEmail.setVisibility(View.GONE);
         if (emailViews < 6)
             mAddMoreEmail.setVisibility(View.VISIBLE);
@@ -142,11 +141,13 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         mDetailSubject = mDetailSubjectView.getText().toString();
         initParticipantsList();
 
-        if ((!emailChecker()) || (mTitle.isEmpty() || mParticipants.isEmpty())) {
+        if ((!emailChecker()) || (mTitle.isEmpty() || mParticipants.isEmpty()) || mDetailSubject.isEmpty()) {
             if (mTitle.isEmpty())
                 mTitleView.setError("Veuillez remplir ce champs");
             if (mParticipants.isEmpty())
                 mEmailView.setError("Veuillez remplir ce champs");
+            if (mDetailSubject.isEmpty())
+                mDetailSubjectView.setError("Veuillez remplir ce champs");
             return false;
         }
         setMeeting();
