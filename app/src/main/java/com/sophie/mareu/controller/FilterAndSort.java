@@ -1,7 +1,5 @@
 package com.sophie.mareu.controller;
 
-import android.util.Log;
-
 import com.sophie.mareu.model.Meeting;
 
 import java.util.ArrayList;

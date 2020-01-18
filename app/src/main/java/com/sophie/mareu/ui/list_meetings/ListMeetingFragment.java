@@ -41,8 +41,6 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
     private TextView mNoNewMeetings;
     private int listCurrentState = -1;
 
-    private static final String TAG = "LOGGListMeetingFragment";
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

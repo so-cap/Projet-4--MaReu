@@ -18,8 +18,6 @@ public class AvailabilityByDate {
     public static HashMap<Date, ArrayList<Meeting>> mMeetingsByDate = new HashMap<>();
     public static HashMap<Date, RoomsAvailabilityService> serviceByDate = new HashMap<>();
 
-    private static final String TAG = "LOGIAvailabilityByDate";
-
     public static RoomsAvailabilityService setCurrentService(Date date) {
         for (int position = 0; position < serviceByDate.size(); position++) {
             if (serviceByDate.containsKey(date))
@@ -39,7 +37,7 @@ public class AvailabilityByDate {
 
     public static void addMeeting(Meeting meeting, Date date) {
         if (mMeetingsByDate.get(date) != null)
-            mMeetingsByDate.get(date).add(meeting);
+            Objects.requireNonNull(mMeetingsByDate.get(date)).add(meeting);
         else {
             ArrayList<Meeting> newMeetingList = new ArrayList<>();
             newMeetingList.add(meeting);

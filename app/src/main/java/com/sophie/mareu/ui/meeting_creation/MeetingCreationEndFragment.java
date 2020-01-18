@@ -64,8 +64,6 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     @BindView(R.id.btn_endsetup)
     Button mBtnEnd;
 
-    private static final String TAG = "LOGGCreationEndFragm";
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

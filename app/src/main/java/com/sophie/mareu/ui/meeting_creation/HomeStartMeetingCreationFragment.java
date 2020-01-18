@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
-import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 
 import butterknife.BindView;

@@ -52,7 +52,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     public static final int SORTED = 1;
     public static final int UNCHANGED = -1;
     public static int ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-    ;
 
     @BindView(R.id.my_toolbar)
     Toolbar mToolbar;
@@ -101,8 +100,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         getMenuInflater().inflate(R.menu.menu_filter, menu);
         return true;
     }
-
-    private static final String TAG = "LOGGListMeeActivity";
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

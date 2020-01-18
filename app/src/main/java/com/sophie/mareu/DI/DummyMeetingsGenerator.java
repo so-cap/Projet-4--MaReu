@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by SOPHIE on 04/01/2020.
  */
-public abstract class DummyMeetingsGenerator {
+abstract class DummyMeetingsGenerator {
     private static Date dateA = Calendar.getInstance().getTime();
     private static Date dateB = new GregorianCalendar(2020, 7, 23).getTime();
     private static Date dateC = new GregorianCalendar(2020, 4, 3).getTime();
