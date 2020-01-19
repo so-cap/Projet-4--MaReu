@@ -146,7 +146,7 @@ public class MeetingCreationTests {
         if (mActivity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             onView(withId(R.id.fab)).perform(click());
         else
-            onView(withId(R.id.fab_home)).perform(click());
+            onView(withId(R.id.home_btn)).perform(click());
         onView(withId(R.id.select_date)).perform(click());
         onView(withId(R.id.ok_button)).perform(click());
         onView(withText(mRooms.get(roomPosition))).perform(click());

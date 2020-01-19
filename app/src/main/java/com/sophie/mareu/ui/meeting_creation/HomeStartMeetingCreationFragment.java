@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
  */
 public class HomeStartMeetingCreationFragment extends Fragment implements View.OnClickListener {
     private CardView filterView;
-    @BindView(R.id.fab_home)
+    @BindView(R.id.home_btn)
     Button mFab;
 
     @Nullable
