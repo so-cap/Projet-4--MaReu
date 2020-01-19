@@ -22,6 +22,10 @@
                 app:titleTextColor="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
+            <include
+                android:id="@+id/filter_activated"
+                layout="@layout/filter_activated_view"
+                android:visibility="gone" />
         </com.google.android.material.appbar.AppBarLayout>
         <FrameLayout
             android:id="@+id/frame_listmeetings"

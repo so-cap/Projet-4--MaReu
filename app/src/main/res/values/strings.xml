@@ -59,9 +59,11 @@
     <string name="invalid_email">Addresse email invalide !</string>
     <string name="meeting_saved">Réunion enregistrée !</string>
     <string name="choose_date_or_room">Choisissez une date et/ou une salle</string>
+    <string name="filtered_date_only">"Réunions du %s</string>
+    <string name="filtered_room_only">"Réunions en salle %s</string>
+    <string name="filtered_date_and_room">"Réunions du %1$s en salle %2$s</string>
 
     <string-array name="room_names">
-        <item>""</item>
         <item>Peach</item>
         <item>Luigi</item>
         <item>Mario</item>
@@ -72,5 +74,20 @@
         <item>Rosalina</item>
         <item>Toad</item>
         <item>Yoshi</item>
+    </string-array>
+
+    <string-array name="hour_list">
+        <item>8h00</item>
+        <item>9h00</item>
+        <item>10h00</item>
+        <item>11h00</item>
+        <item>12h00</item>
+        <item>13h00</item>
+        <item>14h00</item>
+        <item>15h00</item>
+        <item>16h00</item>
+        <item>17h00</item>
+        <item>18h00</item>
+        <item>19h00</item>
     </string-array>
 </resources>

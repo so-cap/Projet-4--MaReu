@@ -15,11 +15,17 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:title="@string/app_name"
             app:titleTextColor="@android:color/white" />
+
         <include
-            android:visibility="gone"
             android:id="@+id/filter_activity"
-            layout="@layout/filter_fragment"/>
+            layout="@layout/filter_fragment"
+            android:visibility="gone" />
+        <include
+            android:id="@+id/filter_activated"
+            layout="@layout/filter_activated_view"
+            android:visibility="gone" />
     </com.google.android.material.appbar.AppBarLayout>
+
     <FrameLayout
         android:id="@+id/frame_listmeetings"
         android:layout_width="match_parent"

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
+
 import static com.sophie.mareu.Constants.*;
 
 
@@ -31,21 +32,18 @@ import butterknife.ButterKnife;
 
 public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMeetingsRecyclerViewAdapter.ViewHolder> {
     private ArrayList<Meeting> mMeetings;
-    private Context mContext;
     private OnDeleteMeetingListener mOnDeleteMeetingListener;
+    private OnMeetingClickListener mOnMeetingClickListener;
 
-    ListMeetingsRecyclerViewAdapter(ArrayList<Meeting> meetings, Context context,
-                                    OnDeleteMeetingListener onDeleteMeetingListener) {
+    ListMeetingsRecyclerViewAdapter(ArrayList<Meeting> meetings) {
         mMeetings = meetings;
-        mContext = context;
-        mOnDeleteMeetingListener = onDeleteMeetingListener;
     }
 
     @NonNull
     @Override
     public ListMeetingsRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_meeting, parent, false);
-        return new ViewHolder(view, mOnDeleteMeetingListener);
+        return new ViewHolder(view, mOnDeleteMeetingListener, mOnMeetingClickListener);
     }
 
     @Override
@@ -61,6 +59,14 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
             return mMeetings.size();
     }
 
+    public void setOnDeleteMeetingListener(OnDeleteMeetingListener onDeleteMeetingListener){
+        mOnDeleteMeetingListener = onDeleteMeetingListener;
+    }
+
+    public void setOnMeetingClickListener(OnMeetingClickListener onMeetingClickListener){
+        mOnMeetingClickListener = onMeetingClickListener;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.titleView)
         TextView mTitle;
@@ -72,16 +78,19 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
         ImageButton mDeleteButton;
 
         OnDeleteMeetingListener onDeleteMeetingListener;
-        Resources res = mContext.getResources();
+        OnMeetingClickListener onMeetingClickListener;
 
-        ViewHolder(@NonNull View itemView, OnDeleteMeetingListener onDeleteMeetingListener) {
+
+        ViewHolder(@NonNull View itemView, OnDeleteMeetingListener onDeleteMeetingListener, OnMeetingClickListener onMeetingClickListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
             this.onDeleteMeetingListener = onDeleteMeetingListener;
+            this.onMeetingClickListener = onMeetingClickListener;
         }
 
         void bind(Meeting meeting) {
+            Resources res = itemView.getResources();
             mIcon.setImageDrawable(res.getDrawable(meeting.getIcon()));
             mTitle.setText(res.getString(R.string.title_hour_room, meeting.getTitle(), meeting.getHour().getValue(), meeting.getRoomName()));
             mParticipants.setText(meeting.getParticipantsInOneString());
@@ -93,10 +102,11 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
             if (v.getId() == R.id.delete_meeting_btn)
                 onDeleteMeetingListener.onDeleteMeetingClick(mMeetings.get(getAdapterPosition()));
             else
-                startDetailFragment();
+                onMeetingClickListener.onMeetingClick(mMeetings.get(getAdapterPosition()));
         }
 
-        private void startDetailFragment() {
+        //TODO: deplacer la méthode dans ListMeetingFragment , envoyer l'interface
+     /*   private void startDetailFragment() {
             AppCompatActivity activity = (AppCompatActivity) mContext;
             FragmentTransaction fm = activity.getSupportFragmentManager().beginTransaction();
             DetailFragment detailFragment = new DetailFragment();
@@ -108,9 +118,16 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
                 fm.replace(R.id.frame_listmeetings, detailFragment).addToBackStack(null).commit();
             } else fm.replace(R.id.frame_setmeeting, detailFragment).addToBackStack(null).commit();
         }
+
+      */
     }
+
 
     public interface OnDeleteMeetingListener {
         void onDeleteMeetingClick(Meeting meeting);
+    }
+
+    public interface OnMeetingClickListener {
+        void onMeetingClick(Meeting meeting);
     }
 }

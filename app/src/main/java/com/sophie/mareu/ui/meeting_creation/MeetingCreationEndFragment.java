@@ -44,9 +44,10 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     private AbstractMap.SimpleEntry<Integer, String> mHour;
     private ArrayList<String> mParticipants = new ArrayList<>();
     private Context mContext;
-    private int mRoomPosition, mHourPosition;
+   // private int mRoomPosition, mHourPosition;
     private RoomsAvailabilityService mService;
-    private Date mSelectedDate;
+   // private Date mSelectedDate;
+    private Meeting mMeeting;
 
     @BindView(R.id.meeting_title_input)
     EditText mTitleView;
@@ -80,6 +81,9 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
                     .popBackStack());
 
         if (getArguments() != null) {
+            mMeeting = getArguments().getParcelable(ARGUMENT_MEETING);
+            mService = (RoomsAvailabilityByHourImpl) getArguments().getSerializable(ARGUMENT_SERVICE);
+/*
             int key = (getArguments().getInt(ARGUMENT_HOUR_KEY));
             String hourValue = (getArguments().getString(ARGUMENT_HOUR_VALUE));
             mHour = new AbstractMap.SimpleEntry<>(key, hourValue);
@@ -87,7 +91,8 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
             mHourPosition = getArguments().getInt(ARGUMENT_HOUR_POSITION);
             mRoomPosition = getArguments().getInt(ARGUMENT_ROOM_POSITION);
             mSelectedDate = (Date) getArguments().getSerializable(ARGUMENT_DATE);
-            mService = (RoomsAvailabilityByHourImpl) getArguments().getSerializable(ARGUMENT_SERVICE);
+
+ */
         }
         mAddMoreEmail.setOnClickListener(this);
         mBtnEnd.setOnClickListener(this);
@@ -203,15 +208,18 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     }
 
     private void setMeeting() {
-        Meeting meeting = new Meeting(mTitle, mHour, mRoomName, mParticipants, mDetailSubject, mSelectedDate);
-        AvailabilityByDate.addMeeting(meeting, mSelectedDate);
+        mMeeting.setTitle(mTitle);
+        mMeeting.setParticipants(mParticipants);
+        mMeeting.setSubject(mDetailSubject);
+       // Meeting meeting = new Meeting(mTitle, mHour, mRoomName, mParticipants, mDetailSubject, mSelectedDate);
+        AvailabilityByDate.addMeeting(mMeeting, mMeeting.getDate());
         updateRoomAvailability();
     }
 
     private void updateRoomAvailability() {
         ArrayList<RoomsPerHour> roomsPerHour = mService.getRoomsPerHourList();
-        roomsPerHour.get(mHourPosition).getRooms().remove(mRoomPosition);
+        roomsPerHour.get(mMeeting.getHour().getKey()).getRooms().remove(mMeeting.getRoomName());
         mService.updateAvailableHours(roomsPerHour);
-        AvailabilityByDate.updateAvailabilityByDate(mSelectedDate, mService);
+        AvailabilityByDate.updateAvailabilityByDate(mMeeting.getDate(), mService);
     }
 }

@@ -26,6 +26,7 @@ public class Meeting implements Parcelable {
     public static int iconSelector = 0;
 
     public Meeting() {
+        mIcon = (int) getIconList().get(iconSelector++);
     }
 
     public Meeting(Meeting meeting) {
@@ -40,14 +41,7 @@ public class Meeting implements Parcelable {
 
     public Meeting(String title, AbstractMap.SimpleEntry<Integer, String> hour,
                    String roomName, ArrayList<String> participants, String subject, Date date) {
-
-        ArrayList iconList = new ArrayList<>(Arrays.asList(R.drawable.ic_lightpink, R.drawable.ic_lightgreen,
-                R.drawable.ic_darkergreen));
-
-        mIcon = (int) iconList.get(iconSelector++);
-        if (iconSelector == 3)
-            iconSelector = 0;
-
+        mIcon = (int) getIconList().get(iconSelector++);
         mTitle = title;
         mHour = new AbstractMap.SimpleEntry<>(hour.getKey(), hour.getValue());
         mRoomName = roomName;
@@ -77,6 +71,13 @@ public class Meeting implements Parcelable {
             return new Meeting[size];
         }
     };
+
+    private ArrayList getIconList(){
+        if (iconSelector == 3)
+            iconSelector = 0;
+        return new ArrayList<>(Arrays.asList(R.drawable.ic_lightpink, R.drawable.ic_lightgreen,
+                R.drawable.ic_darkergreen));
+    }
 
     public String getRoomName() {
         return mRoomName;

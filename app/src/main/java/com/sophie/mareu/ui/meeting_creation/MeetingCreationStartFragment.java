@@ -27,6 +27,7 @@ import com.adroitandroid.chipcloud.ChipCloud;
 import com.adroitandroid.chipcloud.ChipListener;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.AvailabilityByDate;
+import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
 import com.sophie.mareu.controller.RoomsPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
@@ -170,13 +171,14 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
     private void startNextFragment() {
         MeetingCreationEndFragment meetingCreationEndFragment = new MeetingCreationEndFragment();
+        // TODO: Envoyer un objet Meeting à la place des args.
+
+        Meeting meeting = new Meeting();
+        meeting.setHour(mSelectedHour.getKey(), mSelectedHour.getValue());
+        meeting.setRoomName(mSelectedRoomName);
+        meeting.setDate(mSelectedDate);
         Bundle bundle = new Bundle();
-        bundle.putInt(ARGUMENT_HOUR_KEY, mSelectedHour.getKey());
-        bundle.putString(ARGUMENT_HOUR_VALUE, mSelectedHour.getValue());
-        bundle.putInt(ARGUMENT_HOUR_POSITION, mHourPosition);
-        bundle.putString(ARGUMENT_ROOM, mSelectedRoomName);
-        bundle.putInt(ARGUMENT_ROOM_POSITION, mRoomPosition);
-        bundle.putSerializable(ARGUMENT_DATE, mSelectedDate);
+        bundle.putParcelable(ARGUMENT_MEETING, meeting);
         bundle.putSerializable(ARGUMENT_SERVICE, mRoomsAvailabilityService);
         meetingCreationEndFragment.setArguments(bundle);
 
