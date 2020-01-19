@@ -15,8 +15,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.ASCENDING;
-import static com.sophie.mareu.ui.list_meetings.ListMeetingsActivity.DESCENDING;
+import static com.sophie.mareu.Constants.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class RoomsPerHour {
     private AbstractMap.SimpleEntry<Integer, String> hour;
     private ArrayList<String> rooms = new ArrayList<>();
-    private static int key = 0;
+    public static int key = 0;
 
     RoomsPerHour() {}
 

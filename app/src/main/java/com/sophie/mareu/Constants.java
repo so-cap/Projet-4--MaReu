@@ -9,4 +9,5 @@ public class Constants {
 
     public static final String ARGUMENT_MEETING = "selected meeting";
     public static final String ARGUMENT_SERVICE = "rooms availability service";
+    public static final String ARGUMENT_HOUR_POSITION = "hour position";
 }

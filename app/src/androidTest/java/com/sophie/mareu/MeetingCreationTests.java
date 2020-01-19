@@ -47,18 +47,7 @@ public class MeetingCreationTests {
     private ArrayList<RoomsPerHour> mRoomsAndHours = new ArrayList<>();
     private ArrayList<String> mRooms = DI.getNewRoomsList();
     private RoomsAvailabilityService mService = new RoomsAvailabilityByHourImpl();
-    private Date mDate = getDateWithoutTime();
     private char A;
-
-    // To be able to test correctly no matter the day or the time of running the test.
-    public static Date getDateWithoutTime() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
-    }
 
     @Rule
     public ActivityTestRule<ListMeetingsActivity> mActivityRule =
@@ -70,6 +59,8 @@ public class MeetingCreationTests {
         mActivity = mActivityRule.getActivity();
         assertThat(mActivity, notNullValue());
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        // To test without the default dummyMeeting
+        AvailabilityByDate.clearAllMeetings();
     }
 
     @Test
@@ -106,6 +97,7 @@ public class MeetingCreationTests {
         addMeeting(0);
         onView(ViewMatchers.withId(R.id.meetings_list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(0));
     }
 
     @Test
@@ -126,8 +118,9 @@ public class MeetingCreationTests {
         mRoomsAndHours.add(new RoomsPerHour("8h00", new ArrayList<>(mRooms)));
         mRoomsAndHours.add(new RoomsPerHour("9h00", new ArrayList<>(mRooms)));
         mService.updateAvailableHours(mRoomsAndHours);
-        AvailabilityByDate.updateAvailabilityByDate(mDate, mService);
-        AvailabilityByDate.setCurrentService(mDate);
+        Date today = getTodaysDateWithoutTime();
+        AvailabilityByDate.updateAvailabilityByDate(today, mService);
+        AvailabilityByDate.initCurrentService(today);
 
         for (int i = 0; i < initialHoursAvailable; i++) {
             int initialRoomsCount = mRooms.size() - 1;
@@ -155,5 +148,15 @@ public class MeetingCreationTests {
         onView(withId(R.id.meeting_subjectdetail_input)).perform(scrollTo()).perform(replaceText("Sujet de réunion"));
         onView(withId(R.id.email_one)).perform(scrollTo()).perform(typeText("email@address.com"));
         onView(withId(R.id.save_meeting_btn)).perform(click());
+    }
+
+    // To be able to test correctly no matter the time of running the test.
+    public static Date getTodaysDateWithoutTime() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 }

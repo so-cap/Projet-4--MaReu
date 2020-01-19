@@ -43,6 +43,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     private ArrayList<String> mParticipants = new ArrayList<>();
     private RoomsAvailabilityService mService;
     private Meeting mMeeting;
+    private int mHourPosition;
 
     @BindView(R.id.meeting_title_input)
     EditText mTitleView;
@@ -76,6 +77,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         if (getArguments() != null) {
             mMeeting = getArguments().getParcelable(ARGUMENT_MEETING);
             mService = (RoomsAvailabilityByHourImpl) getArguments().getSerializable(ARGUMENT_SERVICE);
+            mHourPosition = getArguments().getInt(ARGUMENT_HOUR_POSITION);
         }
 
         setTextChangedListener();
@@ -217,7 +219,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
 
     private void updateRoomAvailability() {
         ArrayList<RoomsPerHour> roomsPerHour = mService.getRoomsPerHourList();
-        roomsPerHour.get(mMeeting.getHour().getKey()).getRooms().remove(mMeeting.getRoomName());
+        roomsPerHour.get(mHourPosition).getRooms().remove(mMeeting.getRoomName());
         mService.updateAvailableHours(roomsPerHour);
         AvailabilityByDate.updateAvailabilityByDate(mMeeting.getDate(), mService);
     }

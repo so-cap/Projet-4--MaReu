@@ -18,7 +18,7 @@ public class AvailabilityByDate {
     public static HashMap<Date, ArrayList<Meeting>> mMeetingsByDate = new HashMap<>();
     public static HashMap<Date, RoomsAvailabilityService> serviceByDate = new HashMap<>();
 
-    public static RoomsAvailabilityService setCurrentService(Date date) {
+    public static RoomsAvailabilityService initCurrentService(Date date) {
         for (int position = 0; position < serviceByDate.size(); position++) {
             if (serviceByDate.containsKey(date))
                 return serviceByDate.get(date);

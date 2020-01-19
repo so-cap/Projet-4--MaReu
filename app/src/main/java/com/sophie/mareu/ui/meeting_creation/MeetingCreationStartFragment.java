@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -178,6 +177,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         Bundle bundle = new Bundle();
         bundle.putParcelable(ARGUMENT_MEETING, meeting);
         bundle.putSerializable(ARGUMENT_SERVICE, mRoomsAvailabilityService);
+        bundle.putInt(ARGUMENT_HOUR_POSITION, mHourPosition);
         meetingCreationEndFragment.setArguments(bundle);
 
         if (getFragmentManager() != null) {
@@ -210,7 +210,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     private void updateCurrentService(Date newDate) {
-        mRoomsAvailabilityService = AvailabilityByDate.setCurrentService(newDate);
+        mRoomsAvailabilityService = AvailabilityByDate.initCurrentService(newDate);
         if (mRoomsAvailabilityService.getRoomsPerHourList().isEmpty()) {
             mMeetingsFull.setVisibility(View.VISIBLE);
             mChipCloud.setVisibility(View.GONE);
