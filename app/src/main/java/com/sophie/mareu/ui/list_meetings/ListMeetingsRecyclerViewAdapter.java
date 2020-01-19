@@ -104,22 +104,6 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
             else
                 onMeetingClickListener.onMeetingClick(mMeetings.get(getAdapterPosition()));
         }
-
-        //TODO: deplacer la méthode dans ListMeetingFragment , envoyer l'interface
-     /*   private void startDetailFragment() {
-            AppCompatActivity activity = (AppCompatActivity) mContext;
-            FragmentTransaction fm = activity.getSupportFragmentManager().beginTransaction();
-            DetailFragment detailFragment = new DetailFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(ARGUMENT_MEETING, mMeetings.get(getAdapterPosition()));
-            detailFragment.setArguments(bundle);
-
-            if ((activity.findViewById((R.id.frame_setmeeting)) == null && !res.getString(R.string.screen_type).equals("tablet"))) {
-                fm.replace(R.id.frame_listmeetings, detailFragment).addToBackStack(null).commit();
-            } else fm.replace(R.id.frame_setmeeting, detailFragment).addToBackStack(null).commit();
-        }
-
-      */
     }
 
 

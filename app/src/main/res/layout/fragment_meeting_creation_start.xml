@@ -144,14 +144,15 @@
             app:layout_constraintTop_toBottomOf="@id/availablerooms_title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
-    <ImageButton
+    <Button
+        android:visibility="gone"
         android:id="@+id/next_page"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:background="@null"
-        android:src="@drawable/ic_arrow_forward_black_24dp"
-        android:contentDescription="@string/next_page"
+        android:textStyle="italic"
+        android:text="@string/next_page"
         android:layout_gravity="bottom|end"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

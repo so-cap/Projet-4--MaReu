@@ -65,7 +65,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     @BindView(R.id.all_meetings_full)
     TextView mMeetingsFull;
     @BindView(R.id.next_page)
-    ImageButton mNextPage;
+    Button mNextPage;
     @BindView(R.id.meeting_start_toolbar)
     Toolbar toolbar;
 
@@ -171,8 +171,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
     private void startNextFragment() {
         MeetingCreationEndFragment meetingCreationEndFragment = new MeetingCreationEndFragment();
-        // TODO: Envoyer un objet Meeting à la place des args.
-
         Meeting meeting = new Meeting();
         meeting.setHour(mSelectedHour.getKey(), mSelectedHour.getValue());
         meeting.setRoomName(mSelectedRoomName);

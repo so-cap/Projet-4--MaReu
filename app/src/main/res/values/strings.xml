@@ -6,7 +6,7 @@
     <string name="previous_page">RETOUR</string>
     <string name="no_new_meetings">Aucune réunion de prévue</string>
     <string name="all_meetings_full">Plus de salles disponibles!\nVeuillez choisir une autre date.</string>
-    <string name="next_page">page suivante</string>
+    <string name="next_page">Suivant</string>
     <string name="default_recyclerview_title">Réunion A - 14h00 - PEACH</string>
     <string name="delete_btn">delete_btn</string>
     <string name="meeting_icon">meeting_icon</string>

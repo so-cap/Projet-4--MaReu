@@ -1,8 +1,9 @@
 package com.sophie.mareu.ui.meeting_creation;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +31,7 @@ import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
 import com.sophie.mareu.service.RoomsAvailabilityService;
 import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,13 +39,9 @@ import butterknife.ButterKnife;
 import static com.sophie.mareu.Constants.*;
 
 public class MeetingCreationEndFragment extends Fragment implements View.OnClickListener {
-    private String mTitle, mRoomName, mDetailSubject;
-    private AbstractMap.SimpleEntry<Integer, String> mHour;
+    private String mTitle, mDetailSubject;
     private ArrayList<String> mParticipants = new ArrayList<>();
-    private Context mContext;
-   // private int mRoomPosition, mHourPosition;
     private RoomsAvailabilityService mService;
-   // private Date mSelectedDate;
     private Meeting mMeeting;
 
     @BindView(R.id.meeting_title_input)
@@ -64,7 +59,6 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     ImageButton mAddMoreEmail;
     @BindView(R.id.delete_mail)
     ImageButton mDeleteEmail;
-
     @BindView(R.id.save_meeting_btn)
     Button mBtnEnd;
 
@@ -74,7 +68,6 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         View view = inflater.inflate(R.layout.fragment_meeting_creation_end, container, false);
 
         ButterKnife.bind(this, view);
-        mContext = getContext();
 
         if (getActivity() != null)
             toolbar.setNavigationOnClickListener(v -> getActivity().getSupportFragmentManager()
@@ -83,21 +76,28 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         if (getArguments() != null) {
             mMeeting = getArguments().getParcelable(ARGUMENT_MEETING);
             mService = (RoomsAvailabilityByHourImpl) getArguments().getSerializable(ARGUMENT_SERVICE);
-/*
-            int key = (getArguments().getInt(ARGUMENT_HOUR_KEY));
-            String hourValue = (getArguments().getString(ARGUMENT_HOUR_VALUE));
-            mHour = new AbstractMap.SimpleEntry<>(key, hourValue);
-            mRoomName = getArguments().getString(ARGUMENT_ROOM);
-            mHourPosition = getArguments().getInt(ARGUMENT_HOUR_POSITION);
-            mRoomPosition = getArguments().getInt(ARGUMENT_ROOM_POSITION);
-            mSelectedDate = (Date) getArguments().getSerializable(ARGUMENT_DATE);
-
- */
         }
+
+        setTextChangedListener();
         mAddMoreEmail.setOnClickListener(this);
         mBtnEnd.setOnClickListener(this);
         mDeleteEmail.setOnClickListener(this);
         return view;
+    }
+
+    private void setTextChangedListener() {
+        mTitleView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) mBtnEnd.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override
@@ -117,7 +117,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     }
 
     private void addEmailView() {
-        EditText anotherEmail = new EditText(mContext);
+        EditText anotherEmail = new EditText(getContext());
 
         anotherEmail.setHint(getString(R.string.email_hint));
         anotherEmail.setTextSize(20);
@@ -196,22 +196,21 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
             if (activity.getClass().equals(MeetingCreationActivity.class)) {
                 activity.finish();
             } else {
-              ListMeetingFragment listMeetingFragment = (ListMeetingFragment) activity.getSupportFragmentManager().
-                       findFragmentById(R.id.frame_listmeetings);
+                ListMeetingFragment listMeetingFragment = (ListMeetingFragment) activity.getSupportFragmentManager().
+                        findFragmentById(R.id.frame_listmeetings);
                 FragmentManager fm = activity.getSupportFragmentManager();
                 fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 if (listMeetingFragment != null)
                     listMeetingFragment.initList(UNCHANGED);
             }
         }
-        Toast.makeText(mContext, getResources().getString(R.string.meeting_saved), Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), getResources().getString(R.string.meeting_saved), Toast.LENGTH_LONG).show();
     }
 
     private void setMeeting() {
         mMeeting.setTitle(mTitle);
         mMeeting.setParticipants(mParticipants);
         mMeeting.setSubject(mDetailSubject);
-       // Meeting meeting = new Meeting(mTitle, mHour, mRoomName, mParticipants, mDetailSubject, mSelectedDate);
         AvailabilityByDate.addMeeting(mMeeting, mMeeting.getDate());
         updateRoomAvailability();
     }

@@ -169,6 +169,7 @@
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
     <Button
+        android:visibility="gone"
         android:id="@+id/save_meeting_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -176,6 +177,5 @@
         android:layout_marginEnd="16dp"
         android:background="@null"
         android:text="@string/save_meeting"
-        android:contentDescription="@string/next_page"
         android:layout_gravity="bottom|end"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,13 +2,12 @@ package com.sophie.mareu.service;
 
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.controller.RoomsPerHour;
-
 import java.util.ArrayList;
 
 /**
  * Created by SOPHIE on 30/12/2019.
  */
-public class RoomsAvailabilityByHourImpl extends RoomsAvailabilityService {
+public class RoomsAvailabilityByHourImpl implements RoomsAvailabilityService {
     private ArrayList<RoomsPerHour> mRoomsPerHourList = new ArrayList<>();
 
     public RoomsAvailabilityByHourImpl(){
