@@ -8,10 +8,8 @@ import java.util.ArrayList;
 /**
  * Created by SOPHIE on 16/01/2020.
  */
-
-// TODO: mettre une interface à la place du abstract
 public interface RoomsAvailabilityService extends Serializable {
     void initRoomsAndHours();
-    abstract ArrayList<RoomsPerHour> getRoomsPerHourList();
-    abstract void updateAvailableHours(ArrayList<RoomsPerHour> availableHoursAndRooms);
+    ArrayList<RoomsPerHour> getRoomsPerHourList();
+    void updateAvailableHours(ArrayList<RoomsPerHour> availableHoursAndRooms);
 }
