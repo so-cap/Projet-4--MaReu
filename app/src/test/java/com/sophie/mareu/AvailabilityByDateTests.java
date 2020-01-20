@@ -59,10 +59,10 @@ public class AvailabilityByDateTests {
 
     @Test
     public void getMeetingsWithSuccess(){
-        assertTrue(AvailabilityByDate.getMeetings(differentDate).isEmpty());
+        assertTrue(AvailabilityByDate.getMeetingsByDate(differentDate).isEmpty());
 
         AvailabilityByDate.addMeeting(meeting, date);
-        assertTrue(AvailabilityByDate.getMeetings(date).contains(meeting));
+        assertTrue(AvailabilityByDate.getMeetingsByDate(date).contains(meeting));
         assertThat(AvailabilityByDate.getMeetings().size(),equalTo(1));
     }
 

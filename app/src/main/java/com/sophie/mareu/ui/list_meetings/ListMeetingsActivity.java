@@ -85,6 +85,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
 
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
+        AvailabilityByDate.setService(new RoomsAvailabilityByHourImpl());
         listMeetingFrame = getSupportFragmentManager().findFragmentById(R.id.frame_listmeetings);
 
         /* Add dummyMeeting for presentation : */

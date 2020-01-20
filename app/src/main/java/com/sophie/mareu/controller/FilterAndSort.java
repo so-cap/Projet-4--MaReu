@@ -20,7 +20,7 @@ public class FilterAndSort {
     public static void filterMeetingsList(Date date, String roomName) {
         mFilteredList.clear();
         if (date != null && roomName.isEmpty())
-            mFilteredList = new ArrayList<>(getMeetings(date));
+            mFilteredList = new ArrayList<>(AvailabilityByDate.getMeetingsByDate(date));
          else if (!(roomName.isEmpty()) && date == null) {
             for (Map.Entry<Date, ArrayList<Meeting>> meetings : AvailabilityByDate.mMeetingsByDate.entrySet()) {
                 for (int i = 0; i < meetings.getValue().size(); i++) {
@@ -30,7 +30,7 @@ public class FilterAndSort {
                 }
             }
         } else
-            for (Meeting entry : getMeetings(date)) {
+            for (Meeting entry : AvailabilityByDate.getMeetingsByDate(date)) {
                 if (entry.getRoomName().equals(roomName) && entry.getDate().equals(date)) {
                     mFilteredList.add(new Meeting(entry));
                 }

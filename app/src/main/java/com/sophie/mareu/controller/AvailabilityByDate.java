@@ -1,7 +1,6 @@
 package com.sophie.mareu.controller;
 
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
 import com.sophie.mareu.service.RoomsAvailabilityService;
 
 
@@ -17,17 +16,18 @@ import java.util.Objects;
 public class AvailabilityByDate {
     public static HashMap<Date, ArrayList<Meeting>> mMeetingsByDate = new HashMap<>();
     public static HashMap<Date, RoomsAvailabilityService> serviceByDate = new HashMap<>();
+    private static RoomsAvailabilityService newService;
+
+    public static void setService(RoomsAvailabilityService service){
+        newService = service;
+    }
 
     public static RoomsAvailabilityService initCurrentService(Date date) {
         for (int position = 0; position < serviceByDate.size(); position++) {
             if (serviceByDate.containsKey(date))
                 return serviceByDate.get(date);
         }
-        return getNewService();
-    }
-
-    private static RoomsAvailabilityService getNewService() {
-        return new RoomsAvailabilityByHourImpl();
+        return newService;
     }
 
     public static void updateAvailabilityByDate(Date date, RoomsAvailabilityService roomsAvailabilityService) {
@@ -53,7 +53,7 @@ public class AvailabilityByDate {
         return meetings;
     }
 
-    public static ArrayList<Meeting> getMeetings(Date date) {
+    public static ArrayList<Meeting> getMeetingsByDate(Date date) {
         if (AvailabilityByDate.mMeetingsByDate.get(date) != null) {
             return AvailabilityByDate.mMeetingsByDate.get(date);
         } else
