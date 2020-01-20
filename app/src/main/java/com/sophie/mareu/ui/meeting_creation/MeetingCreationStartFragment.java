@@ -225,14 +225,4 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             initChipCloud();
         }
     }
-
-    @VisibleForTesting
-    public ArrayList<String> getSpinnerArray() {
-        return mSpinnerArray;
-    }
-
-    @VisibleForTesting
-    public void initSpinnerTest() {
-        initSpinner();
-    }
 }
