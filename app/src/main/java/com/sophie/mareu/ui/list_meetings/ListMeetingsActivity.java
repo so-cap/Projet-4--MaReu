@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +27,7 @@ import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.controller.AvailabilityByDate;
 import com.sophie.mareu.model.Meeting;
+
 import static com.sophie.mareu.Constants.*;
 
 import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
@@ -75,6 +75,9 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     TextView filterModeText;
     @BindView(R.id.filter_activated)
     View filterActivatedView;
+    @BindView(R.id.deactivate_sorted_list)
+    CardView sortedModeActivated;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
 
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
-
         listMeetingFrame = getSupportFragmentManager().findFragmentById(R.id.frame_listmeetings);
 
         /* Add dummyMeeting for presentation : */
@@ -94,6 +96,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         configureAndShowListMeetingFragment();
         configureAndShowHomeStartMeetingCreationFragment();
 
+        sortedModeActivated.setOnClickListener(this);
         mDeactivateFilter.setOnClickListener(this);
         mBackBtn.setOnClickListener(this);
         mOkButton.setOnClickListener(this);
@@ -101,7 +104,10 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         mRoomsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mSelectedRoom = getResources().getStringArray(R.array.room_names)[position];
+                if (position == 0)
+                    mSelectedRoom = "";
+                else
+                    mSelectedRoom = getResources().getStringArray(R.array.room_names)[position - 1];
             }
 
             @Override
@@ -151,21 +157,33 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        filterActivatedView.setVisibility(View.VISIBLE);
         switch (item.getItemId()) {
             case R.id.ascending:
-                FilterAndSort.sortList(ASCENDING);
-                listMeetingFragment.initList(SORTED);
-                break;
+                if (FilterAndSort.getFilteredList().isEmpty() && mDeactivateFilter.getVisibility() == View.VISIBLE)
+                    break;
+                else {
+                    FilterAndSort.sortList(ASCENDING);
+                    listMeetingFragment.initList(SORTED);
+                    sortedModeActivated.setVisibility(View.VISIBLE);
+                    break;
+                }
             case R.id.descending:
-                FilterAndSort.sortList(DESCENDING);
-                listMeetingFragment.initList(SORTED);
-                break;
+                if (FilterAndSort.getFilteredList().isEmpty() && mDeactivateFilter.getVisibility() == View.VISIBLE)
+                    break;
+                else {
+                    FilterAndSort.sortList(DESCENDING);
+                    listMeetingFragment.initList(SORTED);
+                    sortedModeActivated.setVisibility(View.VISIBLE);
+                    break;
+                }
             case R.id.filter:
                 initSpinner();
                 mFilterView.setVisibility(View.VISIBLE);
                 break;
             case R.id.display_all_meetings:
-                displayAllMeetings();
+                listMeetingFragment.initList(UNCHANGED);
+                resetFilterView();
                 break;
         }
         return true;
@@ -183,10 +201,8 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
 
     private void showDatePickerDialog() {
         Locale.setDefault(Locale.FRANCE);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                this, Calendar.getInstance().get(Calendar.YEAR),
-                Calendar.getInstance().get(Calendar.MONTH),
-                Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
     }
 
@@ -203,25 +219,38 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                 showDatePickerDialog();
                 break;
             case R.id.ok_filter:
-                if (mSelectedDate != null || !mSelectedRoom.isEmpty()) {
-                    FilterAndSort.filterMeetingsList(mSelectedDate, mSelectedRoom);
-                    mFilterView.setVisibility(View.GONE);
-                    listMeetingFragment.initList(FILTERED);
-                    setFilteredLListCardViews();
-                    resetFilterView();
-                } else
+                if (mSelectedDate != null || !mSelectedRoom.isEmpty()) filterList();
+                else
                     Toast.makeText(this, getString(R.string.choose_date_or_room), Toast.LENGTH_LONG).show();
                 break;
             case R.id.back_button:
-                resetFilterView();
+                mFilterView.setVisibility(View.GONE);
                 break;
             case R.id.deactivate_filter:
-                displayAllMeetings();
+                listMeetingFragment.initList(UNCHANGED);
+                resetFilterView();
+                break;
+            case R.id.deactivate_sorted_list:
+                if (FilterAndSort.getFilteredList().isEmpty())
+                    listMeetingFragment.initList(UNCHANGED);
+                else {
+                    FilterAndSort.filterMeetingsList(mSelectedDate, mSelectedRoom);
+                    listMeetingFragment.initList(FILTERED);
+                }
+                sortedModeActivated.setVisibility(View.GONE);
                 break;
         }
     }
 
-    private void setFilteredLListCardViews() {
+    private void filterList() {
+        FilterAndSort.filterMeetingsList(mSelectedDate, mSelectedRoom);
+        mFilterView.setVisibility(View.GONE);
+        sortedModeActivated.setVisibility(View.GONE);
+        listMeetingFragment.initList(FILTERED);
+        setFilteredListCardViews();
+    }
+
+    private void setFilteredListCardViews() {
         String text;
         if (mSelectedDate != null && mSelectedRoom.isEmpty())
             text = getString(R.string.filtered_date_only, df.format(mSelectedDate));
@@ -229,16 +258,9 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
             text = getString(R.string.filtered_room_only, mSelectedRoom);
         else
             text = getString(R.string.filtered_date_and_room, df.format(Objects.requireNonNull(mSelectedDate)), mSelectedRoom);
-
         filterModeText.setText(text);
-        filterActivatedView.setVisibility(View.VISIBLE);
-    }
-
-    private void displayAllMeetings() {
-        listMeetingFragment.initList(UNCHANGED);
-        FilterAndSort.getSortedList().clear();
-        FilterAndSort.getFilteredList().clear();
-        filterActivatedView.setVisibility(View.GONE);
+        mFilterSelected.setVisibility(View.VISIBLE);
+        mDeactivateFilter.setVisibility(View.VISIBLE);
     }
 
     private void resetFilterView() {
@@ -247,12 +269,18 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         mSelectedDate = null;
         mSelectedRoom = "";
         mRoomsSpinner.setSelection(0);
+        FilterAndSort.getSortedList().clear();
+        FilterAndSort.getFilteredList().clear();
+        mFilterSelected.setVisibility(View.GONE);
+        mDeactivateFilter.setVisibility(View.GONE);
+        sortedModeActivated.setVisibility(View.GONE);
+        mFilterView.setVisibility(View.GONE);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mFilterView.setVisibility(View.GONE);
+        resetFilterView();
     }
 
     @Override

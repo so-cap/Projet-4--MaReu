@@ -1,7 +1,6 @@
 package com.sophie.mareu.service;
 
 import com.sophie.mareu.controller.RoomsPerHour;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 

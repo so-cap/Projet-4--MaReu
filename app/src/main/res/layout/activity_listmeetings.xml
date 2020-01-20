@@ -23,7 +23,7 @@
         <include
             android:id="@+id/filter_activated"
             layout="@layout/filter_activated_view"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout

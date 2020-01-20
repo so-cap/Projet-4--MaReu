@@ -70,16 +70,16 @@ public class AvailabilityByDate {
     public static void deleteMeeting(Meeting meeting) {
         RoomsAvailabilityService currentService = serviceByDate.get(meeting.getDate());
         if (currentService != null) {
-            ArrayList<RoomsPerHour> updateRooms = currentService.getRoomsPerHourList();
+            ArrayList<RoomsPerHour> roomsPerHourList = currentService.getRoomsPerHourList();
             Integer meetingPosition = meeting.getHour().getKey();
             // make hour available again if it wasn't anymore
-            if (!updateRooms.get(meetingPosition).getHour().getKey().equals(meetingPosition)) {
+            if (!roomsPerHourList.get(meetingPosition).getHour().getKey().equals(meetingPosition)) {
                 RoomsPerHour roomsPerHour = new RoomsPerHour();
                 roomsPerHour.setHour(meetingPosition, meeting.getHour().getValue());
-                updateRooms.add(meetingPosition,roomsPerHour);
+                roomsPerHourList.add(meetingPosition,roomsPerHour);
             }
             // make room available again
-            updateRooms.get(meeting.getHour().getKey()).addRoom(meeting.getRoomName());
+            roomsPerHourList.get(meeting.getHour().getKey()).addRoom(meeting.getRoomName());
 
             // finally, delete meeting from lists
             Objects.requireNonNull(mMeetingsByDate.get(meeting.getDate())).remove(meeting);
@@ -90,7 +90,7 @@ public class AvailabilityByDate {
                 mMeetingsByDate.remove(meeting.getDate());
 
             // update service
-            currentService.updateAvailableHours(updateRooms);
+            currentService.updateAvailableHours(roomsPerHourList);
         }
     }
 }

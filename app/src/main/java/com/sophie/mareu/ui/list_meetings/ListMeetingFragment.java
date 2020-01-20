@@ -53,8 +53,6 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
     @Nullable
     @BindView(R.id.fab)
     FloatingActionButton mFab;
-    @BindView(R.id.filter_activated)
-    View filterActivatedView;
     @BindView(R.id.filter_activity)
     CardView mFilterView;
 
@@ -84,7 +82,6 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        filterActivatedView.setVisibility(View.GONE);
         if (FilterAndSort.getFilteredList().isEmpty() && FilterAndSort.getSortedList().isEmpty())
             initList(UNCHANGED);
         else if(!FilterAndSort.getSortedList().isEmpty() && FilterAndSort.getFilteredList().isEmpty())
@@ -108,7 +105,7 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
             mMeetings = FilterAndSort.getSortedList();
         else {
             mMeetings = AvailabilityByDate.getMeetings();
-            filterActivatedView.setVisibility(View.GONE);
+
         }
 
         mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings));
@@ -143,9 +140,7 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         FragmentTransaction fm;
         AppCompatActivity activity = (AppCompatActivity) context;
 
-        filterActivatedView.setVisibility(View.GONE);
         mFilterView.setVisibility(View.GONE);
-
         if (getFragmentManager() != null) {
             fm = getFragmentManager().beginTransaction();
 

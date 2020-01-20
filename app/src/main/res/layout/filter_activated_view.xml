@@ -8,6 +8,7 @@
     android:layout_marginBottom="2dp">
 
     <androidx.cardview.widget.CardView
+        android:visibility="gone"
         android:id="@+id/filter_selected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,12 +26,13 @@
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:textSize="16sp"
-            android:text="Réunions du 13/03/20 en salle Peach"
+            android:text="@string/default_filterview_text"
             android:textColor="@color/dark_grey"
             android:textStyle="italic|bold" />
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:visibility="gone"
         android:id="@+id/deactivate_filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,12 +45,38 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/deactivate_filter_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
-            android:text="Désactiver le filtre"
+            android:text="@string/deactivate_filter"
             android:textColor="@color/dark_grey"
             android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/deactivate_sorted_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/light_blue"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:text="@string/cancel_sorted_list"
+            android:textColor="@color/dark_grey"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -62,6 +62,9 @@
     <string name="filtered_date_only">"Réunions du %s</string>
     <string name="filtered_room_only">"Réunions en salle %s</string>
     <string name="filtered_date_and_room">"Réunions du %1$s en salle %2$s</string>
+    <string name="default_filterview_text">Réunions du 13/03/20 en salle Peach</string>
+    <string name="deactivate_filter">Désactiver le filtre</string>
+    <string name="cancel_sorted_list">"Revenir à l'ordre initial"</string>
 
     <string-array name="room_names">
         <item>Peach</item>

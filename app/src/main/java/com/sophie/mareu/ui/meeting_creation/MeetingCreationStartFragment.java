@@ -83,6 +83,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
                 mHourPosition = position;
                 mSelectedHour = mAvailableHoursAndRooms.get(mHourPosition).getHour();
                 initChipCloud();
+                //In case the user chooses a room, then changes the hour afterwards.
+                mRoomPosition = - 1;
             }
 
             @Override
@@ -174,6 +176,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         meeting.setHour(mSelectedHour.getKey(), mSelectedHour.getValue());
         meeting.setRoomName(mSelectedRoomName);
         meeting.setDate(mSelectedDate);
+
         Bundle bundle = new Bundle();
         bundle.putParcelable(ARGUMENT_MEETING, meeting);
         bundle.putSerializable(ARGUMENT_SERVICE, mRoomsAvailabilityService);
