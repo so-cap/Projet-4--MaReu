@@ -57,7 +57,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     @BindView(R.id.my_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.choose_date)
-    Button mDateView;
+    Button chooseDateBtn;
     @BindView(R.id.back_button)
     ImageButton mBackBtn;
     @BindView(R.id.ok_filter)
@@ -75,7 +75,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     @BindView(R.id.filter_activated)
     View filterActivatedView;
     @BindView(R.id.deactivate_sorted_list)
-    CardView sortedModeActivated;
+    CardView sortedModeBtn;
 
 
     @Override
@@ -85,6 +85,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
 
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
+        DI.setResources(getResources());
         AvailabilityByDate.setService(new RoomsAvailabilityByHourImpl());
         listMeetingFrame = getSupportFragmentManager().findFragmentById(R.id.frame_listmeetings);
 
@@ -96,11 +97,11 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         configureAndShowListMeetingFragment();
         configureAndShowHomeStartMeetingCreationFragment();
 
-        sortedModeActivated.setOnClickListener(this);
+        sortedModeBtn.setOnClickListener(this);
         mDeactivateFilterBtn.setOnClickListener(this);
         mBackBtn.setOnClickListener(this);
         mOkButton.setOnClickListener(this);
-        mDateView.setOnClickListener(this);
+        chooseDateBtn.setOnClickListener(this);
         mRoomsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -165,7 +166,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                 else {
                     FilterAndSort.sortList(ASCENDING);
                     listMeetingFragment.initList(SORTED);
-                    sortedModeActivated.setVisibility(View.VISIBLE);
+                    sortedModeBtn.setVisibility(View.VISIBLE);
                     break;
                 }
             case R.id.descending:
@@ -174,7 +175,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                 else {
                     FilterAndSort.sortList(DESCENDING);
                     listMeetingFragment.initList(SORTED);
-                    sortedModeActivated.setVisibility(View.VISIBLE);
+                    sortedModeBtn.setVisibility(View.VISIBLE);
                     break;
                 }
             case R.id.filter:
@@ -209,7 +210,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         mSelectedDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
-        mDateView.setText(df.format(mSelectedDate));
+        chooseDateBtn.setText(df.format(mSelectedDate));
     }
 
     @Override
@@ -237,7 +238,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                     FilterAndSort.filterMeetingsList(mSelectedDate, mSelectedRoom);
                     listMeetingFragment.initList(FILTERED);
                 }
-                sortedModeActivated.setVisibility(View.GONE);
+                sortedModeBtn.setVisibility(View.GONE);
                 break;
         }
     }
@@ -245,7 +246,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     private void filterList() {
         FilterAndSort.filterMeetingsList(mSelectedDate, mSelectedRoom);
         mChooseFilterView.setVisibility(View.GONE);
-        sortedModeActivated.setVisibility(View.GONE);
+        sortedModeBtn.setVisibility(View.GONE);
         listMeetingFragment.initList(FILTERED);
 
         String text;
@@ -262,15 +263,14 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
 
     private void resetFilterView() {
         mChooseFilterView.setVisibility(View.GONE);
-        mDateView.setText(getResources().getString(R.string.select_date));
+        chooseDateBtn.setText(getResources().getString(R.string.select_date));
         mSelectedDate = null;
         mSelectedRoom = "";
         mRoomsSpinner.setSelection(0);
-        FilterAndSort.getSortedList().clear();
-        FilterAndSort.getFilteredList().clear();
+        FilterAndSort.clearLists();
         mFilterSelected.setVisibility(View.GONE);
         mDeactivateFilterBtn.setVisibility(View.GONE);
-        sortedModeActivated.setVisibility(View.GONE);
+        sortedModeBtn.setVisibility(View.GONE);
         mChooseFilterView.setVisibility(View.GONE);
     }
 

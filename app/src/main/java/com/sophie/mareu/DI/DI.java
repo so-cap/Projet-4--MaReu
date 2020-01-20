@@ -1,5 +1,8 @@
 package com.sophie.mareu.DI;
 
+import android.content.res.Resources;
+
+import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
 
 import java.util.ArrayList;
@@ -11,20 +14,20 @@ import java.util.List;
  * Created by SOPHIE on 31/12/2019.
  */
 public class DI {
+    private static Resources res;
 
-    // TODO: Ecrire la liste dans un fichier String.xml puis recupérer les string Arrays
-    private static List<String> mInitialHoursList = Arrays.asList("8h00","9h00","10h00","11h00","12h00","13h00","14h00",
-           "15h00","16h00","17h00","18h00","19h00");
-    private static List<String> mInitialRoomsList = Arrays.asList("Peach","Luigi","Mario","Bowser","Waluigi","Daisy",
-            "Wario","Rosalina","Toad","Yoshi");
+    public static void setResources(Resources resources){
+        res = resources;
+    }
+
     private static List<Meeting> dummyMeetings = DummyMeetingsGenerator.getDummyMeetings();
 
-    public static ArrayList<String> getNewHoursList(){
-        return new ArrayList<>(mInitialHoursList);
+    public static ArrayList<String> getNewHoursList() {
+        return new ArrayList<>(Arrays.asList(res.getStringArray(R.array.hour_list)));
     }
 
     public static ArrayList<String> getNewRoomsList(){
-        return new ArrayList<>(mInitialRoomsList);
+        return new ArrayList<>(Arrays.asList(res.getStringArray(R.array.room_names)));
     }
 
     public static List<Meeting> getDummyMeetings(){

@@ -63,8 +63,7 @@ public class AvailabilityByDate {
     public static void clearAllMeetings() {
         serviceByDate.clear();
         mMeetingsByDate.clear();
-        FilterAndSort.getFilteredList().clear();
-        FilterAndSort.getSortedList().clear();
+        FilterAndSort.clearLists();
     }
 
     public static void deleteMeeting(Meeting meeting) {
@@ -83,8 +82,7 @@ public class AvailabilityByDate {
 
             // finally, delete meeting from lists
             Objects.requireNonNull(mMeetingsByDate.get(meeting.getDate())).remove(meeting);
-            FilterAndSort.getFilteredList().remove(meeting);
-            FilterAndSort.getSortedList().remove(meeting);
+            FilterAndSort.removeMeeting(meeting);
 
             if (mMeetingsByDate.get(meeting.getDate()) == null)
                 mMeetingsByDate.remove(meeting.getDate());

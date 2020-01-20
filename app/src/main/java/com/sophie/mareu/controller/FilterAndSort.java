@@ -56,4 +56,14 @@ public class FilterAndSort {
     public static ArrayList<Meeting> getFilteredList() {
         return mFilteredList;
     }
+
+    public static void clearLists(){
+        mFilteredList.clear();
+        mSortedList.clear();
+    }
+
+    public static void removeMeeting(Meeting meeting){
+        FilterAndSort.getFilteredList().remove(meeting);
+        FilterAndSort.getSortedList().remove(meeting);
+    }
 }

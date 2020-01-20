@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -34,7 +32,6 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Optional;
 
 import static com.sophie.mareu.Constants.*;
 
@@ -55,6 +52,8 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
     FloatingActionButton mFab;
     @BindView(R.id.filter_activity)
     CardView mFilterView;
+    @BindView(R.id.filter_activated)
+    View filterActivatedView;
 
     @Nullable
     @Override
@@ -62,6 +61,7 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_list_meetings, container, false);
 
+        //To display the toolbar only on the list meeting fragment
         Toolbar mainToolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.my_toolbar);
         mainToolbar.setVisibility(View.VISIBLE);
         context = view.getContext();
@@ -82,9 +82,11 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
+        //In case of clicking on the details of a meeting, the list will keep it's previous state.
+        //If creating a new meeting, the list will be update without any filter.
         if (FilterAndSort.getFilteredList().isEmpty() && FilterAndSort.getSortedList().isEmpty())
             initList(UNCHANGED);
-        else if(!FilterAndSort.getSortedList().isEmpty() && FilterAndSort.getFilteredList().isEmpty())
+         else if (!FilterAndSort.getSortedList().isEmpty() && FilterAndSort.getFilteredList().isEmpty())
             initList(SORTED);
         else
             initList(FILTERED);
@@ -105,7 +107,7 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
             mMeetings = FilterAndSort.getSortedList();
         else {
             mMeetings = AvailabilityByDate.getMeetings();
-
+            filterActivatedView.setVisibility(View.GONE);
         }
 
         mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings));
@@ -149,10 +151,11 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
             bundle.putParcelable(ARGUMENT_MEETING, meeting);
             detailFragment.setArguments(bundle);
 
-            if (activity!= null)
-            if (activity.findViewById(R.id.frame_setmeeting) == null && !getString(R.string.screen_type).equals("tablet")) {
-                fm.replace(R.id.frame_listmeetings, detailFragment).addToBackStack(null).commit();
-            } else fm.replace(R.id.frame_setmeeting, detailFragment).addToBackStack(null).commit();
+            if (activity != null)
+                if (activity.findViewById(R.id.frame_setmeeting) == null && !getString(R.string.screen_type).equals("tablet")) {
+                    fm.replace(R.id.frame_listmeetings, detailFragment).addToBackStack(null).commit();
+                } else
+                    fm.replace(R.id.frame_setmeeting, detailFragment).addToBackStack(null).commit();
         }
     }
 }

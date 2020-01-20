@@ -45,8 +45,8 @@ import static org.hamcrest.Matchers.notNullValue;
 public class MeetingCreationTests {
     private ListMeetingsActivity mActivity;
     private ArrayList<RoomsPerHour> mRoomsAndHours = new ArrayList<>();
-    private ArrayList<String> mRooms = DI.getNewRoomsList();
-    private RoomsAvailabilityService mService = new RoomsAvailabilityByHourImpl();
+    private ArrayList<String> mRooms;
+    private RoomsAvailabilityService mService;
     private char A;
 
     @Rule
@@ -59,26 +59,31 @@ public class MeetingCreationTests {
         mActivity = mActivityRule.getActivity();
         assertThat(mActivity, notNullValue());
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        // To test without the default dummyMeeting
-        AvailabilityByDate.clearAllMeetings();
+
+        DI.setResources(mActivity.getResources());
+        mRooms = DI.getNewRoomsList();
+        mService = new RoomsAvailabilityByHourImpl();
     }
 
+    // All tests take into account the default dummyMeeting
+    // Therefore the expected values += 1 .
     @Test
     public void addNewMeetingWithSuccess() {
         addMeeting(0);
-        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(1));
+        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(2));
     }
 
     @Test
     public void addNewMeetingInLandscapeModeWithSuccess() {
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        AvailabilityByDate.clearAllMeetings();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         addMeeting(0);
-        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(1));
+        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(2));
     }
 
     @Test
@@ -86,32 +91,32 @@ public class MeetingCreationTests {
         for (int position = 3; position != 0; position--)
             addMeeting(position);
 
-        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(3));
+        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(4));
         onView(ViewMatchers.withId(R.id.meetings_list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, new DeleteViewAction()));
-        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(2));
+        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(3));
     }
 
     @Test
     public void openDetailsWithSuccess_OnClickOnMeeting() {
-        addMeeting(0);
         onView(ViewMatchers.withId(R.id.meetings_list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(0));
+        onView(ViewMatchers.withId(R.id.detail_fragment)).check(matches(isDisplayed()));
     }
 
     @Test
     public void deleteAllMeetingsOnPhoneRotationWithSuccess() throws InterruptedException {
         for (int position = 2; position != 0; position--)
             addMeeting(position);
-        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(2));
+        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(3));
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        AvailabilityByDate.clearAllMeetings();
         Thread.sleep(2000);
-        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(0));
+        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(1));
     }
 
     @Test
-    public void updateHoursAvailabilityDummyWithSuccess() {
+    public void updateHoursAvailabilityDummy_MustShowUnavailabilityWithSuccess() {
         int initialHoursAvailable = 2;
 
         mRooms = new ArrayList<>(Arrays.asList("Peach", "Mario"));
