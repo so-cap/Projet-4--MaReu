@@ -1,7 +1,7 @@
 package com.sophie.mareu;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.controller.AvailabilityByDate;
+import com.sophie.mareu.service.MeetingsApiServiceImpl;
 import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.model.Meeting;
 
@@ -37,11 +37,11 @@ public class FilterAndSortTests {
 
     @Before
     public void setup(){
-        AvailabilityByDate.clearAllMeetings();
+        MeetingsApiServiceImpl.clearAllMeetings();
         FilterAndSort.getFilteredList().clear();
 
         for (Meeting entry : meetings){
-            AvailabilityByDate.addMeeting(entry, entry.getDate());
+            MeetingsApiServiceImpl.addMeeting(entry, entry.getDate());
         }
     }
 

@@ -1,7 +1,6 @@
 package com.sophie.mareu;
 
 import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -9,11 +8,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.controller.AvailabilityByDate;
-import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
-import com.sophie.mareu.controller.RoomsPerHour;
-import com.sophie.mareu.service.RoomsAvailabilityService;
-import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
+import com.sophie.mareu.service.MeetingsApiServiceImpl;
+import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
+import com.sophie.mareu.model.RoomsPerHour;
+import com.sophie.mareu.service.RoomsAvailabilityApiService;
+import com.sophie.mareu.view.list_meetings.ListMeetingsActivity;
 import com.sophie.mareu.utils.DeleteViewAction;
 
 import org.junit.Before;
@@ -47,7 +46,7 @@ public class MeetingCreationTests {
     private ListMeetingsActivity mActivity;
     private ArrayList<RoomsPerHour> mRoomsAndHours = new ArrayList<>();
     private ArrayList<String> mRooms;
-    private RoomsAvailabilityService mService;
+    private RoomsAvailabilityApiService mService;
     private char A;
 
     @Rule
@@ -63,7 +62,7 @@ public class MeetingCreationTests {
 
         DI.setResources(mActivity.getResources());
         mRooms = DI.getNewRoomsList();
-        mService = new RoomsAvailabilityByHourImpl();
+        mService = new RoomsAvailabilityServiceImpl();
     }
 
     // All tests take into account the default dummyMeeting
@@ -77,7 +76,7 @@ public class MeetingCreationTests {
     @Test
     public void addNewMeetingInLandscapeModeWithSuccess() {
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        AvailabilityByDate.clearAllMeetings();
+        MeetingsApiServiceImpl.clearAllMeetings();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -111,7 +110,7 @@ public class MeetingCreationTests {
             addMeeting(position);
         onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(3));
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        AvailabilityByDate.clearAllMeetings();
+        MeetingsApiServiceImpl.clearAllMeetings();
         Thread.sleep(2000);
         onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(1));
     }
@@ -125,8 +124,8 @@ public class MeetingCreationTests {
         mRoomsAndHours.add(new RoomsPerHour("9h00", new ArrayList<>(mRooms)));
         mService.updateAvailableHours(mRoomsAndHours);
         Date today = getTodaysDateWithoutTime();
-        AvailabilityByDate.updateAvailabilityByDate(today, mService);
-        AvailabilityByDate.initCurrentService(today);
+        MeetingsApiServiceImpl.updateAvailabilityByDate(today, mService);
+        MeetingsApiServiceImpl.getCurrentRoomsPerHourService(today);
 
         for (int i = 0; i < initialHoursAvailable; i++) {
             int initialRoomsCount = mRooms.size() - 1;
@@ -151,7 +150,7 @@ public class MeetingCreationTests {
         onView(withText(mRooms.get(roomPosition))).perform(click());
         onView(withId(R.id.next_page)).perform(click());
         onView(withId(R.id.meeting_title_input)).perform(typeText("Reunion " + A++));
-        onView(withId(R.id.meeting_subjectdetail_input)).perform(scrollTo()).perform(replaceText("Sujet de réunion"));
+        onView(withId(R.id.meeting_subject_input)).perform(scrollTo()).perform(replaceText("Sujet de réunion"));
         onView(withId(R.id.email_one)).perform(scrollTo()).perform(typeText("email@address.com"));
         onView(withId(R.id.save_meeting_btn)).perform(click());
     }

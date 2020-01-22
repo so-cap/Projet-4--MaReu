@@ -1,8 +1,8 @@
 package com.sophie.mareu;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
-import com.sophie.mareu.controller.RoomsPerHour;
+import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
+import com.sophie.mareu.model.RoomsPerHour;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,9 +17,9 @@ import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
-public class RoomsAvailabilityServiceTests {
+public class RoomsAvailabilityApiServiceTests {
     private ArrayList<RoomsPerHour> mRoomsPerHour = new ArrayList<>();
-    private RoomsAvailabilityByHourImpl availabilityByHourService;
+    private RoomsAvailabilityServiceImpl availabilityByHourService;
 
     // for expected data
     private ArrayList<String>  mHoursList = DI.getNewHoursList();
@@ -27,7 +27,7 @@ public class RoomsAvailabilityServiceTests {
 
     @Before
     public void setup(){
-        availabilityByHourService = new RoomsAvailabilityByHourImpl();
+        availabilityByHourService = new RoomsAvailabilityServiceImpl();
     }
 
     @Test

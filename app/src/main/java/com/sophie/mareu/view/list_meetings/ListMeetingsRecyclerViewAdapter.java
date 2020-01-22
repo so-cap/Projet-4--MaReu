@@ -1,8 +1,6 @@
-package com.sophie.mareu.ui.list_meetings;
+package com.sophie.mareu.view.list_meetings;
 
-import android.content.Context;
 import android.content.res.Resources;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
-
-import static com.sophie.mareu.Constants.*;
 
 
 import java.util.ArrayList;

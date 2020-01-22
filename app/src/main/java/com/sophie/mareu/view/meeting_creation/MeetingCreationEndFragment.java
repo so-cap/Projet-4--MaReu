@@ -1,4 +1,4 @@
-package com.sophie.mareu.ui.meeting_creation;
+package com.sophie.mareu.view.meeting_creation;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,12 +24,12 @@ import androidx.fragment.app.FragmentManager;
 
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
-import com.sophie.mareu.controller.RoomsPerHour;
+import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.controller.AvailabilityByDate;
-import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
-import com.sophie.mareu.service.RoomsAvailabilityService;
-import com.sophie.mareu.ui.list_meetings.ListMeetingsFragment;
+import com.sophie.mareu.service.MeetingsApiServiceImpl;
+import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
+import com.sophie.mareu.service.RoomsAvailabilityApiService;
+import com.sophie.mareu.view.list_meetings.ListMeetingsFragment;
 
 import java.util.ArrayList;
 
@@ -39,29 +39,29 @@ import butterknife.ButterKnife;
 import static com.sophie.mareu.Constants.*;
 
 public class MeetingCreationEndFragment extends Fragment implements View.OnClickListener {
-    private String mTitle, mDetailSubject;
-    private ArrayList<String> mParticipants = new ArrayList<>();
-    private RoomsAvailabilityService mService;
-    private Meeting mMeeting;
-    private int mHourPosition;
+    private String title, subject;
+    private ArrayList<String> participants = new ArrayList<>();
+    private RoomsAvailabilityApiService service;
+    private Meeting meeting;
+    private int hourPosition;
 
     @BindView(R.id.meeting_title_input)
-    EditText mTitleView;
-    @BindView(R.id.meeting_subjectdetail_input)
-    EditText mDetailSubjectView;
+    EditText titleView;
+    @BindView(R.id.meeting_subject_input)
+    EditText subjectView;
     @BindView(R.id.email_one)
-    EditText mEmailView;
+    EditText emailView;
     @BindView(R.id.meeting_end_toolbar)
     Toolbar toolbar;
 
     @BindView(R.id.email_container)
-    LinearLayout mEmailContainer;
+    LinearLayout emailContainer;
     @BindView(R.id.add_more_email)
-    ImageButton mAddMoreEmail;
+    ImageButton addMoreEmail;
     @BindView(R.id.delete_mail)
-    ImageButton mDeleteEmail;
+    ImageButton deleteEmail;
     @BindView(R.id.save_meeting_btn)
-    Button mBtnEnd;
+    Button saveMeetingBtn;
 
     @Nullable
     @Override
@@ -75,20 +75,20 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
                     .popBackStack());
 
         if (getArguments() != null) {
-            mMeeting = getArguments().getParcelable(ARGUMENT_MEETING);
-            mService = (RoomsAvailabilityByHourImpl) getArguments().getSerializable(ARGUMENT_SERVICE);
-            mHourPosition = getArguments().getInt(ARGUMENT_HOUR_POSITION);
+            meeting = getArguments().getParcelable(ARGUMENT_MEETING);
+            service = (RoomsAvailabilityServiceImpl) getArguments().getSerializable(ARGUMENT_SERVICE);
+            hourPosition = getArguments().getInt(ARGUMENT_HOUR_POSITION);
         }
 
         setTextChangedListener();
-        mAddMoreEmail.setOnClickListener(this);
-        mBtnEnd.setOnClickListener(this);
-        mDeleteEmail.setOnClickListener(this);
+        addMoreEmail.setOnClickListener(this);
+        saveMeetingBtn.setOnClickListener(this);
+        deleteEmail.setOnClickListener(this);
         return view;
     }
 
     private void setTextChangedListener() {
-        mTitleView.addTextChangedListener(new TextWatcher() {
+        titleView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
@@ -97,7 +97,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty()) mBtnEnd.setVisibility(View.VISIBLE);
+                if (!s.toString().isEmpty()) saveMeetingBtn.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -125,35 +125,35 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         anotherEmail.setTextSize(20);
         anotherEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         anotherEmail.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        mEmailContainer.addView(anotherEmail);
-        mDeleteEmail.setVisibility(View.VISIBLE);
+        emailContainer.addView(anotherEmail);
+        deleteEmail.setVisibility(View.VISIBLE);
 
-        if (mEmailContainer.getChildCount() == 5)
-            mAddMoreEmail.setVisibility(View.INVISIBLE);
+        if (emailContainer.getChildCount() == 5)
+            addMoreEmail.setVisibility(View.INVISIBLE);
     }
 
     private void deleteEmailView() {
-        int emailViews = mEmailContainer.getChildCount();
+        int emailViews = emailContainer.getChildCount();
         if (emailViews > 1)
-            mEmailContainer.removeViewAt(emailViews - 1);
+            emailContainer.removeViewAt(emailViews - 1);
         if (emailViews == 3)
-            mDeleteEmail.setVisibility(View.GONE);
+            deleteEmail.setVisibility(View.GONE);
         if (emailViews < 6)
-            mAddMoreEmail.setVisibility(View.VISIBLE);
+            addMoreEmail.setVisibility(View.VISIBLE);
     }
 
     private boolean checkIfValid() {
-        mTitle = mTitleView.getText().toString();
-        mDetailSubject = mDetailSubjectView.getText().toString();
+        title = titleView.getText().toString();
+        subject = subjectView.getText().toString();
         initParticipantsList();
 
-        if ((!emailChecker()) || (mTitle.isEmpty() || mParticipants.isEmpty()) || mDetailSubject.isEmpty()) {
-            if (mTitle.isEmpty())
-                mTitleView.setError(getResources().getString(R.string.write_in_this_area));
-            if (mParticipants.isEmpty())
-                mEmailView.setError(getResources().getString(R.string.write_in_this_area));
-            if (mDetailSubject.isEmpty())
-                mDetailSubjectView.setError(getResources().getString(R.string.write_in_this_area));
+        if ((!emailChecker()) || (title.isEmpty() || participants.isEmpty()) || subject.isEmpty()) {
+            if (title.isEmpty())
+                titleView.setError(getResources().getString(R.string.write_in_this_area));
+            if (participants.isEmpty())
+                emailView.setError(getResources().getString(R.string.write_in_this_area));
+            if (subject.isEmpty())
+                subjectView.setError(getResources().getString(R.string.write_in_this_area));
             return false;
         }
         setMeeting();
@@ -161,16 +161,16 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     }
 
     private boolean emailChecker() {
-        int emailsNbr = mEmailContainer.getChildCount();
+        int emailsNbr = emailContainer.getChildCount();
         int errors = 0;
         EditText emailView;
 
         for (int position = 0; position < emailsNbr; position++) {
-            emailView = (EditText) mEmailContainer.getChildAt(position);
+            emailView = (EditText) emailContainer.getChildAt(position);
             String emptyView = emailView.getText().toString();
             if (!(Patterns.EMAIL_ADDRESS.matcher(emailView.getText().toString())).matches() && (!(emptyView.isEmpty()))) {
                 emailView.setError(getResources().getString(R.string.invalid_email));
-                mParticipants.clear();
+                participants.clear();
                 errors++;
             }
         }
@@ -178,13 +178,13 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     }
 
     private void initParticipantsList() {
-        int emailsEntered = mEmailContainer.getChildCount();
+        int emailsEntered = emailContainer.getChildCount();
 
         for (int i = 0; i < emailsEntered; i++) {
-            if (!(((EditText) mEmailContainer.getChildAt(i)).getText().toString().isEmpty())) {
+            if (!(((EditText) emailContainer.getChildAt(i)).getText().toString().isEmpty())) {
                 String emailAddress;
-                emailAddress = ((EditText) mEmailContainer.getChildAt(i)).getText().toString();
-                mParticipants.add(emailAddress);
+                emailAddress = ((EditText) emailContainer.getChildAt(i)).getText().toString();
+                participants.add(emailAddress);
             }
         }
     }
@@ -210,17 +210,17 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     }
 
     private void setMeeting() {
-        mMeeting.setTitle(mTitle);
-        mMeeting.setParticipants(mParticipants);
-        mMeeting.setSubject(mDetailSubject);
-        AvailabilityByDate.addMeeting(mMeeting, mMeeting.getDate());
+        meeting.setTitle(title);
+        meeting.setParticipants(participants);
+        meeting.setSubject(subject);
+        MeetingsApiServiceImpl.addMeeting(meeting, meeting.getDate());
         updateRoomAvailability();
     }
 
     private void updateRoomAvailability() {
-        ArrayList<RoomsPerHour> roomsPerHour = mService.getRoomsPerHourList();
-        roomsPerHour.get(mHourPosition).getRooms().remove(mMeeting.getRoomName());
-        mService.updateAvailableHours(roomsPerHour);
-        AvailabilityByDate.updateAvailabilityByDate(mMeeting.getDate(), mService);
+        ArrayList<RoomsPerHour> roomsPerHour = service.getRoomsPerHourList();
+        roomsPerHour.get(hourPosition).getRooms().remove(meeting.getRoomName());
+        service.updateAvailableHours(roomsPerHour);
+        MeetingsApiServiceImpl.updateAvailabilityByDate(meeting.getDate(), service);
     }
 }

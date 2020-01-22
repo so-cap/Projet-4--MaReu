@@ -1,4 +1,4 @@
-package com.sophie.mareu.controller;
+package com.sophie.mareu.model;
 
 import com.sophie.mareu.DI.DI;
 
@@ -10,7 +10,7 @@ public class RoomsPerHour {
     private ArrayList<String> rooms = new ArrayList<>();
     public static int key = 0;
 
-    RoomsPerHour() {}
+    public RoomsPerHour() {}
 
     public RoomsPerHour(String hour, ArrayList<String> rooms) {
         this.hour = new AbstractMap.SimpleEntry<>(key++, hour);
@@ -22,7 +22,7 @@ public class RoomsPerHour {
         return hour;
     }
 
-    void setHour(Integer key, String hour) {
+    public void setHour(Integer key, String hour) {
         this.hour = new AbstractMap.SimpleEntry<>(key, hour);
     }
 
@@ -30,7 +30,7 @@ public class RoomsPerHour {
         return rooms;
     }
 
-    void addRoom(String room){
+    public void addRoom(String room){
         rooms.add(room);
     }
 }

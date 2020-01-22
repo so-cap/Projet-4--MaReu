@@ -1,4 +1,4 @@
-package com.sophie.mareu.ui.meeting_creation;
+package com.sophie.mareu.view.meeting_creation;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -25,12 +24,12 @@ import androidx.fragment.app.FragmentTransaction;
 import com.adroitandroid.chipcloud.ChipCloud;
 import com.adroitandroid.chipcloud.ChipListener;
 import com.sophie.mareu.R;
-import com.sophie.mareu.controller.AvailabilityByDate;
+import com.sophie.mareu.service.MeetingsApiServiceImpl;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
-import com.sophie.mareu.controller.RoomsPerHour;
-import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
-import com.sophie.mareu.service.RoomsAvailabilityService;
+import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
+import com.sophie.mareu.model.RoomsPerHour;
+import com.sophie.mareu.view.list_meetings.ListMeetingsActivity;
+import com.sophie.mareu.service.RoomsAvailabilityApiService;
 import static com.sophie.mareu.Constants.*;
 
 import java.text.DateFormat;
@@ -53,7 +52,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     private Context mContext;
     private int mRoomPosition = -1;
     private Date mSelectedDate;
-    private RoomsAvailabilityService mRoomsAvailabilityService = new RoomsAvailabilityByHourImpl();
+    private RoomsAvailabilityApiService mRoomsAvailabilityApiService = new RoomsAvailabilityServiceImpl();
 
     @BindView(R.id.select_date)
     Button mDateView;
@@ -113,7 +112,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     private void initSpinner() {
-        mAvailableHoursAndRooms = mRoomsAvailabilityService.getRoomsPerHourList();
+        mAvailableHoursAndRooms = mRoomsAvailabilityApiService.getRoomsPerHourList();
         mSpinnerArray = new ArrayList<>();
         String mHour;
 
@@ -179,7 +178,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
         Bundle bundle = new Bundle();
         bundle.putParcelable(ARGUMENT_MEETING, meeting);
-        bundle.putSerializable(ARGUMENT_SERVICE, mRoomsAvailabilityService);
+        bundle.putSerializable(ARGUMENT_SERVICE, mRoomsAvailabilityApiService);
         bundle.putInt(ARGUMENT_HOUR_POSITION, mHourPosition);
         meetingCreationEndFragment.setArguments(bundle);
 
@@ -213,8 +212,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     private void updateCurrentService(Date newDate) {
-        mRoomsAvailabilityService = AvailabilityByDate.initCurrentService(newDate);
-        if (mRoomsAvailabilityService.getRoomsPerHourList().isEmpty()) {
+        mRoomsAvailabilityApiService = MeetingsApiServiceImpl.getCurrentRoomsPerHourService(newDate);
+        if (mRoomsAvailabilityApiService.getRoomsPerHourList().isEmpty()) {
             mMeetingsFull.setVisibility(View.VISIBLE);
             mChipCloud.setVisibility(View.GONE);
             mNextPage.setVisibility(View.GONE);

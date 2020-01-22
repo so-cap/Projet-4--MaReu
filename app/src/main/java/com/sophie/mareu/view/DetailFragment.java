@@ -1,4 +1,4 @@
-package com.sophie.mareu.ui;
+package com.sophie.mareu.view;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;

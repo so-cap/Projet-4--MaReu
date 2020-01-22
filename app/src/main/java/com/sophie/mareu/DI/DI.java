@@ -4,8 +4,8 @@ import android.content.res.Resources;
 
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
-import com.sophie.mareu.service.RoomsAvailabilityService;
+import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
+import com.sophie.mareu.service.RoomsAvailabilityApiService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class DI {
     private static Resources res;
+    private static RoomsAvailabilityApiService roomsPerHourService = new RoomsAvailabilityServiceImpl();
+
 
     public static void setResources(Resources resources){
         res = resources;
@@ -36,7 +38,12 @@ public class DI {
         return dummyMeetings;
     }
 
-    public static RoomsAvailabilityService getService(){
-        return new RoomsAvailabilityByHourImpl();
+    public static RoomsAvailabilityApiService getNewRoomsAvailabilityService(){
+        return new RoomsAvailabilityServiceImpl();
     }
+
+    public static RoomsAvailabilityApiService getRoomsPerHourService(){
+        return roomsPerHourService;
+    }
+
 }

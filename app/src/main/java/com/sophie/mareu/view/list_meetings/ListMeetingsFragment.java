@@ -1,4 +1,4 @@
-package com.sophie.mareu.ui.list_meetings;
+package com.sophie.mareu.view.list_meetings;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,14 +21,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
-import com.sophie.mareu.controller.AvailabilityByDate;
+import com.sophie.mareu.service.MeetingsApiServiceImpl;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
-import com.sophie.mareu.ui.DetailFragment;
-import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
+import com.sophie.mareu.view.DetailFragment;
+import com.sophie.mareu.view.meeting_creation.MeetingCreationActivity;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -110,7 +108,7 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
         else if (listCurrentState == SORTED)
             meetings = FilterAndSort.getSortedList();
         else {
-            meetings = AvailabilityByDate.getMeetings();
+            meetings = MeetingsApiServiceImpl.getMeetings();
             filterActivatedView.setVisibility(View.GONE);
         }
 
@@ -124,7 +122,7 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onDeleteMeetingClick(Meeting meeting) {
-        AvailabilityByDate.deleteMeeting(meeting);
+        MeetingsApiServiceImpl.deleteMeeting(meeting);
         initList(listCurrentState);
         if (meetings.isEmpty()) mNoNewMeetings.setVisibility(View.VISIBLE);
 
@@ -163,6 +161,4 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
                     fm.replace(R.id.frame_setmeeting, detailFragment).addToBackStack(null).commit();
         }
     }
-
-
 }

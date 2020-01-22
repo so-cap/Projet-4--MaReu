@@ -1,13 +1,14 @@
 package com.sophie.mareu.controller;
 
 import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.service.MeetingsApiServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
-import static com.sophie.mareu.controller.AvailabilityByDate.getMeetings;
+import static com.sophie.mareu.service.MeetingsApiServiceImpl.getMeetings;
 import static com.sophie.mareu.Constants.*;
 
 /**
@@ -20,9 +21,9 @@ public class FilterAndSort {
     public static void filterMeetingsList(Date date, String roomName) {
         mFilteredList.clear();
         if (date != null && roomName.isEmpty())
-            mFilteredList = new ArrayList<>(AvailabilityByDate.getMeetingsByDate(date));
+            mFilteredList = new ArrayList<>(MeetingsApiServiceImpl.getMeetingsByDate(date));
          else if (!(roomName.isEmpty()) && date == null) {
-            for (Map.Entry<Date, ArrayList<Meeting>> meetings : AvailabilityByDate.mMeetingsByDate.entrySet()) {
+            for (Map.Entry<Date, ArrayList<Meeting>> meetings : MeetingsApiServiceImpl.mMeetingsByDate.entrySet()) {
                 for (int i = 0; i < meetings.getValue().size(); i++) {
                     if (meetings.getValue().get(i).getRoomName().equals(roomName)) {
                         mFilteredList.add(new Meeting(meetings.getValue().get(i)));
@@ -30,7 +31,7 @@ public class FilterAndSort {
                 }
             }
         } else
-            for (Meeting entry : AvailabilityByDate.getMeetingsByDate(date)) {
+            for (Meeting entry : MeetingsApiServiceImpl.getMeetingsByDate(date)) {
                 if (entry.getRoomName().equals(roomName) && entry.getDate().equals(date)) {
                     mFilteredList.add(new Meeting(entry));
                 }

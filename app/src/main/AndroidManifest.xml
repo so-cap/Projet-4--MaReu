@@ -9,15 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.list_meetings.ListMeetingsActivity">
+        <activity android:name=".view.list_meetings.ListMeetingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.meeting_creation.MeetingCreationActivity" />
-        <activity android:name=".ui.DetailFragment" />
+        <activity android:name=".view.meeting_creation.MeetingCreationActivity" />
+        <activity android:name=".view.DetailFragment" />
     </application>
 
 </manifest>

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.list_meetings.ListMeetingsActivity"
+    tools:context=".view.list_meetings.ListMeetingsActivity"
     android:baselineAligned="false"
     android:id="@+id/activity_meeting_creation"
     android:weightSum="100">
