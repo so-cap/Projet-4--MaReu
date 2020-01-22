@@ -24,10 +24,4 @@
                 android:title="@string/descending"/>
         </menu>
     </item>
-
-    <item
-        android:id="@+id/display_all_meetings"
-        android:title="@string/display_all_meetings"
-        />
-
 </menu>

@@ -1,6 +1,7 @@
 package com.sophie.mareu;
 
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;

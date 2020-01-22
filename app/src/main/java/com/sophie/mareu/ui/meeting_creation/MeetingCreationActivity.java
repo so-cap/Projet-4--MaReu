@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.sophie.mareu.R;
-import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
+import com.sophie.mareu.ui.list_meetings.ListMeetingsFragment;
 
 /**
  * Created by SOPHIE on 31/12/2019.
@@ -36,9 +36,9 @@ public class MeetingCreationActivity extends AppCompatActivity {
 
     // to go back to the main activity display when in land mode
     private void configureAndShowListMeetingFragment() {
-        ListMeetingFragment listMeetingFragment = (ListMeetingFragment) getSupportFragmentManager()
+        ListMeetingsFragment listMeetingsFragment = (ListMeetingsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.frame_listmeetings);
-        if(listMeetingFragment == null && findViewById(R.id.frame_listmeetings) != null) {
+        if(listMeetingsFragment == null && findViewById(R.id.frame_listmeetings) != null) {
             finish();
         }
     }

@@ -38,20 +38,20 @@
         </FrameLayout>
     </LinearLayout>
 
-    <LinearLayout android:layout_weight="60"
-        android:layout_height="match_parent"
-        android:layout_width="0dp">
+    <View
+        android:background="@color/colorPrimary"
+        android:layout_width="2dp"
+        android:layout_height="match_parent" />
 
         <FrameLayout
+            android:layout_weight="60"
             android:id="@+id/frame_setmeeting"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/light_blue">
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
 
             <include
                 android:id="@+id/filter_activity"
                 layout="@layout/filter_fragment"
                 android:visibility="gone" />
         </FrameLayout>
-    </LinearLayout>
 </LinearLayout>

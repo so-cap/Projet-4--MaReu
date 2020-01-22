@@ -1,4 +1,4 @@
-package com.sophie.mareu.ui.list_meetings;
+package com.sophie.mareu.ui;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;

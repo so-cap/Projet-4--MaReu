@@ -29,7 +29,7 @@ import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.controller.AvailabilityByDate;
 import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
 import com.sophie.mareu.service.RoomsAvailabilityService;
-import com.sophie.mareu.ui.list_meetings.ListMeetingFragment;
+import com.sophie.mareu.ui.list_meetings.ListMeetingsFragment;
 
 import java.util.ArrayList;
 
@@ -198,12 +198,12 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
             if (activity.getClass().equals(MeetingCreationActivity.class)) {
                 activity.finish();
             } else {
-                ListMeetingFragment listMeetingFragment = (ListMeetingFragment) activity.getSupportFragmentManager().
+                ListMeetingsFragment listMeetingsFragment = (ListMeetingsFragment) activity.getSupportFragmentManager().
                         findFragmentById(R.id.frame_listmeetings);
                 FragmentManager fm = activity.getSupportFragmentManager();
                 fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                if (listMeetingFragment != null)
-                    listMeetingFragment.initList(UNCHANGED);
+                if (listMeetingsFragment != null)
+                    listMeetingsFragment.initList(UNCHANGED);
             }
         }
         Toast.makeText(getContext(), getResources().getString(R.string.meeting_saved), Toast.LENGTH_LONG).show();

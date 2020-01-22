@@ -21,10 +21,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.controller.AvailabilityByDate;
 import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
+import com.sophie.mareu.ui.DetailFragment;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
 
 import java.util.ArrayList;
@@ -38,10 +41,10 @@ import static com.sophie.mareu.Constants.*;
 /**
  * Created by SOPHIE on 30/12/2019.
  */
-public class ListMeetingFragment extends Fragment implements View.OnClickListener,
+public class ListMeetingsFragment extends Fragment implements View.OnClickListener,
         ListMeetingsRecyclerViewAdapter.OnDeleteMeetingListener, ListMeetingsRecyclerViewAdapter.OnMeetingClickListener {
-    private ArrayList<Meeting> mMeetings = new ArrayList<>();
-    private RecyclerView mRecyclerView;
+    private ArrayList<Meeting> meetings = new ArrayList<>();
+    private RecyclerView recyclerView;
     private Context context;
     private int listCurrentState = -1;
 
@@ -49,9 +52,9 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
     TextView mNoNewMeetings;
     @Nullable
     @BindView(R.id.fab)
-    FloatingActionButton mFab;
+    FloatingActionButton fab;
     @BindView(R.id.filter_activity)
-    CardView mFilterView;
+    CardView filterSelectionView;
     @BindView(R.id.filter_activated)
     View filterActivatedView;
 
@@ -65,16 +68,16 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         Toolbar mainToolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.my_toolbar);
         mainToolbar.setVisibility(View.VISIBLE);
         context = view.getContext();
-        mRecyclerView = (RecyclerView) view;
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+        recyclerView = (RecyclerView) view;
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
         if (getActivity() != null)
             ButterKnife.bind(this, getActivity());
 
-        if (mFab != null) {
-            mFab.setOnClickListener(this);
-            mFab.show();
+        if (fab != null) {
+            fab.setOnClickListener(this);
+            fab.show();
         }
         return view;
     }
@@ -82,6 +85,7 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
+        filterActivatedView.setVisibility(View.VISIBLE);
         //In case of clicking on the details of a meeting, the list will keep it's previous state.
         //If creating a new meeting, the list will be update without any filter.
         if (FilterAndSort.getFilteredList().isEmpty() && FilterAndSort.getSortedList().isEmpty())
@@ -102,19 +106,19 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         this.listCurrentState = listCurrentState;
 
         if (listCurrentState == FILTERED)
-            mMeetings = FilterAndSort.getFilteredList();
+            meetings = FilterAndSort.getFilteredList();
         else if (listCurrentState == SORTED)
-            mMeetings = FilterAndSort.getSortedList();
+            meetings = FilterAndSort.getSortedList();
         else {
-            mMeetings = AvailabilityByDate.getMeetings();
+            meetings = AvailabilityByDate.getMeetings();
             filterActivatedView.setVisibility(View.GONE);
         }
 
-        mRecyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(mMeetings));
-        ((ListMeetingsRecyclerViewAdapter) Objects.requireNonNull(mRecyclerView.getAdapter())).setOnDeleteMeetingListener(this);
-        ((ListMeetingsRecyclerViewAdapter) mRecyclerView.getAdapter()).setOnMeetingClickListener(this);
+        recyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(meetings));
+        ((ListMeetingsRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setOnDeleteMeetingListener(this);
+        ((ListMeetingsRecyclerViewAdapter) recyclerView.getAdapter()).setOnMeetingClickListener(this);
 
-        if (!(mMeetings.isEmpty())) mNoNewMeetings.setVisibility(View.GONE);
+        if (!(meetings.isEmpty())) mNoNewMeetings.setVisibility(View.GONE);
         else mNoNewMeetings.setVisibility(View.VISIBLE);
     }
 
@@ -122,13 +126,13 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
     public void onDeleteMeetingClick(Meeting meeting) {
         AvailabilityByDate.deleteMeeting(meeting);
         initList(listCurrentState);
-        if (mMeetings.isEmpty()) mNoNewMeetings.setVisibility(View.VISIBLE);
+        if (meetings.isEmpty()) mNoNewMeetings.setVisibility(View.VISIBLE);
 
         Fragment detailFragment = null;
         if (getFragmentManager() != null)
             detailFragment = getFragmentManager().findFragmentById(R.id.frame_setmeeting);
 
-        // To hide only the detailview of the deleted meeting.
+        // To pop only the detailFragment of the deleted meeting.
         if (detailFragment != null && detailFragment.getClass() == DetailFragment.class)
             if (detailFragment.getFragmentManager() != null) {
                 if (detailFragment.getArguments() != null
@@ -142,7 +146,7 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
         FragmentTransaction fm;
         AppCompatActivity activity = (AppCompatActivity) context;
 
-        mFilterView.setVisibility(View.GONE);
+        filterSelectionView.setVisibility(View.GONE);
         if (getFragmentManager() != null) {
             fm = getFragmentManager().beginTransaction();
 
@@ -154,8 +158,11 @@ public class ListMeetingFragment extends Fragment implements View.OnClickListene
             if (activity != null)
                 if (activity.findViewById(R.id.frame_setmeeting) == null && !getString(R.string.screen_type).equals("tablet")) {
                     fm.replace(R.id.frame_listmeetings, detailFragment).addToBackStack(null).commit();
+                    filterActivatedView.setVisibility(View.GONE);
                 } else
                     fm.replace(R.id.frame_setmeeting, detailFragment).addToBackStack(null).commit();
         }
     }
+
+
 }

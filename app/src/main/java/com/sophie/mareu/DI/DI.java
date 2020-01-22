@@ -4,6 +4,8 @@ import android.content.res.Resources;
 
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.service.RoomsAvailabilityByHourImpl;
+import com.sophie.mareu.service.RoomsAvailabilityService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,5 +34,9 @@ public class DI {
 
     public static List<Meeting> getDummyMeetings(){
         return dummyMeetings;
+    }
+
+    public static RoomsAvailabilityService getService(){
+        return new RoomsAvailabilityByHourImpl();
     }
 }
