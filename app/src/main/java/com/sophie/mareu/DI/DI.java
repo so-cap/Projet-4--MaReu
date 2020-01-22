@@ -1,7 +1,7 @@
 package com.sophie.mareu.DI;
 
-import com.sophie.mareu.controller.MeetingsController;
-import com.sophie.mareu.controller.RoomsAvailabilityController;
+import com.sophie.mareu.model.MeetingsHandler;
+import com.sophie.mareu.model.RoomsAvailabilityHandler;
 import com.sophie.mareu.model.Meeting;
 
 import java.util.ArrayList;
@@ -13,25 +13,25 @@ import java.util.List;
  * Created by SOPHIE on 31/12/2019.
  */
 public class DI {
-    private static MeetingsController meetingsController = new MeetingsController();
+    private static MeetingsHandler meetingsHandler = new MeetingsHandler();
     private static List<Meeting> dummyMeetings = DummyMeetingsGenerator.getDummyMeetings();
 
     public static List<Meeting> getDummyMeetings(){
         return dummyMeetings;
     }
 
-    public static RoomsAvailabilityController getNewRoomsAvailabilityController(){
-        return new RoomsAvailabilityController();
+    public static RoomsAvailabilityHandler getNewRoomsAvailabilityHandler(){
+        return new RoomsAvailabilityHandler();
     }
 
-    public static MeetingsController getMeetingsController(){
-        return meetingsController;
+    public static MeetingsHandler getMeetingsHandler(){
+        return meetingsHandler;
     }
 
 
     // For testing
-    public static MeetingsController getNewMeetingsController(){
-        return new MeetingsController();
+    public static MeetingsHandler getNewMeetingsHandler(){
+        return new MeetingsHandler();
     }
 
     public static ArrayList<String> getDummyHoursList(){

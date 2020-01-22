@@ -24,9 +24,9 @@ import androidx.fragment.app.FragmentManager;
 
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
-import com.sophie.mareu.controller.FilterAndSort;
-import com.sophie.mareu.controller.MeetingsController;
-import com.sophie.mareu.controller.RoomsAvailabilityController;
+import com.sophie.mareu.model.FilterAndSort;
+import com.sophie.mareu.model.MeetingsHandler;
+import com.sophie.mareu.model.RoomsAvailabilityHandler;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsFragment;
@@ -38,13 +38,13 @@ import butterknife.ButterKnife;
 
 import static com.sophie.mareu.Constants.ARGUMENT_HOUR_POSITION;
 import static com.sophie.mareu.Constants.ARGUMENT_MEETING;
-import static com.sophie.mareu.Constants.ARGUMENT_SERVICE;
+import static com.sophie.mareu.Constants.ARGUMENT_ROOMS_HANDLER;
 import static com.sophie.mareu.Constants.UNCHANGED;
 
 public class MeetingCreationEndFragment extends Fragment implements View.OnClickListener {
     private String title, subject;
     private ArrayList<String> participants = new ArrayList<>();
-    private RoomsAvailabilityController roomsController;
+    private RoomsAvailabilityHandler roomsAvailability;
     private Meeting meeting;
     private int hourPosition;
 
@@ -79,7 +79,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
 
         if (getArguments() != null) {
             meeting = getArguments().getParcelable(ARGUMENT_MEETING);
-            roomsController = (RoomsAvailabilityController) getArguments().getSerializable(ARGUMENT_SERVICE);
+            roomsAvailability = (RoomsAvailabilityHandler) getArguments().getSerializable(ARGUMENT_ROOMS_HANDLER);
             hourPosition = getArguments().getInt(ARGUMENT_HOUR_POSITION);
         }
 
@@ -220,11 +220,11 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     }
 
     private void updateRoomAvailability() {
-        MeetingsController meetingsController = DI.getMeetingsController();
-        meetingsController.addMeeting(meeting, meeting.getDate());
-        ArrayList<RoomsPerHour> roomsPerHour = roomsController.getRoomsPerHourList();
+        MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
+        meetingsHandler.addMeeting(meeting, meeting.getDate());
+        ArrayList<RoomsPerHour> roomsPerHour = roomsAvailability.getRoomsPerHourList();
         roomsPerHour.get(hourPosition).getRooms().remove(meeting.getRoomName());
-        roomsController.updateAvailableHours(roomsPerHour);
-        meetingsController.updateAvailabilityByDate(meeting.getDate(), roomsController);
+        roomsAvailability.updateAvailableHoursAndRooms(roomsPerHour);
+        meetingsHandler.updateAvailabilityByDate(meeting.getDate(), roomsAvailability);
     }
 }

@@ -24,10 +24,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
-import com.sophie.mareu.controller.FilterAndSort;
-import com.sophie.mareu.controller.MeetingsController;
-import com.sophie.mareu.controller.RoomsAvailabilityController;
+import com.sophie.mareu.model.FilterAndSort;
+import com.sophie.mareu.model.MeetingsHandler;
+import com.sophie.mareu.model.RoomsAvailabilityHandler;
 import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.ui.DetailFragment;
 import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
 
@@ -53,7 +54,7 @@ import static com.sophie.mareu.model.Meeting.iconSelector;
 public class ListMeetingsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
     private ListMeetingsFragment listMeetingsFragment = new ListMeetingsFragment();
     private DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE);
-    private MeetingsController meetingsController = DI.getMeetingsController();
+    private MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
     private Date selectedDate = null;
     private String selectedRoom = null;
     private Menu menu;
@@ -88,15 +89,22 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         setContentView(R.layout.activity_listmeetings);
         ButterKnife.bind(this);
         setSupportActionBar(mainToolbar);
-        meetingsController.setHoursAndRooms(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.hour_list))),
+        meetingsHandler.setHoursAndRooms(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.hour_list))),
                 new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.room_names))));
 
-        // Add dummyMeeting for presentation :
-        Meeting dummyMeeting = DI.getDummyMeetings().get(3);
-        meetingsController.addMeeting(dummyMeeting, dummyMeeting.getDate());
-        RoomsAvailabilityController roomsController = meetingsController.getCurrentRoomsAvailabilityService(dummyMeeting.getDate());
-        meetingsController.updateAvailabilityByDate(dummyMeeting.getDate(), roomsController);
+        // Add 3 dummyMeetings to illustrate presentation. Then update data :
+        for (int i = 0 ; i < DI.getDummyMeetings().size()-1; i++) {
+            Meeting meeting = DI.getDummyMeetings().get(i);
+            meetingsHandler.addMeeting(meeting, meeting.getDate());
+
+            RoomsAvailabilityHandler roomsController = meetingsHandler.getCurrentRoomsAvailabilityController(meeting.getDate());
+            ArrayList<RoomsPerHour> roomsPerHour = roomsController.getRoomsPerHourList();
+            roomsPerHour.get(meeting.getHour().getKey()).getRooms().remove(meeting.getRoomName());
+            roomsController.updateAvailableHoursAndRooms(roomsPerHour);
+            meetingsHandler.updateAvailabilityByDate(meeting.getDate(), roomsController);
+        }
         //
+
         configureAndShowListMeetingFragment();
         configureAndShowHomeStartMeetingCreationFragment();
 
@@ -194,7 +202,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     private void initSpinner() {
         ArrayList<String> spinnerArray = new ArrayList<>();
         spinnerArray.add("");
-        spinnerArray.addAll(meetingsController.getRooms());
+        spinnerArray.addAll(meetingsHandler.getRooms());
         ArrayAdapter<String> spinnerAdapter =
                 new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, spinnerArray);
         spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -291,7 +299,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     protected void onDestroy() {
         super.onDestroy();
         iconSelector = 0;
-        meetingsController.clearAllMeetings();
+        meetingsHandler.clearAllMeetings();
     }
 
     @Override

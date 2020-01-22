@@ -20,15 +20,15 @@ abstract class DummyMeetingsGenerator {
     private static Date dateD = new GregorianCalendar(2020, 9, 23).getTime();
 
     // each Integer is at the position where it would be added when first initialising the hours.
-    // (see RoomsPerHour.class & RoomsAvailabilityController.class)
+    // (see RoomsPerHour.class & RoomsAvailabilityHandler.class)
     private static List<Meeting> DUMMY_MEETINGS = Arrays.asList(
             new Meeting("Réunion A",new AbstractMap.SimpleEntry<>(6, "14h00"), "Peach",
-                    new ArrayList<>(Arrays.asList("maxime@lamzone.com","alex@lamzone.com")), getSubject(), dateA),
+                    new ArrayList<>(Arrays.asList("maxime@lamzone.com","alex@lamzone.com")), getDummySubject(), dateA),
             new Meeting("Réunion B",new AbstractMap.SimpleEntry<>(8, "16h00"), "Mario",
                     new ArrayList<>(Arrays.asList("paul@lamzone.com","viviane@lamzone.com")), getSubject(), dateB),
             new Meeting("Réunion C",new AbstractMap.SimpleEntry<>(11, "19h00"), "Mario",
                     new ArrayList<>(Arrays.asList("amandine@lamzone.com","luc@lamzone")), getSubject(), dateC),
-            new Meeting("Réunion A",new AbstractMap.SimpleEntry<>(7, "15h00"), "Peach",
+            new Meeting("Réunion D",new AbstractMap.SimpleEntry<>(7, "15h00"), "Peach",
                     new ArrayList<>(Arrays.asList("maxime@lamzone.com","alex@lamzone.com")), getDummySubject(), dateD));
 
     static ArrayList<Meeting> getDummyMeetings(){

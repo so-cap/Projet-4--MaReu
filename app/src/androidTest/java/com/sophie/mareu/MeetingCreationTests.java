@@ -8,8 +8,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.controller.MeetingsController;
-import com.sophie.mareu.controller.RoomsAvailabilityController;
+import com.sophie.mareu.model.MeetingsHandler;
+import com.sophie.mareu.model.RoomsAvailabilityHandler;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 import com.sophie.mareu.utils.DeleteViewAction;
@@ -45,8 +45,8 @@ public class MeetingCreationTests {
     private ListMeetingsActivity activity;
     private ArrayList<RoomsPerHour> roomsAndHours = new ArrayList<>();
     private ArrayList<String> rooms;
-    private RoomsAvailabilityController roomsController;
-    private MeetingsController meetingsController = DI.getMeetingsController();
+    private RoomsAvailabilityHandler roomsAvailability;
+    private MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
     private char A;
 
     @Rule
@@ -64,44 +64,47 @@ public class MeetingCreationTests {
                 getStringArray(R.array.hour_list)));
         rooms = new ArrayList<>(Arrays.asList(activity.getResources().
                 getStringArray(R.array.room_names)));
-        meetingsController.setHoursAndRooms(hours, rooms);
-        roomsController = new RoomsAvailabilityController();
+        meetingsHandler.setHoursAndRooms(hours, rooms);
+        roomsAvailability = new RoomsAvailabilityHandler();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    // All tests take into account the default dummyMeeting
-    // Therefore the expected values += 1 .
+    // All tests take into account the 3 default dummyMeetings added for presentation
+    // Therefore the expected values += 3 .
     @Test
     public void addNewMeetingWithSuccess() {
         addMeeting(0);
-        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(2));
+        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(4));
     }
 
     @Test
     public void addNewMeetingInLandscapeModeWithSuccess() {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        meetingsController.clearAllMeetings();
+        meetingsHandler.clearAllMeetings();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         addMeeting(0);
-        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(2));
+        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(4));
     }
 
     @Test
     public void deleteMeetingWithSuccess() {
-        for (int position = 3; position != 0; position--)
-            addMeeting(position);
-
-        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(4));
+        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(3));
         onView(ViewMatchers.withId(R.id.meetings_list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, new DeleteViewAction()));
-        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(3));
+        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(2));
     }
 
     @Test
     public void openDetailsWithSuccess_OnClickOnMeeting() {
+        addMeeting(0);
         onView(ViewMatchers.withId(R.id.meetings_list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(ViewMatchers.withId(R.id.detail_fragment)).check(matches(isDisplayed()));
@@ -109,13 +112,12 @@ public class MeetingCreationTests {
 
     @Test
     public void deleteAllMeetingsOnPhoneRotationWithSuccess() throws InterruptedException {
-        for (int position = 2; position != 0; position--)
-            addMeeting(position);
-        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(3));
+        addMeeting(0);
+        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(4));
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        meetingsController.clearAllMeetings();
+        meetingsHandler.clearAllMeetings();
         Thread.sleep(2000);
-        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(1));
+        onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(3));
     }
 
     @Test
@@ -125,9 +127,9 @@ public class MeetingCreationTests {
         ArrayList<String> dummyRooms = new ArrayList<>(Arrays.asList("Peach", "Luigi"));
         roomsAndHours.add(new RoomsPerHour("8h00", new ArrayList<>(dummyRooms)));
         roomsAndHours.add(new RoomsPerHour("9h00", new ArrayList<>(dummyRooms)));
-        roomsController.updateAvailableHours(roomsAndHours);
+        roomsAvailability.updateAvailableHoursAndRooms(roomsAndHours);
         Date today = getTodaysDateWithoutTime();
-        meetingsController.updateAvailabilityByDate(today, roomsController);
+        meetingsHandler.updateAvailabilityByDate(today, roomsAvailability);
 
         for (int i = 0; i < initialHoursAvailable; i++) {
             int initialRoomsCount = dummyRooms.size() - 1;

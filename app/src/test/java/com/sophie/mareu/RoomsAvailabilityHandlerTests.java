@@ -1,8 +1,8 @@
 package com.sophie.mareu;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.controller.MeetingsController;
-import com.sophie.mareu.controller.RoomsAvailabilityController;
+import com.sophie.mareu.model.MeetingsHandler;
+import com.sophie.mareu.model.RoomsAvailabilityHandler;
 import com.sophie.mareu.model.RoomsPerHour;
 
 import org.junit.Before;
@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
-public class RoomsAvailabilityControllerTests {
+public class RoomsAvailabilityHandlerTests {
     private ArrayList<RoomsPerHour> roomsPerHour = new ArrayList<>();
-    private RoomsAvailabilityController roomsController;
-    private MeetingsController meetingsController = DI.getNewMeetingsController();
+    private RoomsAvailabilityHandler roomsController;
+    private MeetingsHandler meetingsHandler = DI.getNewMeetingsHandler();
 
     // for expected data
     private ArrayList<String> hours = DI.getDummyHoursList();
@@ -26,8 +26,8 @@ public class RoomsAvailabilityControllerTests {
 
     @Before
     public void setup(){
-        meetingsController.setHoursAndRooms(hours, rooms);
-        roomsController = new RoomsAvailabilityController();
+        meetingsHandler.setHoursAndRooms(hours, rooms);
+        roomsController = new RoomsAvailabilityHandler();
     }
 
     @Test
@@ -56,7 +56,7 @@ public class RoomsAvailabilityControllerTests {
         }
 
         // Updating list
-        roomsController.updateAvailableHours(roomsPerHour);
+        roomsController.updateAvailableHoursAndRooms(roomsPerHour);
 
         //Index 1 = "11h00" after removing hour availability
         assertEquals(roomsPerHour.get(1).getHour().getValue(), "10h00");

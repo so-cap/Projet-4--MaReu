@@ -23,8 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
-import com.sophie.mareu.controller.FilterAndSort;
-import com.sophie.mareu.controller.MeetingsController;
+import com.sophie.mareu.model.FilterAndSort;
+import com.sophie.mareu.model.MeetingsHandler;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.ui.DetailFragment;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
@@ -43,7 +43,7 @@ import static com.sophie.mareu.Constants.*;
 public class ListMeetingsFragment extends Fragment implements View.OnClickListener,
         ListMeetingsRecyclerViewAdapter.OnDeleteMeetingListener, ListMeetingsRecyclerViewAdapter.OnMeetingClickListener {
     private ArrayList<Meeting> meetings = new ArrayList<>();
-    private MeetingsController meetingsController = DI.getMeetingsController();
+    private MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
     private RecyclerView recyclerView;
     private Context context;
     private int listCurrentState = -1;
@@ -110,7 +110,7 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
         else if (listCurrentState == SORTED)
             meetings = FilterAndSort.getSortedList();
         else {
-            meetings = meetingsController.getMeetings();
+            meetings = meetingsHandler.getMeetings();
             filterActivatedView.setVisibility(View.GONE);
         }
 
@@ -124,7 +124,7 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onDeleteMeetingClick(Meeting meeting) {
-        meetingsController.deleteMeeting(meeting);
+        meetingsHandler.deleteMeeting(meeting);
         initList(listCurrentState);
         if (meetings.isEmpty()) mNoNewMeetings.setVisibility(View.VISIBLE);
 

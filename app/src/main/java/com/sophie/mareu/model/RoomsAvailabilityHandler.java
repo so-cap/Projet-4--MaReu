@@ -1,6 +1,4 @@
-package com.sophie.mareu.controller;
-
-import com.sophie.mareu.model.RoomsPerHour;
+package com.sophie.mareu.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,7 +6,7 @@ import java.util.ArrayList;
 /**
  * Created by SOPHIE on 30/12/2019.
  */
-public class RoomsAvailabilityController implements Serializable {
+public class RoomsAvailabilityHandler implements Serializable {
     private ArrayList<RoomsPerHour> roomsPerHourList = new ArrayList<>();
 
     public void initRoomsPerHourList(ArrayList<String> hours, ArrayList<String> rooms){
@@ -26,7 +24,7 @@ public class RoomsAvailabilityController implements Serializable {
         return roomsPerHourList;
     }
 
-    public void updateAvailableHours(ArrayList<RoomsPerHour> availableHoursAndRooms) {
+    public void updateAvailableHoursAndRooms(ArrayList<RoomsPerHour> availableHoursAndRooms) {
         roomsPerHourList = availableHoursAndRooms;
 
         // delete hour availability if all the rooms are taken

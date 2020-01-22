@@ -1,9 +1,8 @@
-package com.sophie.mareu.controller;
+package com.sophie.mareu.model;
 
 import androidx.annotation.VisibleForTesting;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.model.Meeting;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,14 +17,14 @@ import static com.sophie.mareu.Constants.*;
 public class FilterAndSort {
     private static ArrayList<Meeting> mFilteredList = new ArrayList<>();
     private static ArrayList<Meeting> mSortedList = new ArrayList<>();
-    private static MeetingsController meetingsController = DI.getMeetingsController();
+    private static MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
 
     public static void filterMeetingsList(Date date, String roomName) {
         mFilteredList.clear();
         if (date != null && roomName.isEmpty())
-            mFilteredList = new ArrayList<>(meetingsController.getMeetingsByDate(date));
+            mFilteredList = new ArrayList<>(meetingsHandler.getMeetingsByDate(date));
          else if (!(roomName.isEmpty()) && date == null) {
-            for (Map.Entry<Date, ArrayList<Meeting>> meetings : meetingsController.meetingsByDate.entrySet()) {
+            for (Map.Entry<Date, ArrayList<Meeting>> meetings : meetingsHandler.meetingsByDate.entrySet()) {
                 for (int i = 0; i < meetings.getValue().size(); i++) {
                     if (meetings.getValue().get(i).getRoomName().equals(roomName)) {
                         mFilteredList.add(new Meeting(meetings.getValue().get(i)));
@@ -33,7 +32,7 @@ public class FilterAndSort {
                 }
             }
         } else
-            for (Meeting entry : meetingsController.getMeetingsByDate(date)) {
+            for (Meeting entry : meetingsHandler.getMeetingsByDate(date)) {
                 if (entry.getRoomName().equals(roomName) && entry.getDate().equals(date)) {
                     mFilteredList.add(new Meeting(entry));
                 }
@@ -43,7 +42,7 @@ public class FilterAndSort {
     public static void sortList(int listOrder) {
         if (listOrder == ASCENDING || listOrder == DESCENDING) {
             if (mFilteredList.isEmpty())
-                mSortedList = meetingsController.getMeetings();
+                mSortedList = meetingsHandler.getMeetings();
             else
                 mSortedList = mFilteredList;
             Collections.sort(mSortedList, (meeting1, meeting2) -> meeting1.getHour().getKey().compareTo(meeting2.getHour().getKey()));
@@ -71,7 +70,7 @@ public class FilterAndSort {
     }
 
     @VisibleForTesting
-    public static void setMeetingsController(MeetingsController pMeetingsController){
-        meetingsController = pMeetingsController;
+    public static void setMeetingsHandler(MeetingsHandler pMeetingsHandler){
+        meetingsHandler = pMeetingsHandler;
     }
 }

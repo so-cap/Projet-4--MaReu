@@ -1,8 +1,6 @@
-package com.sophie.mareu.controller;
+package com.sophie.mareu.model;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.model.RoomsPerHour;
 
 
 import java.util.ArrayList;
@@ -14,20 +12,20 @@ import java.util.Objects;
 /**
  * Created by SOPHIE on 05/01/2020.
  */
-public class MeetingsController {
+public class MeetingsHandler {
     public HashMap<Date, ArrayList<Meeting>> meetingsByDate = new HashMap<>();
-    public HashMap<Date, RoomsAvailabilityController> serviceByDate = new HashMap<>();
+    public HashMap<Date, RoomsAvailabilityHandler> roomsAvailabilityByDate = new HashMap<>();
     private ArrayList<String> hours;
     private ArrayList<String> rooms;
 
-    public RoomsAvailabilityController getCurrentRoomsAvailabilityService(Date date) {
-        for (int position = 0; position < serviceByDate.size(); position++) {
-            if (serviceByDate.containsKey(date))
-                return serviceByDate.get(date);
+    public RoomsAvailabilityHandler getCurrentRoomsAvailabilityController(Date date) {
+        for (int position = 0; position < roomsAvailabilityByDate.size(); position++) {
+            if (roomsAvailabilityByDate.containsKey(date))
+                return roomsAvailabilityByDate.get(date);
         }
-        RoomsAvailabilityController roomsController = DI.getNewRoomsAvailabilityController();
-        roomsController.initRoomsPerHourList(hours, rooms);
-        return roomsController;
+        RoomsAvailabilityHandler roomsHandler = DI.getNewRoomsAvailabilityHandler();
+        roomsHandler.initRoomsPerHourList(hours, rooms);
+        return roomsHandler;
     }
 
     public void setHoursAndRooms(ArrayList<String> hours, ArrayList<String> rooms){
@@ -35,9 +33,9 @@ public class MeetingsController {
         this.rooms = rooms;
     }
 
-    public void updateAvailabilityByDate(Date date, RoomsAvailabilityController roomsAvailability) {
-        serviceByDate.remove(date);
-        serviceByDate.put(date, roomsAvailability);
+    public void updateAvailabilityByDate(Date date, RoomsAvailabilityHandler roomsAvailability) {
+        roomsAvailabilityByDate.remove(date);
+        roomsAvailabilityByDate.put(date, roomsAvailability);
     }
 
     public void addMeeting(Meeting meeting, Date date) {
@@ -66,13 +64,13 @@ public class MeetingsController {
     }
 
     public void clearAllMeetings() {
-        serviceByDate.clear();
+        roomsAvailabilityByDate.clear();
         meetingsByDate.clear();
         FilterAndSort.clearLists();
     }
 
     public void deleteMeeting(Meeting meeting) {
-        RoomsAvailabilityController currentRoomsController = serviceByDate.get(meeting.getDate());
+        RoomsAvailabilityHandler currentRoomsController = roomsAvailabilityByDate.get(meeting.getDate());
         if (currentRoomsController != null) {
             ArrayList<RoomsPerHour> roomsPerHourList = currentRoomsController.getRoomsPerHourList();
             Integer meetingHourPosition = meeting.getHour().getKey();
@@ -100,11 +98,11 @@ public class MeetingsController {
                 meetingsByDate.remove(meeting.getDate());
 
             // update service
-            currentRoomsController.updateAvailableHours(roomsPerHourList);
+            currentRoomsController.updateAvailableHoursAndRooms(roomsPerHourList);
         }
     }
 
-    public ArrayList<String> getHours() {
+    ArrayList<String> getHours() {
         return hours;
     }
 

@@ -1,8 +1,8 @@
 package com.sophie.mareu;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.controller.MeetingsController;
-import com.sophie.mareu.controller.FilterAndSort;
+import com.sophie.mareu.model.MeetingsHandler;
+import com.sophie.mareu.model.FilterAndSort;
 import com.sophie.mareu.model.Meeting;
 
 import org.junit.Before;
@@ -34,15 +34,15 @@ public class FilterAndSortTests {
     private List<Meeting> meetings = DI.getDummyMeetings();
     private ArrayList<Meeting> expectedList = new ArrayList<>();
     private ArrayList<Meeting> result = new ArrayList<>();
-    private MeetingsController meetingsController = DI.getNewMeetingsController();
+    private MeetingsHandler meetingsHandler = DI.getNewMeetingsHandler();
 
     @Before
     public void setup(){
         FilterAndSort.clearLists();
-        FilterAndSort.setMeetingsController(meetingsController);
+        FilterAndSort.setMeetingsHandler(meetingsHandler);
 
         for (Meeting entry : meetings){
-            meetingsController.addMeeting(entry, entry.getDate());
+            meetingsHandler.addMeeting(entry, entry.getDate());
         }
     }
 

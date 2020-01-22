@@ -8,6 +8,6 @@ public class Constants {
     public static final int UNCHANGED = -1;
 
     public static final String ARGUMENT_MEETING = "selected meeting";
-    public static final String ARGUMENT_SERVICE = "rooms availability service";
+    public static final String ARGUMENT_ROOMS_HANDLER = "rooms availability service";
     public static final String ARGUMENT_HOUR_POSITION = "hour position";
 }

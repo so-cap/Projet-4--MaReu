@@ -25,51 +25,51 @@ import butterknife.ButterKnife;
  */
 
 public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMeetingsRecyclerViewAdapter.ViewHolder> {
-    private ArrayList<Meeting> mMeetings;
-    private OnDeleteMeetingListener mOnDeleteMeetingListener;
-    private OnMeetingClickListener mOnMeetingClickListener;
+    private ArrayList<Meeting> meetings;
+    private OnDeleteMeetingListener onDeleteMeetingListener;
+    private OnMeetingClickListener onMeetingClickListener;
 
     ListMeetingsRecyclerViewAdapter(ArrayList<Meeting> meetings) {
-        mMeetings = meetings;
+        this.meetings = meetings;
     }
 
     @NonNull
     @Override
     public ListMeetingsRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_meeting, parent, false);
-        return new ViewHolder(view, mOnDeleteMeetingListener, mOnMeetingClickListener);
+        return new ViewHolder(view, onDeleteMeetingListener, onMeetingClickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ListMeetingsRecyclerViewAdapter.ViewHolder holder, int position) {
-        holder.bind(mMeetings.get(position));
+        holder.bind(meetings.get(position));
     }
 
     @Override
     public int getItemCount() {
-        if (mMeetings == null)
+        if (meetings == null)
             return 0;
         else
-            return mMeetings.size();
+            return meetings.size();
     }
 
     void setOnDeleteMeetingListener(OnDeleteMeetingListener onDeleteMeetingListener){
-        mOnDeleteMeetingListener = onDeleteMeetingListener;
+        this.onDeleteMeetingListener = onDeleteMeetingListener;
     }
 
     void setOnMeetingClickListener(OnMeetingClickListener onMeetingClickListener){
-        mOnMeetingClickListener = onMeetingClickListener;
+        this.onMeetingClickListener = onMeetingClickListener;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.titleView)
-        TextView mTitle;
+        TextView title;
         @BindView(R.id.participants)
-        TextView mParticipants;
+        TextView participants;
         @BindView(R.id.meeting_icon)
-        ImageView mIcon;
+        ImageView icon;
         @BindView(R.id.delete_meeting_btn)
-        ImageButton mDeleteButton;
+        ImageButton deleteButton;
 
         OnDeleteMeetingListener onDeleteMeetingListener;
         OnMeetingClickListener onMeetingClickListener;
@@ -85,18 +85,18 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
 
         void bind(Meeting meeting) {
             Resources res = itemView.getResources();
-            mIcon.setImageDrawable(res.getDrawable(meeting.getIcon()));
-            mTitle.setText(res.getString(R.string.title_hour_room, meeting.getTitle(), meeting.getHour().getValue(), meeting.getRoomName()));
-            mParticipants.setText(meeting.getParticipantsInOneString());
-            mDeleteButton.setOnClickListener(this);
+            icon.setImageDrawable(res.getDrawable(meeting.getIcon()));
+            title.setText(res.getString(R.string.title_hour_room, meeting.getTitle(), meeting.getHour().getValue(), meeting.getRoomName()));
+            participants.setText(meeting.getParticipantsInOneString());
+            deleteButton.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.delete_meeting_btn)
-                onDeleteMeetingListener.onDeleteMeetingClick(mMeetings.get(getAdapterPosition()));
+                onDeleteMeetingListener.onDeleteMeetingClick(meetings.get(getAdapterPosition()));
             else
-                onMeetingClickListener.onMeetingClick(mMeetings.get(getAdapterPosition()));
+                onMeetingClickListener.onMeetingClick(meetings.get(getAdapterPosition()));
         }
     }
 

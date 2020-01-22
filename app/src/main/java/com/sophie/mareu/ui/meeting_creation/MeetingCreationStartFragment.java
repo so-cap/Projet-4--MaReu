@@ -25,8 +25,8 @@ import com.adroitandroid.chipcloud.ChipCloud;
 import com.adroitandroid.chipcloud.ChipListener;
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
-import com.sophie.mareu.controller.MeetingsController;
-import com.sophie.mareu.controller.RoomsAvailabilityController;
+import com.sophie.mareu.model.MeetingsHandler;
+import com.sophie.mareu.model.RoomsAvailabilityHandler;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
 
 import static com.sophie.mareu.Constants.ARGUMENT_HOUR_POSITION;
 import static com.sophie.mareu.Constants.ARGUMENT_MEETING;
-import static com.sophie.mareu.Constants.ARGUMENT_SERVICE;
+import static com.sophie.mareu.Constants.ARGUMENT_ROOMS_HANDLER;
 
 public class MeetingCreationStartFragment extends Fragment implements View.OnClickListener, ChipListener, DatePickerDialog.OnDateSetListener {
     private ArrayList<RoomsPerHour> roomsPerHourList;
@@ -55,7 +55,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     private Context context;
     private int roomPosition = -1;
     private Date selectedDate;
-    private RoomsAvailabilityController roomsController = new RoomsAvailabilityController();
+    private RoomsAvailabilityHandler roomsAvailability = new RoomsAvailabilityHandler();
 
     @BindView(R.id.select_date)
     Button dateView;
@@ -115,7 +115,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     private void initSpinner() {
-        roomsPerHourList = roomsController.getRoomsPerHourList();
+        roomsPerHourList = roomsAvailability.getRoomsPerHourList();
         spinnerArray = new ArrayList<>();
         String mHour;
 
@@ -181,7 +181,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
         Bundle bundle = new Bundle();
         bundle.putParcelable(ARGUMENT_MEETING, meeting);
-        bundle.putSerializable(ARGUMENT_SERVICE, roomsController);
+        bundle.putSerializable(ARGUMENT_ROOMS_HANDLER, roomsAvailability);
         bundle.putInt(ARGUMENT_HOUR_POSITION, hourPosition);
         meetingCreationEndFragment.setArguments(bundle);
 
@@ -215,9 +215,9 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     private void updateCurrentService(Date newDate) {
-        MeetingsController controller = DI.getMeetingsController();
-        roomsController = controller.getCurrentRoomsAvailabilityService(newDate);
-        if (roomsController.getRoomsPerHourList().isEmpty()) {
+        MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
+        roomsAvailability = meetingsHandler.getCurrentRoomsAvailabilityController(newDate);
+        if (roomsAvailability.getRoomsPerHourList().isEmpty()) {
             meetingsFull.setVisibility(View.VISIBLE);
             chipCloud.setVisibility(View.GONE);
             nextPage.setVisibility(View.GONE);
