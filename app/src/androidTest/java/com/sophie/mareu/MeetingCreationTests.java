@@ -8,10 +8,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.service.MeetingsController;
-import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
+import com.sophie.mareu.controller.service.MeetingsController;
+import com.sophie.mareu.controller.service.RoomsAvailabilityServiceImpl;
 import com.sophie.mareu.model.RoomsPerHour;
-import com.sophie.mareu.service.RoomsAvailabilityApiService;
+import com.sophie.mareu.controller.service.RoomsAvailabilityApiService;
 import com.sophie.mareu.view.list_meetings.ListMeetingsActivity;
 import com.sophie.mareu.utils.DeleteViewAction;
 

@@ -4,7 +4,7 @@ import androidx.annotation.VisibleForTesting;
 
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.MeetingsController;
+import com.sophie.mareu.controller.service.MeetingsController;
 
 import java.util.ArrayList;
 import java.util.Collections;

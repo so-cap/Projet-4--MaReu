@@ -1,9 +1,9 @@
 package com.sophie.mareu.DI;
 
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.MeetingsController;
-import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
-import com.sophie.mareu.service.RoomsAvailabilityApiService;
+import com.sophie.mareu.controller.service.MeetingsController;
+import com.sophie.mareu.controller.service.RoomsAvailabilityServiceImpl;
+import com.sophie.mareu.controller.service.RoomsAvailabilityApiService;
 
 import java.util.ArrayList;
 import java.util.Arrays;

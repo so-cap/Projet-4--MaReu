@@ -25,12 +25,12 @@ import android.widget.Toast;
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
-import com.sophie.mareu.service.MeetingsController;
+import com.sophie.mareu.controller.service.MeetingsController;
 
 import static com.sophie.mareu.Constants.*;
 
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.RoomsAvailabilityApiService;
+import com.sophie.mareu.controller.service.RoomsAvailabilityApiService;
 import com.sophie.mareu.view.DetailFragment;
 import com.sophie.mareu.view.meeting_creation.HomeStartMeetingCreationFragment;
 

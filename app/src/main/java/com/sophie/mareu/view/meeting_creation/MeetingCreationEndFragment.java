@@ -27,9 +27,9 @@ import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.MeetingsController;
-import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
-import com.sophie.mareu.service.RoomsAvailabilityApiService;
+import com.sophie.mareu.controller.service.MeetingsController;
+import com.sophie.mareu.controller.service.RoomsAvailabilityServiceImpl;
+import com.sophie.mareu.controller.service.RoomsAvailabilityApiService;
 import com.sophie.mareu.view.list_meetings.ListMeetingsFragment;
 
 import java.util.ArrayList;

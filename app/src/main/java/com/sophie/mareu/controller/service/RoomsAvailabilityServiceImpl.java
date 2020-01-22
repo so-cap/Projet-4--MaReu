@@ -1,7 +1,7 @@
-package com.sophie.mareu.service;
+package com.sophie.mareu.controller.service;
 
 import com.sophie.mareu.model.RoomsPerHour;
-import com.sophie.mareu.service.RoomsAvailabilityApiService;
+
 import java.util.ArrayList;
 
 /**

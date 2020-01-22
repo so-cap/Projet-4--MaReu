@@ -3,9 +3,9 @@ package com.sophie.mareu;
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.MeetingsController;
-import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
-import com.sophie.mareu.service.RoomsAvailabilityApiService;
+import com.sophie.mareu.controller.service.MeetingsController;
+import com.sophie.mareu.controller.service.RoomsAvailabilityServiceImpl;
+import com.sophie.mareu.controller.service.RoomsAvailabilityApiService;
 
 import org.junit.Assert;
 import org.junit.Before;
