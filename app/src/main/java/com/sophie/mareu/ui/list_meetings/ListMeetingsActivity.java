@@ -25,9 +25,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.FilterAndSort;
+import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.model.MeetingsHandler;
 import com.sophie.mareu.model.RoomsAvailabilityHandler;
-import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.ui.DetailFragment;
 import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
@@ -96,12 +96,12 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         for (int i = 0 ; i < DI.getDummyMeetings().size()-1; i++) {
             Meeting meeting = DI.getDummyMeetings().get(i);
             meetingsHandler.addMeeting(meeting, meeting.getDate());
+            RoomsAvailabilityHandler roomsAvailability = meetingsHandler.getCurrentRoomsAvailabilityController(meeting.getDate());
+            meetingsHandler.updateAvailabilityByDate(meeting.getDate(), roomsAvailability);
 
-            RoomsAvailabilityHandler roomsController = meetingsHandler.getCurrentRoomsAvailabilityController(meeting.getDate());
-            ArrayList<RoomsPerHour> roomsPerHour = roomsController.getRoomsPerHourList();
+            ArrayList<RoomsPerHour> roomsPerHour = roomsAvailability.getRoomsPerHourList();
             roomsPerHour.get(meeting.getHour().getKey()).getRooms().remove(meeting.getRoomName());
-            roomsController.updateAvailableHoursAndRooms(roomsPerHour);
-            meetingsHandler.updateAvailabilityByDate(meeting.getDate(), roomsController);
+            roomsAvailability.updateAvailableHoursAndRooms(roomsPerHour);
         }
 
         configureAndShowListMeetingFragment();

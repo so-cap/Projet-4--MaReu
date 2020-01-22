@@ -6,6 +6,8 @@ import com.sophie.mareu.model.Meeting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -40,5 +42,15 @@ public class DI {
 
      public static ArrayList<String> getDummyRoomsList(){
         return new ArrayList<>(Arrays.asList("Peach", "Mario", "Bowser","Luigi", "Waluigi", "Yoshi"));
+    }
+
+    // To be able to do tests correctly no matter the hour of running the test.
+    public static Date getTodaysDateWithoutTime() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 }

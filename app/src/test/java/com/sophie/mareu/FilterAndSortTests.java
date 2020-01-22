@@ -49,7 +49,7 @@ public class FilterAndSortTests {
     @Test
     public void filterListByRoomWithSuccess(){
         String room = "Mario";
-        expectedList = new ArrayList<>(Arrays.asList(meetingB,meetingC));
+        expectedList = new ArrayList<>(Arrays.asList(meetingC,meetingB));
 
         FilterAndSort.filterMeetingsList(null, room);
         result = FilterAndSort.getFilteredList();

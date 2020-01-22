@@ -21,7 +21,6 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -128,7 +127,7 @@ public class MeetingCreationTests {
         roomsAndHours.add(new RoomsPerHour("8h00", new ArrayList<>(dummyRooms)));
         roomsAndHours.add(new RoomsPerHour("9h00", new ArrayList<>(dummyRooms)));
         roomsAvailability.updateAvailableHoursAndRooms(roomsAndHours);
-        Date today = getTodaysDateWithoutTime();
+        Date today = DI.getTodaysDateWithoutTime();
         meetingsHandler.updateAvailabilityByDate(today, roomsAvailability);
 
         for (int i = 0; i < initialHoursAvailable; i++) {
@@ -159,13 +158,4 @@ public class MeetingCreationTests {
         onView(withId(R.id.save_meeting_btn)).perform(click());
     }
 
-    // To be able to test correctly no matter the time of running the test.
-    public static Date getTodaysDateWithoutTime() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
-    }
 }

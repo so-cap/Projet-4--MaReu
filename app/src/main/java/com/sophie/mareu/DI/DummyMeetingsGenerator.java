@@ -5,7 +5,6 @@ import com.sophie.mareu.model.Meeting;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -14,10 +13,10 @@ import java.util.List;
  * Created by SOPHIE on 04/01/2020.
  */
 abstract class DummyMeetingsGenerator {
-    private static Date dateA = Calendar.getInstance().getTime();
-    private static Date dateB = new GregorianCalendar(2020, 7, 23).getTime();
-    private static Date dateC = new GregorianCalendar(2020, 4, 3).getTime();
-    private static Date dateD = new GregorianCalendar(2020, 9, 23).getTime();
+    private static Date dateA = DI.getTodaysDateWithoutTime();
+    private static Date dateB = new GregorianCalendar(2020, 4, 23).getTime();
+    private static Date dateC = new GregorianCalendar(2020, 7, 3).getTime();
+    private static Date dateD = new GregorianCalendar(2020, 9, 19).getTime();
 
     // each Integer is at the position where it would be added when first initialising the hours.
     // (see RoomsPerHour.class & RoomsAvailabilityHandler.class)
@@ -44,5 +43,4 @@ abstract class DummyMeetingsGenerator {
                 "Phasellus et nisi suscipit, pulvinar lectus vitae, sagittis tortor.\n" +
                 "Nullam sit amet felis euismod, facilisis sem quis.";
     }
-
 }
