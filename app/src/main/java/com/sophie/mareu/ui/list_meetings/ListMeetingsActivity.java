@@ -92,7 +92,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         meetingsHandler.setHoursAndRooms(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.hour_list))),
                 new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.room_names))));
 
-        // Add 3 dummyMeetings to illustrate presentation. Then update data :
+        // Add 3 dummyMeetings to illustrate presentation. Then update data.
         for (int i = 0 ; i < DI.getDummyMeetings().size()-1; i++) {
             Meeting meeting = DI.getDummyMeetings().get(i);
             meetingsHandler.addMeeting(meeting, meeting.getDate());
@@ -103,7 +103,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
             roomsController.updateAvailableHoursAndRooms(roomsPerHour);
             meetingsHandler.updateAvailabilityByDate(meeting.getDate(), roomsController);
         }
-        //
 
         configureAndShowListMeetingFragment();
         configureAndShowHomeStartMeetingCreationFragment();
