@@ -25,13 +25,11 @@ import android.widget.Toast;
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
-import com.sophie.mareu.service.MeetingsApiService;
-import com.sophie.mareu.service.MeetingsApiServiceImpl;
+import com.sophie.mareu.service.MeetingsController;
 
 import static com.sophie.mareu.Constants.*;
 
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
 import com.sophie.mareu.service.RoomsAvailabilityApiService;
 import com.sophie.mareu.view.DetailFragment;
 import com.sophie.mareu.view.meeting_creation.HomeStartMeetingCreationFragment;
@@ -52,9 +50,8 @@ import static com.sophie.mareu.model.Meeting.iconSelector;
 
 public class ListMeetingsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
     private ListMeetingsFragment listMeetingsFragment = new ListMeetingsFragment();
-    private ArrayList<String> hours = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.hour_list)));
-    private ArrayList<String> rooms = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.room_names)));
     private DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE);
+    private MeetingsController meetingsController = DI.getMeetingsController();
     private Date selectedDate = null;
     private String selectedRoom = null;
     private Menu menu;
@@ -89,13 +86,14 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         setContentView(R.layout.activity_listmeetings);
         ButterKnife.bind(this);
         setSupportActionBar(mainToolbar);
-        DI.setResources(getResources());
+        meetingsController.setHoursAndRooms(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.hour_list))),
+                new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.room_names))));
 
         // Add dummyMeeting for presentation :
         Meeting dummyMeeting = DI.getDummyMeetings().get(3);
-        MeetingsApiServiceImpl.addMeeting(dummyMeeting, dummyMeeting.getDate());
-        RoomsAvailabilityApiService service = MeetingsApiServiceImpl.getCurrentRoomsPerHourService(dummyMeeting.getDate());
-        MeetingsApiServiceImpl.updateAvailabilityByDate(dummyMeeting.getDate(), service);
+        meetingsController.addMeeting(dummyMeeting, dummyMeeting.getDate());
+        RoomsAvailabilityApiService service = meetingsController.getCurrentRoomsAvailabilityService(dummyMeeting.getDate());
+        meetingsController.updateAvailabilityByDate(dummyMeeting.getDate(), service);
         //
         configureAndShowListMeetingFragment();
         configureAndShowHomeStartMeetingCreationFragment();
@@ -194,7 +192,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     private void initSpinner() {
         ArrayList<String> spinnerArray = new ArrayList<>();
         spinnerArray.add("");
-        spinnerArray.addAll(DI.getNewRoomsList());
+        spinnerArray.addAll(meetingsController.getRooms());
         ArrayAdapter<String> spinnerAdapter =
                 new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, spinnerArray);
         spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -291,7 +289,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     protected void onDestroy() {
         super.onDestroy();
         iconSelector = 0;
-        MeetingsApiServiceImpl.clearAllMeetings();
+        meetingsController.clearAllMeetings();
     }
 
     @Override

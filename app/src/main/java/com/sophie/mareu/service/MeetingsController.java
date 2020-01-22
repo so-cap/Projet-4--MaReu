@@ -15,33 +15,33 @@ import java.util.Objects;
 /**
  * Created by SOPHIE on 05/01/2020.
  */
-public class MeetingsApiServiceImpl implements MeetingsApiService{
-    public static HashMap<Date, ArrayList<Meeting>> mMeetingsByDate = new HashMap<>();
-    public static HashMap<Date, RoomsAvailabilityApiService> serviceByDate = new HashMap<>();
-    private static ArrayList<String> hours;
-    private static ArrayList<String> rooms;
+public class MeetingsController {
+    public HashMap<Date, ArrayList<Meeting>> mMeetingsByDate = new HashMap<>();
+    public HashMap<Date, RoomsAvailabilityApiService> serviceByDate = new HashMap<>();
+    private ArrayList<String> hours;
+    private ArrayList<String> rooms;
 
-    public static RoomsAvailabilityApiService getCurrentRoomsPerHourService(Date date) {
+    public RoomsAvailabilityApiService getCurrentRoomsAvailabilityService(Date date) {
         for (int position = 0; position < serviceByDate.size(); position++) {
             if (serviceByDate.containsKey(date))
                 return serviceByDate.get(date);
         }
         RoomsAvailabilityApiService service = DI.getNewRoomsAvailabilityService();
-        service.initRoomsAndHours(hours, rooms);
+        service.initRoomsPerHourList(hours, rooms);
         return service;
     }
 
-    public void setHoursAndRooms(ArrayList<String> pHours, ArrayList<String> pRooms){
-        hours = pHours;
-        rooms = pRooms;
+    public void setHoursAndRooms(ArrayList<String> hours, ArrayList<String> rooms){
+        this.hours = hours;
+        this.rooms = rooms;
     }
 
-    public static void updateAvailabilityByDate(Date date, RoomsAvailabilityApiService roomsAvailabilityApiService) {
+    public void updateAvailabilityByDate(Date date, RoomsAvailabilityApiService roomsAvailabilityApiService) {
         serviceByDate.remove(date);
         serviceByDate.put(date, roomsAvailabilityApiService);
     }
 
-    public static void addMeeting(Meeting meeting, Date date) {
+    public void addMeeting(Meeting meeting, Date date) {
         if (mMeetingsByDate.get(date) != null)
             Objects.requireNonNull(mMeetingsByDate.get(date)).add(meeting);
         else {
@@ -51,7 +51,7 @@ public class MeetingsApiServiceImpl implements MeetingsApiService{
         }
     }
 
-    public static ArrayList<Meeting> getMeetings() {
+    public ArrayList<Meeting> getMeetings() {
         ArrayList<Meeting> meetings = new ArrayList<>();
         for (Map.Entry<Date, ArrayList<Meeting>> entry : mMeetingsByDate.entrySet()) {
             meetings.addAll(entry.getValue());
@@ -59,32 +59,39 @@ public class MeetingsApiServiceImpl implements MeetingsApiService{
         return meetings;
     }
 
-    public static ArrayList<Meeting> getMeetingsByDate(Date date) {
-        if (MeetingsApiServiceImpl.mMeetingsByDate.get(date) != null) {
-            return MeetingsApiServiceImpl.mMeetingsByDate.get(date);
+    public ArrayList<Meeting> getMeetingsByDate(Date date) {
+        if (mMeetingsByDate.get(date) != null) {
+            return mMeetingsByDate.get(date);
         } else
             return new ArrayList<>();
     }
 
-    public static void clearAllMeetings() {
+    public void clearAllMeetings() {
         serviceByDate.clear();
         mMeetingsByDate.clear();
         FilterAndSort.clearLists();
     }
 
-    public static void deleteMeeting(Meeting meeting) {
+    public void deleteMeeting(Meeting meeting) {
         RoomsAvailabilityApiService currentService = serviceByDate.get(meeting.getDate());
         if (currentService != null) {
             ArrayList<RoomsPerHour> roomsPerHourList = currentService.getRoomsPerHourList();
             Integer meetingPosition = meeting.getHour().getKey();
             // make hour available again if it wasn't anymore
-            if (!roomsPerHourList.get(meetingPosition).getHour().getKey().equals(meetingPosition)) {
+            if (roomsPerHourList.size() < meetingPosition ||
+                    !roomsPerHourList.get(meetingPosition).getHour().getKey().equals(meetingPosition)) {
                 RoomsPerHour roomsPerHour = new RoomsPerHour();
                 roomsPerHour.setHour(meetingPosition, meeting.getHour().getValue());
-                roomsPerHourList.add(meetingPosition,roomsPerHour);
+                if (roomsPerHourList.size() > meetingPosition)
+                    roomsPerHourList.add(meetingPosition,roomsPerHour);
+                else
+                    roomsPerHourList.add(roomsPerHour);
             }
             // make room available again
-            roomsPerHourList.get(meeting.getHour().getKey()).addRoom(meeting.getRoomName());
+            if (roomsPerHourList.size() > meetingPosition)
+                roomsPerHourList.get(meeting.getHour().getKey()).addRoom(meeting.getRoomName());
+            else
+                roomsPerHourList.get(roomsPerHourList.size()-1).addRoom(meeting.getRoomName());
 
             // finally, delete meeting from lists
             Objects.requireNonNull(mMeetingsByDate.get(meeting.getDate())).remove(meeting);
@@ -97,4 +104,13 @@ public class MeetingsApiServiceImpl implements MeetingsApiService{
             currentService.updateAvailableHours(roomsPerHourList);
         }
     }
+
+    public ArrayList<String> getHours() {
+        return hours;
+    }
+
+    public ArrayList<String> getRooms() {
+        return rooms;
+    }
+
 }

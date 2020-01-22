@@ -1,9 +1,7 @@
 package com.sophie.mareu.DI;
 
-import android.content.res.Resources;
-
-import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.service.MeetingsController;
 import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
 import com.sophie.mareu.service.RoomsAvailabilityApiService;
 
@@ -16,23 +14,9 @@ import java.util.List;
  * Created by SOPHIE on 31/12/2019.
  */
 public class DI {
-    private static Resources res;
-    private static RoomsAvailabilityApiService roomsPerHourService = new RoomsAvailabilityServiceImpl();
-
-
-    public static void setResources(Resources resources){
-        res = resources;
-    }
-
+    private static RoomsAvailabilityApiService roomsAvailabilityService = new RoomsAvailabilityServiceImpl();
+    private static MeetingsController meetingController = new MeetingsController();
     private static List<Meeting> dummyMeetings = DummyMeetingsGenerator.getDummyMeetings();
-
-    public static ArrayList<String> getNewHoursList() {
-        return new ArrayList<>(Arrays.asList(res.getStringArray(R.array.hour_list)));
-    }
-
-    public static ArrayList<String> getNewRoomsList(){
-        return new ArrayList<>(Arrays.asList(res.getStringArray(R.array.room_names)));
-    }
 
     public static List<Meeting> getDummyMeetings(){
         return dummyMeetings;
@@ -42,8 +26,25 @@ public class DI {
         return new RoomsAvailabilityServiceImpl();
     }
 
-    public static RoomsAvailabilityApiService getRoomsPerHourService(){
-        return roomsPerHourService;
+    public static RoomsAvailabilityApiService getRoomsAvailabilityService(){
+        return roomsAvailabilityService;
+    }
+
+    public static MeetingsController getMeetingsController(){
+        return meetingController;
+    }
+
+    public static MeetingsController getNewMeetingsController(){
+        return new MeetingsController();
+    }
+
+    // For testing
+    public static ArrayList<String> getDummyHoursList(){
+        return new ArrayList<>(Arrays.asList("8h00", "9h00", "10h00", "11h00", "12h00"));
+    }
+
+     public static ArrayList<String> getDummyRoomsList(){
+        return new ArrayList<>(Arrays.asList("Peach", "Mario", "Bowser","Luigi", "Waluigi", "Yoshi"));
     }
 
 }

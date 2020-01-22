@@ -1,6 +1,7 @@
 package com.sophie.mareu.service;
 
 import com.sophie.mareu.model.RoomsPerHour;
+import com.sophie.mareu.service.RoomsAvailabilityApiService;
 import java.util.ArrayList;
 
 /**
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 public class RoomsAvailabilityServiceImpl implements RoomsAvailabilityApiService {
     private ArrayList<RoomsPerHour> roomsPerHourList = new ArrayList<>();
 
-    public void initRoomsAndHours(ArrayList<String> hours, ArrayList<String> rooms){
+    public void initRoomsPerHourList(ArrayList<String> hours, ArrayList<String> rooms){
         RoomsPerHour roomsPerHour;
 
         if(!(roomsPerHourList.isEmpty())) roomsPerHourList.clear();

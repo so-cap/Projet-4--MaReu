@@ -1,7 +1,7 @@
 package com.sophie.mareu;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.service.MeetingsApiServiceImpl;
+import com.sophie.mareu.service.MeetingsController;
 import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.model.Meeting;
 
@@ -34,14 +34,15 @@ public class FilterAndSortTests {
     private List<Meeting> meetings = DI.getDummyMeetings();
     private ArrayList<Meeting> expectedList = new ArrayList<>();
     private ArrayList<Meeting> result = new ArrayList<>();
+    private MeetingsController meetingsController = DI.getNewMeetingsController();
 
     @Before
     public void setup(){
-        MeetingsApiServiceImpl.clearAllMeetings();
-        FilterAndSort.getFilteredList().clear();
+        FilterAndSort.clearLists();
+        FilterAndSort.setMeetingsController(meetingsController);
 
         for (Meeting entry : meetings){
-            MeetingsApiServiceImpl.addMeeting(entry, entry.getDate());
+            meetingsController.addMeeting(entry, entry.getDate());
         }
     }
 
@@ -53,6 +54,7 @@ public class FilterAndSortTests {
         FilterAndSort.filterMeetingsList(null, room);
         result = FilterAndSort.getFilteredList();
 
+        System.out.println(result.size());
         assertTrue(result.containsAll(expectedList));
         assertThat(result.size(), equalTo(2));
     }

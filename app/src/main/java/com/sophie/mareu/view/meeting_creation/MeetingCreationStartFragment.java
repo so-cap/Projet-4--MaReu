@@ -23,8 +23,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.adroitandroid.chipcloud.ChipCloud;
 import com.adroitandroid.chipcloud.ChipListener;
+import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
-import com.sophie.mareu.service.MeetingsApiServiceImpl;
+import com.sophie.mareu.service.MeetingsController;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
 import com.sophie.mareu.model.RoomsPerHour;
@@ -212,7 +213,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     private void updateCurrentService(Date newDate) {
-        mRoomsAvailabilityApiService = MeetingsApiServiceImpl.getCurrentRoomsPerHourService(newDate);
+        MeetingsController controller = DI.getMeetingsController();
+        mRoomsAvailabilityApiService = controller.getCurrentRoomsAvailabilityService(newDate);
         if (mRoomsAvailabilityApiService.getRoomsPerHourList().isEmpty()) {
             mMeetingsFull.setVisibility(View.VISIBLE);
             mChipCloud.setVisibility(View.GONE);

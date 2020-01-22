@@ -8,7 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.service.MeetingsApiServiceImpl;
+import com.sophie.mareu.service.MeetingsController;
 import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.service.RoomsAvailabilityApiService;
@@ -47,6 +47,7 @@ public class MeetingCreationTests {
     private ArrayList<RoomsPerHour> mRoomsAndHours = new ArrayList<>();
     private ArrayList<String> mRooms;
     private RoomsAvailabilityApiService mService;
+    private MeetingsController meetingsController = DI.getNewMeetingsController();
     private char A;
 
     @Rule
@@ -60,8 +61,7 @@ public class MeetingCreationTests {
         assertThat(mActivity, notNullValue());
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        DI.setResources(mActivity.getResources());
-        mRooms = DI.getNewRoomsList();
+        mRooms = meetingsController.getRooms();
         mService = new RoomsAvailabilityServiceImpl();
     }
 
@@ -76,7 +76,7 @@ public class MeetingCreationTests {
     @Test
     public void addNewMeetingInLandscapeModeWithSuccess() {
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        MeetingsApiServiceImpl.clearAllMeetings();
+        meetingsController.clearAllMeetings();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -110,7 +110,7 @@ public class MeetingCreationTests {
             addMeeting(position);
         onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(3));
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        MeetingsApiServiceImpl.clearAllMeetings();
+        meetingsController.clearAllMeetings();
         Thread.sleep(2000);
         onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(1));
     }
@@ -124,8 +124,8 @@ public class MeetingCreationTests {
         mRoomsAndHours.add(new RoomsPerHour("9h00", new ArrayList<>(mRooms)));
         mService.updateAvailableHours(mRoomsAndHours);
         Date today = getTodaysDateWithoutTime();
-        MeetingsApiServiceImpl.updateAvailabilityByDate(today, mService);
-        MeetingsApiServiceImpl.getCurrentRoomsPerHourService(today);
+        meetingsController.updateAvailabilityByDate(today, mService);
+        meetingsController.getCurrentRoomsAvailabilityService(today);
 
         for (int i = 0; i < initialHoursAvailable; i++) {
             int initialRoomsCount = mRooms.size() - 1;

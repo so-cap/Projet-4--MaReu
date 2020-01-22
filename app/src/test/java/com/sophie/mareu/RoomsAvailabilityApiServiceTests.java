@@ -1,6 +1,7 @@
 package com.sophie.mareu;
 
 import com.sophie.mareu.DI.DI;
+import com.sophie.mareu.service.MeetingsController;
 import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
 import com.sophie.mareu.model.RoomsPerHour;
 
@@ -12,51 +13,54 @@ import org.junit.runners.JUnit4;
 import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
 public class RoomsAvailabilityApiServiceTests {
-    private ArrayList<RoomsPerHour> mRoomsPerHour = new ArrayList<>();
-    private RoomsAvailabilityServiceImpl availabilityByHourService;
+    private ArrayList<RoomsPerHour> roomsPerHour = new ArrayList<>();
+    private RoomsAvailabilityServiceImpl roomsAvailability;
+    private MeetingsController meetingsController = DI.getNewMeetingsController();
 
     // for expected data
-    private ArrayList<String>  mHoursList = DI.getNewHoursList();
-    private ArrayList<String> mRoomsList = DI.getNewRoomsList();
+    private ArrayList<String> hours = DI.getDummyHoursList();
+    private ArrayList<String> rooms = DI.getDummyRoomsList();
 
     @Before
     public void setup(){
-        availabilityByHourService = new RoomsAvailabilityServiceImpl();
+        meetingsController.setHoursAndRooms(hours, rooms);
+        roomsAvailability = new RoomsAvailabilityServiceImpl();
     }
 
     @Test
-    public void getRoomsAvailabilityWithSuccess(){
-        mRoomsPerHour = availabilityByHourService.getRoomsPerHourList();
-        assertThat(mRoomsPerHour.get(0).getHour().getValue(), equalTo(mHoursList.get(0)));
-        assertThat(mRoomsPerHour.get(11).getHour().getValue(), equalTo(mHoursList.get(11)));
+    public void initRoomsAvailabilityWithSuccess(){
+        roomsAvailability.initRoomsPerHourList(hours, rooms);
+        roomsPerHour = roomsAvailability.getRoomsPerHourList();
 
-        assertThat(mRoomsPerHour.get(0).getRooms(), equalTo(mRoomsList));
-        assertThat(mRoomsPerHour.get(3).getRooms(), equalTo(mRoomsList));
+        assertThat(roomsPerHour.get(0).getHour().getValue(), equalTo(hours.get(0)));
+        assertThat(roomsPerHour.get(4).getHour().getValue(), equalTo(hours.get(4)));
+
+        assertThat(roomsPerHour.get(0).getRooms(), equalTo(rooms));
+        assertThat(roomsPerHour.get(4).getRooms(), equalTo(rooms));
     }
 
     @Test
     public void updateHoursAvailabilityWithSuccess(){
-        mRoomsPerHour = availabilityByHourService.getRoomsPerHourList();
+        roomsAvailability.initRoomsPerHourList(hours, rooms);
+        roomsPerHour = roomsAvailability.getRoomsPerHourList();
 
-        // Index 2 = "10h00" beforehand
-        assertThat(mRoomsPerHour.get(2).getHour().getValue(), equalTo("10h00"));
+        // Index 1 = "10h00" beforehand
+        assertThat(roomsPerHour.get(1).getHour().getValue(), equalTo("9h00"));
 
-        //deleting all the rooms at index 2
-        while(mRoomsPerHour.get(2).getRooms().size() > 0){
-            mRoomsPerHour.get(2).getRooms().remove(0);
+        //deleting all the rooms at index 1
+        while(roomsPerHour.get(1).getRooms().size() > 0){
+            roomsPerHour.get(1).getRooms().remove(0);
         }
 
         // Updating list
-        availabilityByHourService.updateAvailableHours(mRoomsPerHour);
+        roomsAvailability.updateAvailableHours(roomsPerHour);
 
-        //Index 2 = "11h00" after removing hour availability
-        assertThat(mRoomsPerHour.get(2).getHour().getValue(), equalTo("11h00"));
+        //Index 1 = "11h00" after removing hour availability
+        assertThat(roomsPerHour.get(1).getHour().getValue(), equalTo("10h00"));
     }
 
 }

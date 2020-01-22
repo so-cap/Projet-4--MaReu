@@ -22,11 +22,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.service.MeetingsApiServiceImpl;
+import com.sophie.mareu.service.MeetingsController;
 import com.sophie.mareu.service.RoomsAvailabilityServiceImpl;
 import com.sophie.mareu.service.RoomsAvailabilityApiService;
 import com.sophie.mareu.view.list_meetings.ListMeetingsFragment;
@@ -213,14 +214,15 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         meeting.setTitle(title);
         meeting.setParticipants(participants);
         meeting.setSubject(subject);
-        MeetingsApiServiceImpl.addMeeting(meeting, meeting.getDate());
         updateRoomAvailability();
     }
 
     private void updateRoomAvailability() {
+        MeetingsController controller = DI.getMeetingsController();
+        controller.addMeeting(meeting, meeting.getDate());
         ArrayList<RoomsPerHour> roomsPerHour = service.getRoomsPerHourList();
         roomsPerHour.get(hourPosition).getRooms().remove(meeting.getRoomName());
         service.updateAvailableHours(roomsPerHour);
-        MeetingsApiServiceImpl.updateAvailabilityByDate(meeting.getDate(), service);
+        controller.updateAvailabilityByDate(meeting.getDate(), service);
     }
 }
