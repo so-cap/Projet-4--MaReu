@@ -24,7 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
-import com.sophie.mareu.controller.service.MeetingsController;
+import com.sophie.mareu.controller.MeetingsController;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.ui.DetailFragment;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
@@ -87,7 +87,7 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
         super.onResume();
         filterActivatedView.setVisibility(View.VISIBLE);
         //In case of clicking on the details of a meeting, the list will keep it's previous state.
-        //If creating a new meeting, the list will be update without any filter.
+        //If creating a new meeting, the list will be update without any filter applied to it.
         if (FilterAndSort.getFilteredList().isEmpty() && FilterAndSort.getSortedList().isEmpty())
             initList(UNCHANGED);
          else if (!FilterAndSort.getSortedList().isEmpty() && FilterAndSort.getFilteredList().isEmpty())

@@ -1,7 +1,7 @@
 package com.sophie.mareu.model;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.controller.service.MeetingsController;
+import com.sophie.mareu.controller.MeetingsController;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;

@@ -1,13 +1,14 @@
-package com.sophie.mareu.controller.service;
+package com.sophie.mareu.controller;
 
 import com.sophie.mareu.model.RoomsPerHour;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by SOPHIE on 30/12/2019.
  */
-public class RoomsAvailabilityServiceImpl implements RoomsAvailabilityApiService {
+public class RoomsAvailabilityController implements Serializable {
     private ArrayList<RoomsPerHour> roomsPerHourList = new ArrayList<>();
 
     public void initRoomsPerHourList(ArrayList<String> hours, ArrayList<String> rooms){

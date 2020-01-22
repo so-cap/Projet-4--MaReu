@@ -4,7 +4,6 @@ import androidx.annotation.VisibleForTesting;
 
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.controller.service.MeetingsController;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +25,7 @@ public class FilterAndSort {
         if (date != null && roomName.isEmpty())
             mFilteredList = new ArrayList<>(meetingsController.getMeetingsByDate(date));
          else if (!(roomName.isEmpty()) && date == null) {
-            for (Map.Entry<Date, ArrayList<Meeting>> meetings : meetingsController.mMeetingsByDate.entrySet()) {
+            for (Map.Entry<Date, ArrayList<Meeting>> meetings : meetingsController.meetingsByDate.entrySet()) {
                 for (int i = 0; i < meetings.getValue().size(); i++) {
                     if (meetings.getValue().get(i).getRoomName().equals(roomName)) {
                         mFilteredList.add(new Meeting(meetings.getValue().get(i)));
@@ -66,7 +65,7 @@ public class FilterAndSort {
         mSortedList.clear();
     }
 
-    public static void removeMeeting(Meeting meeting){
+    static void removeMeeting(Meeting meeting){
         FilterAndSort.getFilteredList().remove(meeting);
         FilterAndSort.getSortedList().remove(meeting);
     }

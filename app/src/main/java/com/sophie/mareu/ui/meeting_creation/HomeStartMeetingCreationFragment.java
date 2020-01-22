@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 public class HomeStartMeetingCreationFragment extends Fragment implements View.OnClickListener {
     private CardView filterView;
     @BindView(R.id.home_btn)
-    Button mFab;
+    Button fab;
 
     @Nullable
     @Override
@@ -31,7 +31,7 @@ public class HomeStartMeetingCreationFragment extends Fragment implements View.O
         ButterKnife.bind(this, view);
 
         if (getActivity() != null) filterView = getActivity().findViewById(R.id.filter_activity);
-        mFab.setOnClickListener(this);
+        fab.setOnClickListener(this);
         view.setOnClickListener(this);
         return view;
     }
@@ -39,7 +39,7 @@ public class HomeStartMeetingCreationFragment extends Fragment implements View.O
     @Override
     public void onClick(View v) {
         filterView.setVisibility(View.GONE);
-        if (v == mFab) {
+        if (v == fab) {
             if (getFragmentManager() != null) {
                 FragmentTransaction fm = getFragmentManager().beginTransaction();
                 fm.replace(R.id.frame_setmeeting, new MeetingCreationStartFragment()).addToBackStack(null).commit();

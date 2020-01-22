@@ -8,10 +8,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.controller.service.MeetingsController;
-import com.sophie.mareu.controller.service.RoomsAvailabilityServiceImpl;
+import com.sophie.mareu.controller.MeetingsController;
+import com.sophie.mareu.controller.RoomsAvailabilityController;
 import com.sophie.mareu.model.RoomsPerHour;
-import com.sophie.mareu.controller.service.RoomsAvailabilityApiService;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 import com.sophie.mareu.utils.DeleteViewAction;
 
@@ -43,30 +42,30 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 @RunWith(AndroidJUnit4.class)
 public class MeetingCreationTests {
-    private ListMeetingsActivity mActivity;
+    private ListMeetingsActivity activity;
     private ArrayList<RoomsPerHour> roomsAndHours = new ArrayList<>();
     private ArrayList<String> rooms;
-    private RoomsAvailabilityApiService service;
+    private RoomsAvailabilityController roomsController;
     private MeetingsController meetingsController = DI.getMeetingsController();
     private char A;
 
     @Rule
-    public ActivityTestRule<ListMeetingsActivity> mActivityRule =
+    public ActivityTestRule<ListMeetingsActivity> activityRule =
             new ActivityTestRule<>(ListMeetingsActivity.class);
 
     @Before
     public void setup() {
         A = 'A';
-        mActivity = mActivityRule.getActivity();
-        assertThat(mActivity, notNullValue());
-        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        activity = activityRule.getActivity();
+        assertThat(activity, notNullValue());
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        ArrayList<String> hours = new ArrayList<>(Arrays.asList(mActivity.getResources().
+        ArrayList<String> hours = new ArrayList<>(Arrays.asList(activity.getResources().
                 getStringArray(R.array.hour_list)));
-        rooms = new ArrayList<>(Arrays.asList(mActivity.getResources().
+        rooms = new ArrayList<>(Arrays.asList(activity.getResources().
                 getStringArray(R.array.room_names)));
         meetingsController.setHoursAndRooms(hours, rooms);
-        service = new RoomsAvailabilityServiceImpl();
+        roomsController = new RoomsAvailabilityController();
     }
 
     // All tests take into account the default dummyMeeting
@@ -79,7 +78,7 @@ public class MeetingCreationTests {
 
     @Test
     public void addNewMeetingInLandscapeModeWithSuccess() {
-        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         meetingsController.clearAllMeetings();
         try {
             Thread.sleep(2000);
@@ -113,7 +112,7 @@ public class MeetingCreationTests {
         for (int position = 2; position != 0; position--)
             addMeeting(position);
         onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(3));
-        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         meetingsController.clearAllMeetings();
         Thread.sleep(2000);
         onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(1));
@@ -126,9 +125,9 @@ public class MeetingCreationTests {
         ArrayList<String> dummyRooms = new ArrayList<>(Arrays.asList("Peach", "Luigi"));
         roomsAndHours.add(new RoomsPerHour("8h00", new ArrayList<>(dummyRooms)));
         roomsAndHours.add(new RoomsPerHour("9h00", new ArrayList<>(dummyRooms)));
-        service.updateAvailableHours(roomsAndHours);
+        roomsController.updateAvailableHours(roomsAndHours);
         Date today = getTodaysDateWithoutTime();
-        meetingsController.updateAvailabilityByDate(today, service);
+        meetingsController.updateAvailabilityByDate(today, roomsController);
 
         for (int i = 0; i < initialHoursAvailable; i++) {
             int initialRoomsCount = dummyRooms.size() - 1;
@@ -144,7 +143,7 @@ public class MeetingCreationTests {
     }
 
     public void addMeeting(int roomPosition) {
-        if (mActivity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+        if (activity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             onView(withId(R.id.fab)).perform(click());
         else
             onView(withId(R.id.home_btn)).perform(click());

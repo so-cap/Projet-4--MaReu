@@ -1,18 +1,15 @@
 package com.sophie.mareu;
 
 import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.model.RoomsPerHour;
+import com.sophie.mareu.controller.MeetingsController;
+import com.sophie.mareu.controller.RoomsAvailabilityController;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.controller.service.MeetingsController;
-import com.sophie.mareu.controller.service.RoomsAvailabilityServiceImpl;
-import com.sophie.mareu.controller.service.RoomsAvailabilityApiService;
+import com.sophie.mareu.model.RoomsPerHour;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,7 +29,7 @@ public class MeetingsControllerTests {
     private Date date = new Date();
     private Date differentDate = new Date();
     private Meeting meeting, differentMeeting;
-    private RoomsAvailabilityApiService service;
+    private RoomsAvailabilityController roomsController;
     private MeetingsController meetingsController = DI.getMeetingsController();
     private ArrayList<String> hours = DI.getDummyHoursList();
     private ArrayList<String> rooms = DI.getDummyRoomsList();
@@ -42,9 +39,8 @@ public class MeetingsControllerTests {
         meetingsController.clearAllMeetings();
         meetingsController.setHoursAndRooms(hours, rooms);
 
-        service = new RoomsAvailabilityServiceImpl();
-
-        service.initRoomsPerHourList(hours,rooms);
+        roomsController = new RoomsAvailabilityController();
+        roomsController.initRoomsPerHourList(hours,rooms);
         List<Meeting> meetings = DI.getDummyMeetings();
 
         meeting = meetings.get(0);
@@ -75,18 +71,18 @@ public class MeetingsControllerTests {
 
     @Test
     public void deleteRoomFromListWithSuccess(){
-        ArrayList<RoomsPerHour> roomsPerHour = service.getRoomsPerHourList();
+        ArrayList<RoomsPerHour> roomsPerHour = roomsController.getRoomsPerHourList();
         roomsPerHour.get(2).getRooms().remove(2);
-        Assert.assertThat(roomsPerHour.get(2).getRooms(), not(hasItem("Bowser")));
+        assertThat(roomsPerHour.get(2).getRooms(), not(hasItem("Bowser")));
 
         // check that the room is still available at another hour
-        Assert.assertThat(roomsPerHour.get(1).getRooms(), hasItem("Bowser"));
+        assertThat(roomsPerHour.get(1).getRooms(), hasItem("Bowser"));
     }
 
     @Test
     public void deleteMeetingWithSuccess(){
         meetingsController.addMeeting(meeting, date);
-        meetingsController.updateAvailabilityByDate(date, service);
+        meetingsController.updateAvailabilityByDate(date, roomsController);
         assertThat(meetingsController.getMeetings(), hasItem(meeting));
 
         meetingsController.deleteMeeting(meeting);
@@ -96,16 +92,16 @@ public class MeetingsControllerTests {
     @Test
     public void deleteAllMeetingsAndServicesWithSuccess(){
         meetingsController.addMeeting(meeting, date);
-        meetingsController.updateAvailabilityByDate(date, service);
+        meetingsController.updateAvailabilityByDate(date, roomsController);
 
         meetingsController.addMeeting(differentMeeting, differentDate);
-        meetingsController.updateAvailabilityByDate(differentDate, service);
+        meetingsController.updateAvailabilityByDate(differentDate, roomsController);
 
-        assertThat(meetingsController.mMeetingsByDate.size(), equalTo(2));
+        assertThat(meetingsController.meetingsByDate.size(), equalTo(2));
         assertThat(meetingsController.serviceByDate.size(), equalTo(2));
 
         meetingsController.clearAllMeetings();
-        assertThat(meetingsController.mMeetingsByDate.size(), equalTo(0));
+        assertThat(meetingsController.meetingsByDate.size(), equalTo(0));
         assertThat(meetingsController.serviceByDate.size(), equalTo(0));
     }
 

@@ -34,7 +34,7 @@ public class MeetingCreationActivity extends AppCompatActivity {
             }
     }
 
-    // to go back to the main activity display when in land mode
+    // to go back to the main activity display when rotating into land mode
     private void configureAndShowListMeetingFragment() {
         ListMeetingsFragment listMeetingsFragment = (ListMeetingsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.frame_listmeetings);

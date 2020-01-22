@@ -19,8 +19,8 @@ abstract class DummyMeetingsGenerator {
     private static Date dateC = new GregorianCalendar(2020, 4, 3).getTime();
     private static Date dateD = new GregorianCalendar(2020, 9, 23).getTime();
 
-    // each Integer is at the position where it has been added in ascending order
-    // when initialising the hours availability
+    // each Integer is at the position where it would be added when first initialising the hours.
+    // (see RoomsPerHour.class & RoomsAvailabilityController.class)
     private static List<Meeting> DUMMY_MEETINGS = Arrays.asList(
             new Meeting("Réunion A",new AbstractMap.SimpleEntry<>(6, "14h00"), "Peach",
                     new ArrayList<>(Arrays.asList("maxime@lamzone.com","alex@lamzone.com")), getSubject(), dateA),

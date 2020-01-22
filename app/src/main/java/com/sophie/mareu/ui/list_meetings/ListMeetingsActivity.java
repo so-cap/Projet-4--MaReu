@@ -1,13 +1,5 @@
 package com.sophie.mareu.ui.list_meetings;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,15 +14,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
-import com.sophie.mareu.controller.service.MeetingsController;
-
-import static com.sophie.mareu.Constants.*;
-
+import com.sophie.mareu.controller.MeetingsController;
+import com.sophie.mareu.controller.RoomsAvailabilityController;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.controller.service.RoomsAvailabilityApiService;
 import com.sophie.mareu.ui.DetailFragment;
 import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
 
@@ -46,6 +43,11 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.sophie.mareu.Constants.ASCENDING;
+import static com.sophie.mareu.Constants.DESCENDING;
+import static com.sophie.mareu.Constants.FILTERED;
+import static com.sophie.mareu.Constants.SORTED;
+import static com.sophie.mareu.Constants.UNCHANGED;
 import static com.sophie.mareu.model.Meeting.iconSelector;
 
 public class ListMeetingsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -92,8 +94,8 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         // Add dummyMeeting for presentation :
         Meeting dummyMeeting = DI.getDummyMeetings().get(3);
         meetingsController.addMeeting(dummyMeeting, dummyMeeting.getDate());
-        RoomsAvailabilityApiService service = meetingsController.getCurrentRoomsAvailabilityService(dummyMeeting.getDate());
-        meetingsController.updateAvailabilityByDate(dummyMeeting.getDate(), service);
+        RoomsAvailabilityController roomsController = meetingsController.getCurrentRoomsAvailabilityService(dummyMeeting.getDate());
+        meetingsController.updateAvailabilityByDate(dummyMeeting.getDate(), roomsController);
         //
         configureAndShowListMeetingFragment();
         configureAndShowHomeStartMeetingCreationFragment();
