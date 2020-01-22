@@ -1,4 +1,4 @@
-package com.sophie.mareu.view.list_meetings;
+package com.sophie.mareu.ui.list_meetings;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,8 +31,8 @@ import static com.sophie.mareu.Constants.*;
 
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.controller.service.RoomsAvailabilityApiService;
-import com.sophie.mareu.view.DetailFragment;
-import com.sophie.mareu.view.meeting_creation.HomeStartMeetingCreationFragment;
+import com.sophie.mareu.ui.DetailFragment;
+import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
 
 import java.text.DateFormat;
 import java.util.ArrayList;

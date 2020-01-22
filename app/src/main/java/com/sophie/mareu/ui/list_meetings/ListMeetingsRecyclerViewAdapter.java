@@ -1,4 +1,4 @@
-package com.sophie.mareu.view.list_meetings;
+package com.sophie.mareu.ui.list_meetings;
 
 import android.content.res.Resources;
 import android.view.LayoutInflater;
@@ -53,11 +53,11 @@ public class ListMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<ListMe
             return mMeetings.size();
     }
 
-    public void setOnDeleteMeetingListener(OnDeleteMeetingListener onDeleteMeetingListener){
+    void setOnDeleteMeetingListener(OnDeleteMeetingListener onDeleteMeetingListener){
         mOnDeleteMeetingListener = onDeleteMeetingListener;
     }
 
-    public void setOnMeetingClickListener(OnMeetingClickListener onMeetingClickListener){
+    void setOnMeetingClickListener(OnMeetingClickListener onMeetingClickListener){
         mOnMeetingClickListener = onMeetingClickListener;
     }
 

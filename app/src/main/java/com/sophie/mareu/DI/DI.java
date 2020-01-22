@@ -46,5 +46,4 @@ public class DI {
      public static ArrayList<String> getDummyRoomsList(){
         return new ArrayList<>(Arrays.asList("Peach", "Mario", "Bowser","Luigi", "Waluigi", "Yoshi"));
     }
-
 }

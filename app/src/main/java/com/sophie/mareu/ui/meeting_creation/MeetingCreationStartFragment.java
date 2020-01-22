@@ -1,4 +1,4 @@
-package com.sophie.mareu.view.meeting_creation;
+package com.sophie.mareu.ui.meeting_creation;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -26,12 +26,11 @@ import com.adroitandroid.chipcloud.ChipListener;
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.controller.service.MeetingsController;
-import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.controller.service.RoomsAvailabilityServiceImpl;
-import com.sophie.mareu.model.RoomsPerHour;
-import com.sophie.mareu.view.list_meetings.ListMeetingsActivity;
 import com.sophie.mareu.controller.service.RoomsAvailabilityApiService;
-import static com.sophie.mareu.Constants.*;
+import com.sophie.mareu.controller.service.RoomsAvailabilityServiceImpl;
+import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.model.RoomsPerHour;
+import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 
 import java.text.DateFormat;
 import java.util.AbstractMap;
@@ -43,6 +42,10 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.sophie.mareu.Constants.ARGUMENT_HOUR_POSITION;
+import static com.sophie.mareu.Constants.ARGUMENT_MEETING;
+import static com.sophie.mareu.Constants.ARGUMENT_SERVICE;
 
 public class MeetingCreationStartFragment extends Fragment implements View.OnClickListener, ChipListener, DatePickerDialog.OnDateSetListener {
     private ArrayList<RoomsPerHour> mAvailableHoursAndRooms;

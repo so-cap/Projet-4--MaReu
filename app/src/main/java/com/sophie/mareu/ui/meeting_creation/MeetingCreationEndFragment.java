@@ -1,4 +1,4 @@
-package com.sophie.mareu.view.meeting_creation;
+package com.sophie.mareu.ui.meeting_creation;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -30,7 +30,7 @@ import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.controller.service.MeetingsController;
 import com.sophie.mareu.controller.service.RoomsAvailabilityServiceImpl;
 import com.sophie.mareu.controller.service.RoomsAvailabilityApiService;
-import com.sophie.mareu.view.list_meetings.ListMeetingsFragment;
+import com.sophie.mareu.ui.list_meetings.ListMeetingsFragment;
 
 import java.util.ArrayList;
 

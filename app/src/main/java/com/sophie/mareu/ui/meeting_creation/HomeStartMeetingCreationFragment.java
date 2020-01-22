@@ -1,4 +1,4 @@
-package com.sophie.mareu.view.meeting_creation;
+package com.sophie.mareu.ui.meeting_creation;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

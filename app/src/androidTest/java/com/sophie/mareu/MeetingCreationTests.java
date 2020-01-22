@@ -12,7 +12,7 @@ import com.sophie.mareu.controller.service.MeetingsController;
 import com.sophie.mareu.controller.service.RoomsAvailabilityServiceImpl;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.controller.service.RoomsAvailabilityApiService;
-import com.sophie.mareu.view.list_meetings.ListMeetingsActivity;
+import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 import com.sophie.mareu.utils.DeleteViewAction;
 
 import org.junit.Before;
@@ -44,10 +44,10 @@ import static org.hamcrest.Matchers.notNullValue;
 @RunWith(AndroidJUnit4.class)
 public class MeetingCreationTests {
     private ListMeetingsActivity mActivity;
-    private ArrayList<RoomsPerHour> mRoomsAndHours = new ArrayList<>();
-    private ArrayList<String> mRooms;
-    private RoomsAvailabilityApiService mService;
-    private MeetingsController meetingsController = DI.getNewMeetingsController();
+    private ArrayList<RoomsPerHour> roomsAndHours = new ArrayList<>();
+    private ArrayList<String> rooms;
+    private RoomsAvailabilityApiService service;
+    private MeetingsController meetingsController = DI.getMeetingsController();
     private char A;
 
     @Rule
@@ -61,8 +61,12 @@ public class MeetingCreationTests {
         assertThat(mActivity, notNullValue());
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        mRooms = meetingsController.getRooms();
-        mService = new RoomsAvailabilityServiceImpl();
+        ArrayList<String> hours = new ArrayList<>(Arrays.asList(mActivity.getResources().
+                getStringArray(R.array.hour_list)));
+        rooms = new ArrayList<>(Arrays.asList(mActivity.getResources().
+                getStringArray(R.array.room_names)));
+        meetingsController.setHoursAndRooms(hours, rooms);
+        service = new RoomsAvailabilityServiceImpl();
     }
 
     // All tests take into account the default dummyMeeting
@@ -119,16 +123,15 @@ public class MeetingCreationTests {
     public void updateHoursAvailabilityDummy_MustShowUnavailabilityWithSuccess() {
         int initialHoursAvailable = 2;
 
-        mRooms = new ArrayList<>(Arrays.asList("Peach", "Mario"));
-        mRoomsAndHours.add(new RoomsPerHour("8h00", new ArrayList<>(mRooms)));
-        mRoomsAndHours.add(new RoomsPerHour("9h00", new ArrayList<>(mRooms)));
-        mService.updateAvailableHours(mRoomsAndHours);
+        ArrayList<String> dummyRooms = new ArrayList<>(Arrays.asList("Peach", "Luigi"));
+        roomsAndHours.add(new RoomsPerHour("8h00", new ArrayList<>(dummyRooms)));
+        roomsAndHours.add(new RoomsPerHour("9h00", new ArrayList<>(dummyRooms)));
+        service.updateAvailableHours(roomsAndHours);
         Date today = getTodaysDateWithoutTime();
-        meetingsController.updateAvailabilityByDate(today, mService);
-        meetingsController.getCurrentRoomsAvailabilityService(today);
+        meetingsController.updateAvailabilityByDate(today, service);
 
         for (int i = 0; i < initialHoursAvailable; i++) {
-            int initialRoomsCount = mRooms.size() - 1;
+            int initialRoomsCount = dummyRooms.size() - 1;
             while (initialRoomsCount >= 0) {
                 addMeeting(initialRoomsCount);
                 initialRoomsCount--;
@@ -147,7 +150,7 @@ public class MeetingCreationTests {
             onView(withId(R.id.home_btn)).perform(click());
         onView(withId(R.id.select_date)).perform(click());
         onView(withId(R.id.ok_button)).perform(click());
-        onView(withText(mRooms.get(roomPosition))).perform(click());
+        onView(withText(rooms.get(roomPosition))).perform(click());
         onView(withId(R.id.next_page)).perform(click());
         onView(withId(R.id.meeting_title_input)).perform(typeText("Reunion " + A++));
         onView(withId(R.id.meeting_subject_input)).perform(scrollTo()).perform(replaceText("Sujet de réunion"));

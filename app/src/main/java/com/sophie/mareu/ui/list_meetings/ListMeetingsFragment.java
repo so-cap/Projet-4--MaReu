@@ -1,4 +1,4 @@
-package com.sophie.mareu.view.list_meetings;
+package com.sophie.mareu.ui.list_meetings;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,8 +26,8 @@ import com.sophie.mareu.R;
 import com.sophie.mareu.controller.FilterAndSort;
 import com.sophie.mareu.controller.service.MeetingsController;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.view.DetailFragment;
-import com.sophie.mareu.view.meeting_creation.MeetingCreationActivity;
+import com.sophie.mareu.ui.DetailFragment;
+import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
 
 import java.util.ArrayList;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package com.sophie.mareu.view.meeting_creation;
+package com.sophie.mareu.ui.meeting_creation;
 
 import android.os.Bundle;
 
@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.sophie.mareu.R;
-import com.sophie.mareu.view.list_meetings.ListMeetingsFragment;
+import com.sophie.mareu.ui.list_meetings.ListMeetingsFragment;
 
 /**
  * Created by SOPHIE on 31/12/2019.

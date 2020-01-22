@@ -25,6 +25,7 @@ public class MeetingsController {
         for (int position = 0; position < serviceByDate.size(); position++) {
             if (serviceByDate.containsKey(date))
                 return serviceByDate.get(date);
+            System.out.println("here");
         }
         RoomsAvailabilityApiService service = DI.getNewRoomsAvailabilityService();
         service.initRoomsPerHourList(hours, rooms);
