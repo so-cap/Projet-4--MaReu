@@ -29,7 +29,7 @@ public class MeetingsHandlerTests {
     private Date date = new Date();
     private Date differentDate = new Date();
     private Meeting meeting, differentMeeting;
-    private RoomsAvailabilityHandler roomsController;
+    private RoomsAvailabilityHandler roomsHandler;
     private MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
     private ArrayList<String> hours = DI.getDummyHoursList();
     private ArrayList<String> rooms = DI.getDummyRoomsList();
@@ -39,8 +39,8 @@ public class MeetingsHandlerTests {
         meetingsHandler.clearAllMeetings();
         meetingsHandler.setHoursAndRooms(hours, rooms);
 
-        roomsController = new RoomsAvailabilityHandler();
-        roomsController.initRoomsPerHourList(hours,rooms);
+        roomsHandler = new RoomsAvailabilityHandler();
+        roomsHandler.initRoomsPerHourList(hours,rooms);
         List<Meeting> meetings = DI.getDummyMeetings();
 
         meeting = meetings.get(0);
@@ -71,7 +71,7 @@ public class MeetingsHandlerTests {
 
     @Test
     public void deleteRoomFromListWithSuccess(){
-        ArrayList<RoomsPerHour> roomsPerHour = roomsController.getRoomsPerHourList();
+        ArrayList<RoomsPerHour> roomsPerHour = roomsHandler.getRoomsPerHourList();
         roomsPerHour.get(2).getRooms().remove(2);
         assertThat(roomsPerHour.get(2).getRooms(), not(hasItem("Bowser")));
 
@@ -82,7 +82,7 @@ public class MeetingsHandlerTests {
     @Test
     public void deleteMeetingWithSuccess(){
         meetingsHandler.addMeeting(meeting, date);
-        meetingsHandler.updateAvailabilityByDate(date, roomsController);
+        meetingsHandler.updateAvailabilityByDate(date, roomsHandler);
         assertThat(meetingsHandler.getMeetings(), hasItem(meeting));
 
         meetingsHandler.deleteMeeting(meeting);
@@ -90,12 +90,12 @@ public class MeetingsHandlerTests {
     }
 
     @Test
-    public void deleteAllMeetingsAndServicesWithSuccess(){
+    public void clearAllMeetingsAndHandlersWithSuccess(){
         meetingsHandler.addMeeting(meeting, date);
-        meetingsHandler.updateAvailabilityByDate(date, roomsController);
+        meetingsHandler.updateAvailabilityByDate(date, roomsHandler);
 
         meetingsHandler.addMeeting(differentMeeting, differentDate);
-        meetingsHandler.updateAvailabilityByDate(differentDate, roomsController);
+        meetingsHandler.updateAvailabilityByDate(differentDate, roomsHandler);
 
         assertThat(meetingsHandler.meetingsByDate.size(), equalTo(2));
         assertThat(meetingsHandler.roomsAvailabilityByDate.size(), equalTo(2));

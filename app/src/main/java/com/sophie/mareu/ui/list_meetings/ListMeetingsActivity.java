@@ -96,12 +96,11 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         for (int i = 0 ; i < DI.getDummyMeetings().size()-1; i++) {
             Meeting meeting = DI.getDummyMeetings().get(i);
             meetingsHandler.addMeeting(meeting, meeting.getDate());
-            RoomsAvailabilityHandler roomsAvailability = meetingsHandler.getCurrentRoomsAvailabilityController(meeting.getDate());
-            meetingsHandler.updateAvailabilityByDate(meeting.getDate(), roomsAvailability);
-
-            ArrayList<RoomsPerHour> roomsPerHour = roomsAvailability.getRoomsPerHourList();
+            RoomsAvailabilityHandler roomsHandler = meetingsHandler.getCurrentRoomsAvailabilityHandler(meeting.getDate());
+            ArrayList<RoomsPerHour> roomsPerHour = roomsHandler.getRoomsPerHourList();
             roomsPerHour.get(meeting.getHour().getKey()).getRooms().remove(meeting.getRoomName());
-            roomsAvailability.updateAvailableHoursAndRooms(roomsPerHour);
+            roomsHandler.updateAvailableHoursAndRooms(roomsPerHour);
+            meetingsHandler.updateAvailabilityByDate(meeting.getDate(), roomsHandler);
         }
 
         configureAndShowListMeetingFragment();
@@ -120,8 +119,10 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
         if (listMeetingFrame == null) {
             fm.add(R.id.frame_listmeetings, listMeetingsFragment).commit();
-        } else // in case we previously were in landscape mode.
+        } else /* in case we previously were in landscape mode.*/ {
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fm.replace(R.id.frame_listmeetings, listMeetingsFragment).commit();
+        }
     }
 
     private void configureAndShowHomeStartMeetingCreationFragment() {
@@ -130,7 +131,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         if (findViewById(R.id.frame_setmeeting) != null) {
             if (meetingCreationFrame == null) {
                 fm.add(R.id.frame_setmeeting, new HomeStartMeetingCreationFragment()).commit();
-            } else if (!(meetingCreationFrame.getClass().equals(HomeStartMeetingCreationFragment.class))) {
+            } else {
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 fm.replace(R.id.frame_setmeeting, new HomeStartMeetingCreationFragment()).commit();
             }
@@ -228,7 +229,8 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                 showDatePickerDialog();
                 break;
             case R.id.ok_filter:
-                if (selectedDate != null || !selectedRoom.isEmpty()) filterList();
+                if (selectedDate != null || !selectedRoom.isEmpty())
+                    filterList();
                 else
                     Toast.makeText(this, getString(R.string.choose_date_or_room), Toast.LENGTH_LONG).show();
                 break;

@@ -55,7 +55,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     private Context context;
     private int roomPosition = -1;
     private Date selectedDate;
-    private RoomsAvailabilityHandler roomsAvailability = new RoomsAvailabilityHandler();
+    private RoomsAvailabilityHandler roomsHandler = new RoomsAvailabilityHandler();
 
     @BindView(R.id.select_date)
     Button dateView;
@@ -115,7 +115,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     private void initSpinner() {
-        roomsPerHourList = roomsAvailability.getRoomsPerHourList();
+        roomsPerHourList = roomsHandler.getRoomsPerHourList();
         spinnerArray = new ArrayList<>();
         String mHour;
 
@@ -142,12 +142,12 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.select_date:
+                showDatePickerDialog();
+                break;
             case R.id.next_page:
                 if (checkIfValid())
                     startNextFragment();
-                break;
-            case R.id.select_date:
-                showDatePickerDialog();
                 break;
         }
     }
@@ -159,36 +159,9 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
                 Calendar.getInstance().get(Calendar.MONTH),
                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
+
         Button okButton = datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         okButton.setId(R.id.ok_button);
-    }
-
-    private boolean checkIfValid() {
-        if (roomPosition >= 0) {
-            selectedRoom = roomsPerHourList.get(hourPosition).getRooms().get(roomPosition);
-            return true;
-        } else
-            Toast.makeText(context, getString(R.string.choose_a_room), Toast.LENGTH_LONG).show();
-        return false;
-    }
-
-    private void startNextFragment() {
-        MeetingCreationEndFragment meetingCreationEndFragment = new MeetingCreationEndFragment();
-        Meeting meeting = new Meeting();
-        meeting.setHour(selectedHour.getKey(), selectedHour.getValue());
-        meeting.setRoomName(selectedRoom);
-        meeting.setDate(selectedDate);
-
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(ARGUMENT_MEETING, meeting);
-        bundle.putSerializable(ARGUMENT_ROOMS_HANDLER, roomsAvailability);
-        bundle.putInt(ARGUMENT_HOUR_POSITION, hourPosition);
-        meetingCreationEndFragment.setArguments(bundle);
-
-        if (getFragmentManager() != null) {
-            FragmentTransaction fm = getFragmentManager().beginTransaction();
-            fm.replace(R.id.frame_setmeeting, meetingCreationEndFragment).addToBackStack(null).commit();
-        }
     }
 
     @Override
@@ -211,13 +184,13 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             chipCloud.setVisibility(View.VISIBLE);
             nextPage.setVisibility(View.VISIBLE);
         }
-        updateCurrentService(newDate);
+        updateCurrentRoomsAvailabilityHandler(newDate);
     }
 
-    private void updateCurrentService(Date newDate) {
+    private void updateCurrentRoomsAvailabilityHandler(Date newDate) {
         MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
-        roomsAvailability = meetingsHandler.getCurrentRoomsAvailabilityController(newDate);
-        if (roomsAvailability.getRoomsPerHourList().isEmpty()) {
+        roomsHandler = meetingsHandler.getCurrentRoomsAvailabilityHandler(newDate);
+        if (roomsHandler.getRoomsPerHourList().isEmpty()) {
             meetingsFull.setVisibility(View.VISIBLE);
             chipCloud.setVisibility(View.GONE);
             nextPage.setVisibility(View.GONE);
@@ -226,6 +199,34 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             initSpinner();
             displaySpinner();
             initChipCloud();
+        }
+    }
+
+    private boolean checkIfValid() {
+        if (roomPosition >= 0) {
+            selectedRoom = roomsPerHourList.get(hourPosition).getRooms().get(roomPosition);
+            return true;
+        } else
+            Toast.makeText(context, getString(R.string.choose_a_room), Toast.LENGTH_LONG).show();
+        return false;
+    }
+
+    private void startNextFragment() {
+        MeetingCreationEndFragment meetingCreationEndFragment = new MeetingCreationEndFragment();
+        Meeting meeting = new Meeting();
+        meeting.setHour(selectedHour.getKey(), selectedHour.getValue());
+        meeting.setRoomName(selectedRoom);
+        meeting.setDate(selectedDate);
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ARGUMENT_MEETING, meeting);
+        bundle.putSerializable(ARGUMENT_ROOMS_HANDLER, roomsHandler);
+        bundle.putInt(ARGUMENT_HOUR_POSITION, hourPosition);
+        meetingCreationEndFragment.setArguments(bundle);
+
+        if (getFragmentManager() != null) {
+            FragmentTransaction fm = getFragmentManager().beginTransaction();
+            fm.replace(R.id.frame_setmeeting, meetingCreationEndFragment).addToBackStack(null).commit();
         }
     }
 }

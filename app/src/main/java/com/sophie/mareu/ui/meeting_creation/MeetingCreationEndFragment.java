@@ -139,6 +139,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         int emailViews = emailContainer.getChildCount();
         if (emailViews > 1)
             emailContainer.removeViewAt(emailViews - 1);
+
         if (emailViews == 3)
             deleteEmail.setVisibility(View.GONE);
         if (emailViews < 6)
@@ -159,25 +160,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
                 subjectView.setError(getResources().getString(R.string.write_in_this_area));
             return false;
         }
-        setMeeting();
         return true;
-    }
-
-    private boolean emailChecker() {
-        int emailsNbr = emailContainer.getChildCount();
-        int errors = 0;
-        EditText emailView;
-
-        for (int position = 0; position < emailsNbr; position++) {
-            emailView = (EditText) emailContainer.getChildAt(position);
-            String emptyView = emailView.getText().toString();
-            if (!(Patterns.EMAIL_ADDRESS.matcher(emailView.getText().toString())).matches() && (!(emptyView.isEmpty()))) {
-                emailView.setError(getResources().getString(R.string.invalid_email));
-                participants.clear();
-                errors++;
-            }
-        }
-        return errors == 0;
     }
 
     private void initParticipantsList() {
@@ -192,11 +175,29 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         }
     }
 
+    private boolean emailChecker() {
+        int emailsNbr = emailContainer.getChildCount();
+        int errors = 0;
+        EditText emailView;
+
+        for (int position = 0; position < emailsNbr; position++) {
+            emailView = (EditText) emailContainer.getChildAt(position);
+            String email = emailView.getText().toString();
+            if (!(Patterns.EMAIL_ADDRESS.matcher(emailView.getText().toString())).matches() && (!(email.isEmpty()))) {
+                emailView.setError(getResources().getString(R.string.invalid_email));
+                errors++;
+                participants.clear();
+            }
+        }
+        return errors == 0;
+    }
+
     private void backToHomePage() {
         FragmentActivity activity = getActivity();
         FilterAndSort.getFilteredList().clear();
         FilterAndSort.getSortedList().clear();
 
+        setMeeting();
         if (activity != null) {
             if (activity.getClass().equals(MeetingCreationActivity.class)) {
                 activity.finish();
@@ -222,6 +223,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
     private void updateRoomAvailability() {
         MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
         meetingsHandler.addMeeting(meeting, meeting.getDate());
+
         ArrayList<RoomsPerHour> roomsPerHour = roomsAvailability.getRoomsPerHourList();
         roomsPerHour.get(hourPosition).getRooms().remove(meeting.getRoomName());
         roomsAvailability.updateAvailableHoursAndRooms(roomsPerHour);

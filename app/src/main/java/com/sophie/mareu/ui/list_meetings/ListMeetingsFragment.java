@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -24,8 +23,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.DI.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.FilterAndSort;
-import com.sophie.mareu.model.MeetingsHandler;
 import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.model.MeetingsHandler;
 import com.sophie.mareu.ui.DetailFragment;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
 
@@ -35,7 +34,10 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.sophie.mareu.Constants.*;
+import static com.sophie.mareu.Constants.ARGUMENT_MEETING;
+import static com.sophie.mareu.Constants.FILTERED;
+import static com.sophie.mareu.Constants.SORTED;
+import static com.sophie.mareu.Constants.UNCHANGED;
 
 /**
  * Created by SOPHIE on 30/12/2019.
@@ -75,6 +77,7 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
         if (getActivity() != null)
             ButterKnife.bind(this, getActivity());
 
+        // If the user is in portrait mode.
         if (fab != null) {
             fab.setOnClickListener(this);
             fab.show();
@@ -83,23 +86,23 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(getContext(), MeetingCreationActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         filterActivatedView.setVisibility(View.VISIBLE);
         //In case of clicking on the details of a meeting, the list will keep it's previous state.
-        //If creating a new meeting, the list will be update without any filter applied to it.
+        //If creating a new meeting, the list will be updated without any filter applied to it.
         if (FilterAndSort.getFilteredList().isEmpty() && FilterAndSort.getSortedList().isEmpty())
             initList(UNCHANGED);
          else if (!FilterAndSort.getSortedList().isEmpty() && FilterAndSort.getFilteredList().isEmpty())
             initList(SORTED);
         else
             initList(FILTERED);
-    }
-
-    @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(getContext(), MeetingCreationActivity.class);
-        startActivity(intent);
     }
 
     public void initList(int listCurrentState) {
@@ -128,6 +131,7 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
         initList(listCurrentState);
         if (meetings.isEmpty()) mNoNewMeetings.setVisibility(View.VISIBLE);
 
+        // If the user is in landscape mode and deletes a meeting
         Fragment detailFragment = null;
         if (getFragmentManager() != null)
             detailFragment = getFragmentManager().findFragmentById(R.id.frame_setmeeting);
@@ -144,7 +148,6 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
     @Override
     public void onMeetingClick(Meeting meeting) {
         FragmentTransaction fm;
-        AppCompatActivity activity = (AppCompatActivity) context;
 
         filterSelectionView.setVisibility(View.GONE);
         if (getFragmentManager() != null) {
@@ -155,8 +158,8 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
             bundle.putParcelable(ARGUMENT_MEETING, meeting);
             detailFragment.setArguments(bundle);
 
-            if (activity != null)
-                if (activity.findViewById(R.id.frame_setmeeting) == null && !getString(R.string.screen_type).equals("tablet")) {
+            if (getActivity() != null)
+                if (getActivity().findViewById(R.id.frame_setmeeting) == null && !getString(R.string.screen_type).equals("tablet")) {
                     fm.replace(R.id.frame_listmeetings, detailFragment).addToBackStack(null).commit();
                     filterActivatedView.setVisibility(View.GONE);
                 } else
