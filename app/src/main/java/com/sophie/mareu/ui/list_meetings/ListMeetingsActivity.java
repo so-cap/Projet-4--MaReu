@@ -186,8 +186,8 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                     break;
                 }
             case R.id.filter:
-                initSpinner();
                 filterSelectionView.setVisibility(View.VISIBLE);
+                initSpinner();
                 break;
         }
         return true;
@@ -209,19 +209,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         roomsSpinner.setAdapter(spinnerAdapter);
     }
 
-    private void showDatePickerDialog() {
-        Locale.setDefault(Locale.FRANCE);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, Calendar.getInstance().get(Calendar.YEAR),
-                Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.show();
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        selectedDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
-        chooseDateBtn.setText(df.format(selectedDate));
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -239,7 +226,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                 break;
             case R.id.deactivate_filter:
                 deactivateFilter();
-                resetFilterView();
                 break;
             case R.id.deactivate_sorted_list:
                 if (FilterAndSort.getFilteredList().isEmpty())
@@ -251,6 +237,19 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                 sortedModeBtn.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    private void showDatePickerDialog() {
+        Locale.setDefault(Locale.FRANCE);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        selectedDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
+        chooseDateBtn.setText(df.format(selectedDate));
     }
 
     private void filterList() {
@@ -292,7 +291,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     @Override
     protected void onStop() {
         super.onStop();
-        resetFilterView();
         deactivateFilter();
     }
 
