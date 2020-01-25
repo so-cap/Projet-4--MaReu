@@ -1,6 +1,7 @@
 package com.sophie.mareu;
 
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
@@ -16,6 +17,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -76,6 +78,34 @@ public class FilterAndSortUITests {
         onView(withText("Mario")).perform(click());
         onView(withId(R.id.ok_filter)).perform(click());
         onView(withId(R.id.meetings_list)).check(withItemCount(1));
+    }
+
+    @Test
+    public void sortListInAscendingHourOrderWithSuccess(){
+        //add meeting at 8h00;
+        addMeeting("Daisy");
+
+        onView(withId(R.id.meetings_list)).check(withItemCount(4));
+        Espresso.openContextualActionModeOverflowMenu();
+        onView(withText("Lister par heure")).perform(click());
+        onView(withText("croissante")).perform(click());
+        //check if the meeting is at the top of the list
+        onView(withId(R.id.meetings_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.detail_room)).check(matches(withText("Salle Daisy")));
+    }
+
+    @Test
+    public void sortListInDescendingHourOrderWithSuccess(){
+        //add meeting at 8h00;
+        addMeeting("Waluigi");
+
+        onView(withId(R.id.meetings_list)).check(withItemCount(4));
+        Espresso.openContextualActionModeOverflowMenu();
+        onView(withText("Lister par heure")).perform(click());
+        onView(withText("décroissante")).perform(click());
+        //check if the meeting is at the bottom of the list
+        onView(withId(R.id.meetings_list)).perform(RecyclerViewActions.actionOnItemAtPosition(3, click()));
+        onView(withId(R.id.detail_room)).check(matches(withText("Salle Waluigi")));
     }
 
     public void addMeeting(String room){

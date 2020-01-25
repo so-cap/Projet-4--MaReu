@@ -13,7 +13,7 @@ import java.util.List;
  * Created by SOPHIE on 04/01/2020.
  */
 abstract class DummyMeetingsGenerator {
-    private static Date dateA = new GregorianCalendar(2020, 2, 8).getTime();
+    private static Date dateA = new GregorianCalendar(2020, 4, 8).getTime();
     private static Date dateB = new GregorianCalendar(2020, 4, 23).getTime();
     private static Date dateC = new GregorianCalendar(2020, 7, 3).getTime();
     private static Date dateD = new GregorianCalendar(2020, 9, 19).getTime();
@@ -23,9 +23,9 @@ abstract class DummyMeetingsGenerator {
     private static List<Meeting> DUMMY_MEETINGS = Arrays.asList(
             new Meeting("Réunion A",new AbstractMap.SimpleEntry<>(6, "14h00"), "Peach",
                     new ArrayList<>(Arrays.asList("maxime@lamzone.com","alex@lamzone.com")), getDummySubject(), dateA),
-            new Meeting("Réunion B",new AbstractMap.SimpleEntry<>(8, "16h00"), "Mario",
+            new Meeting("Réunion B",new AbstractMap.SimpleEntry<>(11, "19h00"), "Mario",
                     new ArrayList<>(Arrays.asList("paul@lamzone.com","viviane@lamzone.com")), getSubject(), dateB),
-            new Meeting("Réunion C",new AbstractMap.SimpleEntry<>(11, "19h00"), "Mario",
+            new Meeting("Réunion C",new AbstractMap.SimpleEntry<>(8, "16h00"), "Mario",
                     new ArrayList<>(Arrays.asList("amandine@lamzone.com","luc@lamzone")), getSubject(), dateC),
             new Meeting("Réunion D",new AbstractMap.SimpleEntry<>(7, "15h00"), "Peach",
                     new ArrayList<>(Arrays.asList("maxime@lamzone.com","alex@lamzone.com")), getDummySubject(), dateD));

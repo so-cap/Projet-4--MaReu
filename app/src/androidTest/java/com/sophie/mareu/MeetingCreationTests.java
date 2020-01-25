@@ -62,7 +62,6 @@ public class MeetingCreationTests {
             e.printStackTrace();
         }
     }
-
     // All tests take into account the 3 default dummyMeetings added for presentation
     // Therefore the expected values += 3 .
     @Test

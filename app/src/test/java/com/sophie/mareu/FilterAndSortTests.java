@@ -91,7 +91,7 @@ public class FilterAndSortTests {
 
     @Test
     public void sortListInAscendingHourOrderWithSuccess(){
-        expectedList = new ArrayList<>(Arrays.asList(meetingA, meetingD, meetingB, meetingC));
+        expectedList = new ArrayList<>(Arrays.asList(meetingA, meetingD, meetingC, meetingB));
 
         FilterAndSort.sortList(ASCENDING);
         result = FilterAndSort.getSortedList();
@@ -100,7 +100,7 @@ public class FilterAndSortTests {
 
     @Test
     public void sortListInDescendingHourOrderWithSuccess(){
-        expectedList = new ArrayList<>(Arrays.asList(meetingC, meetingB, meetingD, meetingA));
+        expectedList = new ArrayList<>(Arrays.asList(meetingB, meetingC, meetingD, meetingA));
 
         FilterAndSort.sortList(DESCENDING);
         result = FilterAndSort.getSortedList();
