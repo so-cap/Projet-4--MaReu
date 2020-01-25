@@ -43,10 +43,7 @@ import static org.hamcrest.Matchers.notNullValue;
 public class MeetingCreationTests {
     private ListMeetingsActivity activity;
     private ArrayList<RoomsPerHour> roomsAndHours = new ArrayList<>();
-    private ArrayList<String> rooms;
-    private RoomsAvailabilityHandler roomsAvailability;
-    private MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
-    private char A;
+    private char D;
 
     @Rule
     public ActivityTestRule<ListMeetingsActivity> activityRule =
@@ -54,17 +51,11 @@ public class MeetingCreationTests {
 
     @Before
     public void setup() {
-        A = 'A';
+        D = 'D';
         activity = activityRule.getActivity();
         assertThat(activity, notNullValue());
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        ArrayList<String> hours = new ArrayList<>(Arrays.asList(activity.getResources().
-                getStringArray(R.array.hour_list)));
-        rooms = new ArrayList<>(Arrays.asList(activity.getResources().
-                getStringArray(R.array.room_names)));
-        meetingsHandler.setHoursAndRooms(hours, rooms);
-        roomsAvailability = new RoomsAvailabilityHandler();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -83,7 +74,6 @@ public class MeetingCreationTests {
     @Test
     public void addNewMeetingInLandscapeModeWithSuccess() {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        meetingsHandler.clearAllMeetings();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -114,7 +104,6 @@ public class MeetingCreationTests {
         addMeeting(0);
         onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(4));
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        meetingsHandler.clearAllMeetings();
         Thread.sleep(2000);
         onView(ViewMatchers.withId(R.id.meetings_list)).check(withItemCount(3));
     }
@@ -126,9 +115,12 @@ public class MeetingCreationTests {
         ArrayList<String> dummyRooms = new ArrayList<>(Arrays.asList("Peach", "Luigi"));
         roomsAndHours.add(new RoomsPerHour("8h00", new ArrayList<>(dummyRooms)));
         roomsAndHours.add(new RoomsPerHour("9h00", new ArrayList<>(dummyRooms)));
-        roomsAvailability.updateAvailableHoursAndRooms(roomsAndHours);
         Date today = DI.getTodaysDateWithoutTime();
-        meetingsHandler.updateAvailabilityByDate(today, roomsAvailability);
+
+        MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
+        RoomsAvailabilityHandler roomsHandler = meetingsHandler.getCurrentRoomsAvailabilityHandler(today);
+        roomsHandler.updateAvailableHoursAndRooms(roomsAndHours);
+        meetingsHandler.updateAvailabilityByDate(today, roomsHandler);
 
         for (int i = 0; i < initialHoursAvailable; i++) {
             int initialRoomsCount = dummyRooms.size() - 1;
@@ -139,20 +131,23 @@ public class MeetingCreationTests {
         }
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.select_date)).perform(click());
-        onView(withId(R.id.ok_button)).perform(click());
+        onView(withId(R.id.calendar_ok_button)).perform(click());
         onView(withId(R.id.all_meetings_full)).check(matches(isDisplayed()));
     }
 
     public void addMeeting(int roomPosition) {
+        ArrayList<String> rooms = new ArrayList<>(Arrays.asList(activity.getResources()
+                .getStringArray(R.array.room_names)));
+
         if (activity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             onView(withId(R.id.fab)).perform(click());
         else
             onView(withId(R.id.home_btn)).perform(click());
         onView(withId(R.id.select_date)).perform(click());
-        onView(withId(R.id.ok_button)).perform(click());
+        onView(withId(R.id.calendar_ok_button)).perform(click());
         onView(withText(rooms.get(roomPosition))).perform(click());
         onView(withId(R.id.next_page)).perform(click());
-        onView(withId(R.id.meeting_title_input)).perform(typeText("Reunion " + A++));
+        onView(withId(R.id.meeting_title_input)).perform(typeText("Reunion " + D++));
         onView(withId(R.id.meeting_subject_input)).perform(scrollTo()).perform(replaceText("Sujet de réunion"));
         onView(withId(R.id.email_one)).perform(scrollTo()).perform(typeText("email@address.com"));
         onView(withId(R.id.save_meeting_btn)).perform(click());

@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="ok_button"/>
+    <item name="calendar_ok_button" type="id"/>
 </resources>

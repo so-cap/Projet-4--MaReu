@@ -1,6 +1,7 @@
 package com.sophie.mareu.ui.list_meetings;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,7 +68,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     ImageButton backBtn;
     @BindView(R.id.ok_filter)
     Button okButtonFilter;
-    @BindView(R.id.spinner_filter)
+    @BindView(R.id.rooms_spinner_filter)
     Spinner roomsSpinner;
     @BindView(R.id.filter_activity)
     CardView filterSelectionView;
@@ -185,7 +186,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                     sortList(DESCENDING);
                     break;
                 }
-            case R.id.filter:
+            case R.id.menu_filter:
                 filterSelectionView.setVisibility(View.VISIBLE);
                 initSpinner();
                 break;
@@ -244,6 +245,9 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, Calendar.getInstance().get(Calendar.YEAR),
                 Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
+
+        Button okButton = datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        okButton.setId(R.id.calendar_ok_button);
     }
 
     @Override

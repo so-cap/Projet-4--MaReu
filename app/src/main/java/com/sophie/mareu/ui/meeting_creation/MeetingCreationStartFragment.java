@@ -161,7 +161,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         datePickerDialog.show();
 
         Button okButton = datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        okButton.setId(R.id.ok_button);
+        okButton.setId(R.id.calendar_ok_button);
     }
 
     @Override
