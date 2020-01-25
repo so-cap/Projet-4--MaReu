@@ -30,15 +30,14 @@ public class MeetingsHandlerTests {
     private Date differentDate = new Date();
     private Meeting meeting, differentMeeting;
     private RoomsAvailabilityHandler roomsHandler;
-    private MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
+    private MeetingsHandler meetingsHandler = DI.getNewMeetingsHandler();
     private ArrayList<String> hours = DI.getDummyHoursList();
     private ArrayList<String> rooms = DI.getDummyRoomsList();
 
     @Before
     public void setup(){
-        meetingsHandler.clearAllMeetings();
+        RoomsPerHour.setMeetingsHandler(meetingsHandler);
         meetingsHandler.setHoursAndRooms(hours, rooms);
-
         roomsHandler = new RoomsAvailabilityHandler();
         roomsHandler.initRoomsPerHourList(hours,rooms);
         List<Meeting> meetings = DI.getDummyMeetings();
@@ -48,7 +47,6 @@ public class MeetingsHandlerTests {
 
         differentMeeting = meetings.get(1);
         differentDate = differentMeeting.getDate();
-
     }
 
     @Test
@@ -56,8 +54,6 @@ public class MeetingsHandlerTests {
         meetingsHandler.addMeeting(meeting, date);
         meetingsHandler.addMeeting(differentMeeting, differentDate);
         assertThat(meetingsHandler.getMeetings().size(),equalTo(2));
-
-        meetingsHandler.clearAllMeetings();
     }
 
     @Test
@@ -74,7 +70,6 @@ public class MeetingsHandlerTests {
         ArrayList<RoomsPerHour> roomsPerHour = roomsHandler.getRoomsPerHourList();
         roomsPerHour.get(2).getRooms().remove(2);
         assertThat(roomsPerHour.get(2).getRooms(), not(hasItem("Bowser")));
-
         // check that the room is still available at another hour
         assertThat(roomsPerHour.get(1).getRooms(), hasItem("Bowser"));
     }

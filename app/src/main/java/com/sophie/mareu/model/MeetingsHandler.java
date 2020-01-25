@@ -32,6 +32,11 @@ public class MeetingsHandler {
         return roomsHandler;
     }
 
+    public void updateAvailabilityByDate(Date date, RoomsAvailabilityHandler roomsAvailability) {
+        roomsAvailabilityByDate.remove(date);
+        roomsAvailabilityByDate.put(date, roomsAvailability);
+    }
+
     public void addMeeting(Meeting meeting, Date date) {
         if (meetingsByDate.get(date) != null)
             Objects.requireNonNull(meetingsByDate.get(date)).add(meeting);
@@ -40,11 +45,6 @@ public class MeetingsHandler {
             newMeetingList.add(meeting);
             meetingsByDate.put(date, newMeetingList);
         }
-    }
-
-    public void updateAvailabilityByDate(Date date, RoomsAvailabilityHandler roomsAvailability) {
-        roomsAvailabilityByDate.remove(date);
-        roomsAvailabilityByDate.put(date, roomsAvailability);
     }
 
     public ArrayList<Meeting> getMeetings() {
@@ -60,12 +60,6 @@ public class MeetingsHandler {
             return meetingsByDate.get(date);
         } else
             return new ArrayList<>();
-    }
-
-    public void clearAllMeetings() {
-        roomsAvailabilityByDate.clear();
-        meetingsByDate.clear();
-        FilterAndSort.clearLists();
     }
 
     public void deleteMeeting(Meeting meeting) {
@@ -105,6 +99,12 @@ public class MeetingsHandler {
             // update handlers
             currentRoomsHandler.updateAvailableHoursAndRooms(roomsPerHourList);
         }
+    }
+
+    public void clearAllMeetings() {
+        roomsAvailabilityByDate.clear();
+        meetingsByDate.clear();
+        FilterAndSort.clearLists();
     }
 
     ArrayList<String> getHours() {
