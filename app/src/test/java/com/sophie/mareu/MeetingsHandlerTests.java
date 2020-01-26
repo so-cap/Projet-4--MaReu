@@ -2,7 +2,7 @@ package com.sophie.mareu;
 
 import com.sophie.mareu.di.DI;
 import com.sophie.mareu.helper.MeetingsHandler;
-import com.sophie.mareu.helper.RoomsAvailabilityHandler;
+import com.sophie.mareu.helper.RoomsAvailability;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.model.RoomsPerHour;
 
@@ -29,7 +29,7 @@ public class MeetingsHandlerTests {
     private Date date = new Date();
     private Date differentDate = new Date();
     private Meeting meeting, differentMeeting;
-    private RoomsAvailabilityHandler roomsHandler;
+    private RoomsAvailability roomsAvailability;
     private MeetingsHandler meetingsHandler = DI.getNewMeetingsHandler();
     private ArrayList<String> hours = DI.getDummyHoursList();
     private ArrayList<String> rooms = DI.getDummyRoomsList();
@@ -38,8 +38,8 @@ public class MeetingsHandlerTests {
     public void setup(){
         RoomsPerHour.setMeetingsHandler(meetingsHandler);
         meetingsHandler.setHoursAndRooms(hours, rooms);
-        roomsHandler = new RoomsAvailabilityHandler();
-        roomsHandler.initRoomsPerHourList(hours,rooms);
+        roomsAvailability = new RoomsAvailability();
+        roomsAvailability.initRoomsPerHourList(hours,rooms);
         List<Meeting> meetings = DI.getDummyMeetings();
 
         meeting = meetings.get(0);
@@ -67,7 +67,7 @@ public class MeetingsHandlerTests {
 
     @Test
     public void deleteRoomFromListWithSuccess(){
-        ArrayList<RoomsPerHour> roomsPerHour = roomsHandler.getRoomsPerHourList();
+        ArrayList<RoomsPerHour> roomsPerHour = roomsAvailability.getRoomsPerHourList();
         roomsPerHour.get(2).getRooms().remove(2);
         assertThat(roomsPerHour.get(2).getRooms(), not(hasItem("Bowser")));
         // check that the room is still available at another hour
@@ -77,7 +77,7 @@ public class MeetingsHandlerTests {
     @Test
     public void deleteMeetingWithSuccess(){
         meetingsHandler.addMeeting(meeting, date);
-        meetingsHandler.updateAvailabilityByDate(date, roomsHandler);
+        meetingsHandler.updateAvailabilityByDate(date, roomsAvailability);
         assertThat(meetingsHandler.getMeetings(), hasItem(meeting));
 
         meetingsHandler.deleteMeeting(meeting);
@@ -87,10 +87,10 @@ public class MeetingsHandlerTests {
     @Test
     public void clearAllMeetingsAndHandlersWithSuccess(){
         meetingsHandler.addMeeting(meeting, date);
-        meetingsHandler.updateAvailabilityByDate(date, roomsHandler);
+        meetingsHandler.updateAvailabilityByDate(date, roomsAvailability);
 
         meetingsHandler.addMeeting(differentMeeting, differentDate);
-        meetingsHandler.updateAvailabilityByDate(differentDate, roomsHandler);
+        meetingsHandler.updateAvailabilityByDate(differentDate, roomsAvailability);
 
         assertThat(meetingsHandler.meetingsByDate.size(), equalTo(2));
         assertThat(meetingsHandler.roomsAvailabilityByDate.size(), equalTo(2));

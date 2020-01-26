@@ -28,7 +28,7 @@ import com.sophie.mareu.R;
 import com.sophie.mareu.helper.FilterAndSort;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.helper.MeetingsHandler;
-import com.sophie.mareu.helper.RoomsAvailabilityHandler;
+import com.sophie.mareu.helper.RoomsAvailability;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.ui.DetailFragment;
 import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
@@ -83,7 +83,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     @BindView(R.id.deactivate_sorted_list)
     CardView sortedModeBtn;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,11 +96,11 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         for (int i = 0 ; i < DI.getDummyMeetings().size()-1; i++) {
             Meeting meeting = DI.getDummyMeetings().get(i);
             meetingsHandler.addMeeting(meeting, meeting.getDate());
-            RoomsAvailabilityHandler roomsHandler = meetingsHandler.getCurrentRoomsAvailabilityHandler(meeting.getDate());
-            ArrayList<RoomsPerHour> roomsPerHour = roomsHandler.getRoomsPerHourList();
+            RoomsAvailability roomsAvailability = meetingsHandler.getCurrentRoomsAvailabilityHandler(meeting.getDate());
+            ArrayList<RoomsPerHour> roomsPerHour = roomsAvailability.getRoomsPerHourList();
             roomsPerHour.get(meeting.getHour().getKey()).getRooms().remove(meeting.getRoomName());
-            roomsHandler.updateAvailableHoursAndRooms(roomsPerHour);
-            meetingsHandler.updateAvailabilityByDate(meeting.getDate(), roomsHandler);
+            roomsAvailability.updateAvailableHoursAndRooms(roomsPerHour);
+            meetingsHandler.updateAvailabilityByDate(meeting.getDate(), roomsAvailability);
         }
 
         configureAndShowListMeetingFragment();
@@ -199,18 +198,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // Because the spinner displayed starts at ""  and our array starts at "Peach"
-        if (position == 0) selectedRoom = "";
-        else selectedRoom = getResources().getStringArray(R.array.room_names)[position - 1];
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.choose_date:
@@ -254,6 +241,17 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         selectedDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
         chooseDateBtn.setText(df.format(selectedDate));
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (position == 0) selectedRoom = "";
+        else selectedRoom = getResources().getStringArray(R.array.room_names)[position - 1];
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     private void filterList() {

@@ -26,7 +26,7 @@ import com.sophie.mareu.di.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.helper.FilterAndSort;
 import com.sophie.mareu.helper.MeetingsHandler;
-import com.sophie.mareu.helper.RoomsAvailabilityHandler;
+import com.sophie.mareu.helper.RoomsAvailability;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsFragment;
@@ -38,13 +38,13 @@ import butterknife.ButterKnife;
 
 import static com.sophie.mareu.Constants.ARGUMENT_HOUR_POSITION;
 import static com.sophie.mareu.Constants.ARGUMENT_MEETING;
-import static com.sophie.mareu.Constants.ARGUMENT_ROOMS_HANDLER;
+import static com.sophie.mareu.Constants.ARGUMENT_ROOMS_AVAILABILITY;
 import static com.sophie.mareu.Constants.UNCHANGED;
 
 public class MeetingCreationEndFragment extends Fragment implements View.OnClickListener {
     private String title, subject;
     private ArrayList<String> participants = new ArrayList<>();
-    private RoomsAvailabilityHandler roomsAvailability;
+    private RoomsAvailability roomsAvailability;
     private Meeting meeting;
     private int hourPosition;
 
@@ -79,7 +79,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
 
         if (getArguments() != null) {
             meeting = getArguments().getParcelable(ARGUMENT_MEETING);
-            roomsAvailability = (RoomsAvailabilityHandler) getArguments().getSerializable(ARGUMENT_ROOMS_HANDLER);
+            roomsAvailability = (RoomsAvailability) getArguments().getSerializable(ARGUMENT_ROOMS_AVAILABILITY);
             hourPosition = getArguments().getInt(ARGUMENT_HOUR_POSITION);
         }
 

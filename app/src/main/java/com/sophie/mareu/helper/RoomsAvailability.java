@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by SOPHIE on 30/12/2019.
  */
-public class RoomsAvailabilityHandler implements Serializable {
+public class RoomsAvailability implements Serializable {
     private ArrayList<RoomsPerHour> roomsPerHourList = new ArrayList<>();
 
     public void initRoomsPerHourList(ArrayList<String> hours, ArrayList<String> rooms){
@@ -29,7 +29,6 @@ public class RoomsAvailabilityHandler implements Serializable {
     public void updateAvailableHoursAndRooms(ArrayList<RoomsPerHour> availableHoursAndRooms) {
         roomsPerHourList = availableHoursAndRooms;
 
-        // delete hour availability if all the rooms are taken
         for (int position = 0; position < roomsPerHourList.size(); position++) {
             if (roomsPerHourList.get(position).getRooms().isEmpty()) {
                 roomsPerHourList.remove(position);

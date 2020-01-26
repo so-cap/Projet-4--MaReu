@@ -66,7 +66,6 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_list_meetings, container, false);
 
-        //To display the toolbar only on the list meeting fragment
         Toolbar mainToolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.my_toolbar);
         mainToolbar.setVisibility(View.VISIBLE);
         context = view.getContext();

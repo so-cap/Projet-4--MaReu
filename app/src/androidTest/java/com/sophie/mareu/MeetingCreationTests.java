@@ -9,7 +9,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.sophie.mareu.di.DI;
 import com.sophie.mareu.helper.MeetingsHandler;
-import com.sophie.mareu.helper.RoomsAvailabilityHandler;
+import com.sophie.mareu.helper.RoomsAvailability;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
 import com.sophie.mareu.utils.DeleteViewAction;
@@ -118,9 +118,9 @@ public class MeetingCreationTests {
         Date today = DI.getTodaysDateWithoutTime();
 
         MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
-        RoomsAvailabilityHandler roomsHandler = meetingsHandler.getCurrentRoomsAvailabilityHandler(today);
-        roomsHandler.updateAvailableHoursAndRooms(roomsAndHours);
-        meetingsHandler.updateAvailabilityByDate(today, roomsHandler);
+        RoomsAvailability roomsAvailability = meetingsHandler.getCurrentRoomsAvailabilityHandler(today);
+        roomsAvailability.updateAvailableHoursAndRooms(roomsAndHours);
+        meetingsHandler.updateAvailabilityByDate(today, roomsAvailability);
 
         for (int i = 0; i < initialHoursAvailable; i++) {
             int initialRoomsCount = dummyRooms.size() - 1;

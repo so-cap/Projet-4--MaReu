@@ -15,7 +15,7 @@ import java.util.Objects;
  */
 public class MeetingsHandler {
     public HashMap<Date, ArrayList<Meeting>> meetingsByDate = new HashMap<>();
-    public HashMap<Date, RoomsAvailabilityHandler> roomsAvailabilityByDate = new HashMap<>();
+    public HashMap<Date, RoomsAvailability> roomsAvailabilityByDate = new HashMap<>();
     private ArrayList<String> hours;
     private ArrayList<String> rooms;
 
@@ -24,17 +24,17 @@ public class MeetingsHandler {
         this.rooms = rooms;
     }
 
-    public RoomsAvailabilityHandler getCurrentRoomsAvailabilityHandler(Date date) {
+    public RoomsAvailability getCurrentRoomsAvailabilityHandler(Date date) {
         for (int position = 0; position < roomsAvailabilityByDate.size(); position++) {
             if (roomsAvailabilityByDate.containsKey(date))
                 return roomsAvailabilityByDate.get(date);
         }
-        RoomsAvailabilityHandler roomsHandler = DI.getNewRoomsAvailabilityHandler();
+        RoomsAvailability roomsHandler = DI.getNewRoomsAvailabilityHandler();
         roomsHandler.initRoomsPerHourList(hours, rooms);
         return roomsHandler;
     }
 
-    public void updateAvailabilityByDate(Date date, RoomsAvailabilityHandler roomsAvailability) {
+    public void updateAvailabilityByDate(Date date, RoomsAvailability roomsAvailability) {
         roomsAvailabilityByDate.remove(date);
         roomsAvailabilityByDate.put(date, roomsAvailability);
     }
@@ -65,19 +65,12 @@ public class MeetingsHandler {
     }
 
     public void deleteMeeting(Meeting meeting) {
-        RoomsAvailabilityHandler currentRoomsHandler = roomsAvailabilityByDate.get(meeting.getDate());
-        if (currentRoomsHandler != null) {
-            ArrayList<RoomsPerHour> roomsPerHourList = currentRoomsHandler.getRoomsPerHourList();
+        RoomsAvailability currentRoomsAvailability = roomsAvailabilityByDate.get(meeting.getDate());
+        if (currentRoomsAvailability != null) {
+            ArrayList<RoomsPerHour> roomsPerHourList = currentRoomsAvailability.getRoomsPerHourList();
             Integer meetingHourPosition = meeting.getHour().getKey();
-            // check if the hour of the meeting exists in the list
-            int hourAvailable = 0;
-            for (int i = 0; i < roomsPerHourList.size(); i++)
-                if (roomsPerHourList.get(i).getHour().getKey().equals(meetingHourPosition)){
-                    hourAvailable++;
-                    break;
-                }
-            // make hour available again if it wasn't anymore
-            if (hourAvailable == 0) {
+
+            if (!checkIfMeetingHourIsInTheList(roomsPerHourList, meetingHourPosition)) {
                 RoomsPerHour roomsPerHour = new RoomsPerHour();
                 roomsPerHour.setHour(meetingHourPosition, meeting.getHour().getValue());
                 if (roomsPerHourList.size() > meetingHourPosition)
@@ -85,22 +78,32 @@ public class MeetingsHandler {
                 else
                     roomsPerHourList.add(roomsPerHour);
             }
-            // make room available again
-            if (roomsPerHourList.size() > meetingHourPosition)
-                roomsPerHourList.get(meeting.getHour().getKey()).addRoom(meeting.getRoomName());
-            else
-                roomsPerHourList.get(roomsPerHourList.size() - 1).addRoom(meeting.getRoomName());
 
-            // finally, delete meeting from lists
+            makeRoomAvailableAgain(meetingHourPosition, meeting, roomsPerHourList);
+
             Objects.requireNonNull(meetingsByDate.get(meeting.getDate())).remove(meeting);
             FilterAndSort.removeMeeting(meeting);
 
             if (meetingsByDate.get(meeting.getDate()) == null)
                 meetingsByDate.remove(meeting.getDate());
 
-            // update handlers
-            currentRoomsHandler.updateAvailableHoursAndRooms(roomsPerHourList);
+            currentRoomsAvailability.updateAvailableHoursAndRooms(roomsPerHourList);
         }
+    }
+
+    private boolean checkIfMeetingHourIsInTheList( ArrayList<RoomsPerHour> roomsPerHourList, int meetingHourPosition) {
+        for (int i = 0; i < roomsPerHourList.size(); i++)
+            if (roomsPerHourList.get(i).getHour().getKey().equals(meetingHourPosition)){
+                return true;
+            }
+        return false;
+    }
+
+    private void makeRoomAvailableAgain(Integer meetingHourPosition, Meeting meeting, ArrayList<RoomsPerHour> roomsPerHourList) {
+        if (roomsPerHourList.size() > meetingHourPosition)
+            roomsPerHourList.get(meeting.getHour().getKey()).addRoom(meeting.getRoomName());
+        else
+            roomsPerHourList.get(roomsPerHourList.size() - 1).addRoom(meeting.getRoomName());
     }
 
     public void clearAllMeetings() {

@@ -26,7 +26,7 @@ import com.adroitandroid.chipcloud.ChipListener;
 import com.sophie.mareu.di.DI;
 import com.sophie.mareu.R;
 import com.sophie.mareu.helper.MeetingsHandler;
-import com.sophie.mareu.helper.RoomsAvailabilityHandler;
+import com.sophie.mareu.helper.RoomsAvailability;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.ui.list_meetings.ListMeetingsActivity;
@@ -44,9 +44,9 @@ import butterknife.ButterKnife;
 
 import static com.sophie.mareu.Constants.ARGUMENT_HOUR_POSITION;
 import static com.sophie.mareu.Constants.ARGUMENT_MEETING;
-import static com.sophie.mareu.Constants.ARGUMENT_ROOMS_HANDLER;
+import static com.sophie.mareu.Constants.ARGUMENT_ROOMS_AVAILABILITY;
 
-public class MeetingCreationStartFragment extends Fragment implements View.OnClickListener, ChipListener, DatePickerDialog.OnDateSetListener {
+public class MeetingCreationStartFragment extends Fragment implements View.OnClickListener, ChipListener, DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
     private ArrayList<RoomsPerHour> roomsPerHourList;
     private ArrayList<String> spinnerArray;
     private AbstractMap.SimpleEntry<Integer, String> selectedHour;
@@ -55,7 +55,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     private Context context;
     private int roomPosition = -1;
     private Date selectedDate;
-    private RoomsAvailabilityHandler roomsHandler = new RoomsAvailabilityHandler();
+    private RoomsAvailability roomsAvailability = new RoomsAvailability();
 
     @BindView(R.id.select_date)
     Button dateView;
@@ -79,23 +79,16 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
         setUpBackButton();
         dateView.setOnClickListener(this);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                hourPosition = position;
-                selectedHour = roomsPerHourList.get(hourPosition).getHour();
-                initChipCloud();
-                //In case the user chooses a room, then changes the hour afterwards.
-                roomPosition = - 1;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+        spinner.setOnItemSelectedListener(this);
         chipCloud.setChipListener(this);
         nextPage.setOnClickListener(this);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        roomPosition = -1;
     }
 
     private void setUpBackButton() {
@@ -106,37 +99,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
                 else
                     getActivity().onBackPressed();
             });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        roomPosition = -1;
-    }
-
-    private void initSpinner() {
-        roomsPerHourList = roomsHandler.getRoomsPerHourList();
-        spinnerArray = new ArrayList<>();
-        String mHour;
-
-        for (int position = 0; position < roomsPerHourList.size(); position++) {
-            mHour = (roomsPerHourList.get(position).getHour().getValue());
-            spinnerArray.add(mHour);
-        }
-    }
-
-    private void displaySpinner() {
-        if (!(spinnerArray.isEmpty())) {
-            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, spinnerArray);
-            spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-            spinner.setAdapter(spinnerAdapter);
-        }
-    }
-
-    private void initChipCloud() {
-        String[] rooms = roomsPerHourList.get(hourPosition).getRooms().toArray(new String[0]);
-        chipCloud.removeAllViews();
-        chipCloud.addChips(rooms);
     }
 
     @Override
@@ -165,15 +127,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     }
 
     @Override
-    public void chipSelected(int index) {
-        roomPosition = index;
-    }
-
-    @Override
-    public void chipDeselected(int index) {
-    }
-
-    @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE);
         Date newDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
@@ -189,17 +142,64 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
     private void updateCurrentRoomsAvailabilityHandler(Date newDate) {
         MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
-        roomsHandler = meetingsHandler.getCurrentRoomsAvailabilityHandler(newDate);
-        if (roomsHandler.getRoomsPerHourList().isEmpty()) {
-            meetingsFull.setVisibility(View.VISIBLE);
-            chipCloud.setVisibility(View.GONE);
-            nextPage.setVisibility(View.GONE);
-        } else {
+        roomsAvailability = meetingsHandler.getCurrentRoomsAvailabilityHandler(newDate);
+        if (!roomsAvailability.getRoomsPerHourList().isEmpty()) {
             selectedDate = newDate;
             initSpinner();
             displaySpinner();
             initChipCloud();
+        } else {
+            meetingsFull.setVisibility(View.VISIBLE);
+            chipCloud.setVisibility(View.GONE);
+            nextPage.setVisibility(View.GONE);
         }
+    }
+
+    private void initSpinner() {
+        roomsPerHourList = roomsAvailability.getRoomsPerHourList();
+        spinnerArray = new ArrayList<>();
+        String mHour;
+
+        for (int position = 0; position < roomsPerHourList.size(); position++) {
+            mHour = (roomsPerHourList.get(position).getHour().getValue());
+            spinnerArray.add(mHour);
+        }
+    }
+
+    private void displaySpinner() {
+        if (!(spinnerArray.isEmpty())) {
+            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, spinnerArray);
+            spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            spinner.setAdapter(spinnerAdapter);
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        hourPosition = position;
+        selectedHour = roomsPerHourList.get(hourPosition).getHour();
+        initChipCloud();
+        //In case the user chooses a room, then changes the hour afterwards.
+        roomPosition = - 1;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    private void initChipCloud() {
+        String[] rooms = roomsPerHourList.get(hourPosition).getRooms().toArray(new String[0]);
+        chipCloud.removeAllViews();
+        chipCloud.addChips(rooms);
+    }
+
+    @Override
+    public void chipSelected(int index) {
+        roomPosition = index;
+    }
+
+    @Override
+    public void chipDeselected(int index) {
     }
 
     private boolean checkIfValid() {
@@ -220,7 +220,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
         Bundle bundle = new Bundle();
         bundle.putParcelable(ARGUMENT_MEETING, meeting);
-        bundle.putSerializable(ARGUMENT_ROOMS_HANDLER, roomsHandler);
+        bundle.putSerializable(ARGUMENT_ROOMS_AVAILABILITY, roomsAvailability);
         bundle.putInt(ARGUMENT_HOUR_POSITION, hourPosition);
         meetingCreationEndFragment.setArguments(bundle);
 

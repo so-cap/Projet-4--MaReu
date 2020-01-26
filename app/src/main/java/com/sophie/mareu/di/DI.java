@@ -1,7 +1,7 @@
 package com.sophie.mareu.di;
 
 import com.sophie.mareu.helper.MeetingsHandler;
-import com.sophie.mareu.helper.RoomsAvailabilityHandler;
+import com.sophie.mareu.helper.RoomsAvailability;
 import com.sophie.mareu.model.Meeting;
 
 import java.util.ArrayList;
@@ -22,14 +22,13 @@ public class DI {
         return dummyMeetings;
     }
 
-    public static RoomsAvailabilityHandler getNewRoomsAvailabilityHandler(){
-        return new RoomsAvailabilityHandler();
+    public static RoomsAvailability getNewRoomsAvailabilityHandler(){
+        return new RoomsAvailability();
     }
 
     public static MeetingsHandler getMeetingsHandler(){
         return meetingsHandler;
     }
-
 
     // For testing
     public static MeetingsHandler getNewMeetingsHandler(){
