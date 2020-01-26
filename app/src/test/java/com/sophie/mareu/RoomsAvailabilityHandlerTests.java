@@ -1,8 +1,8 @@
 package com.sophie.mareu;
 
-import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.model.MeetingsHandler;
-import com.sophie.mareu.model.RoomsAvailabilityHandler;
+import com.sophie.mareu.di.DI;
+import com.sophie.mareu.helper.MeetingsHandler;
+import com.sophie.mareu.helper.RoomsAvailabilityHandler;
 import com.sophie.mareu.model.RoomsPerHour;
 
 import org.junit.Before;

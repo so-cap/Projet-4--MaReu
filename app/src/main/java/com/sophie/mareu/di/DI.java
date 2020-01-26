@@ -1,7 +1,7 @@
-package com.sophie.mareu.DI;
+package com.sophie.mareu.di;
 
-import com.sophie.mareu.model.MeetingsHandler;
-import com.sophie.mareu.model.RoomsAvailabilityHandler;
+import com.sophie.mareu.helper.MeetingsHandler;
+import com.sophie.mareu.helper.RoomsAvailabilityHandler;
 import com.sophie.mareu.model.Meeting;
 
 import java.util.ArrayList;

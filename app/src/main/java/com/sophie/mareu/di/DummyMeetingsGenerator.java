@@ -1,4 +1,4 @@
-package com.sophie.mareu.DI;
+package com.sophie.mareu.di;
 
 import com.sophie.mareu.model.Meeting;
 

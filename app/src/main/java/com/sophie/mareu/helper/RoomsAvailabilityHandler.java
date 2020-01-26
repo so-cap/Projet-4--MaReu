@@ -1,4 +1,6 @@
-package com.sophie.mareu.model;
+package com.sophie.mareu.helper;
+
+import com.sophie.mareu.model.RoomsPerHour;
 
 import java.io.Serializable;
 import java.util.ArrayList;

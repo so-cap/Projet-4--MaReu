@@ -20,11 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.sophie.mareu.DI.DI;
+import com.sophie.mareu.di.DI;
 import com.sophie.mareu.R;
-import com.sophie.mareu.model.FilterAndSort;
+import com.sophie.mareu.helper.FilterAndSort;
 import com.sophie.mareu.model.Meeting;
-import com.sophie.mareu.model.MeetingsHandler;
+import com.sophie.mareu.helper.MeetingsHandler;
 import com.sophie.mareu.ui.DetailFragment;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
 
@@ -117,9 +117,10 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
             filterActivatedView.setVisibility(View.GONE);
         }
 
-        recyclerView.setAdapter(new ListMeetingsRecyclerViewAdapter(meetings));
-        ((ListMeetingsRecyclerViewAdapter) Objects.requireNonNull(recyclerView.getAdapter())).setOnDeleteMeetingListener(this);
-        ((ListMeetingsRecyclerViewAdapter) recyclerView.getAdapter()).setOnMeetingClickListener(this);
+        ListMeetingsRecyclerViewAdapter adapter = new ListMeetingsRecyclerViewAdapter(meetings);
+        adapter.setOnMeetingClickListener(this);
+        adapter.setOnDeleteMeetingListener(this);
+        recyclerView.setAdapter(adapter);
 
         if (!(meetings.isEmpty())) mNoNewMeetings.setVisibility(View.GONE);
         else mNoNewMeetings.setVisibility(View.VISIBLE);

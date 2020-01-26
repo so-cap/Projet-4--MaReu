@@ -1,8 +1,8 @@
 package com.sophie.mareu;
 
-import com.sophie.mareu.DI.DI;
-import com.sophie.mareu.model.MeetingsHandler;
-import com.sophie.mareu.model.FilterAndSort;
+import com.sophie.mareu.di.DI;
+import com.sophie.mareu.helper.MeetingsHandler;
+import com.sophie.mareu.helper.FilterAndSort;
 import com.sophie.mareu.model.Meeting;
 
 import org.junit.Before;

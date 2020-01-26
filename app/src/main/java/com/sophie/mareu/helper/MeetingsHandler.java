@@ -1,6 +1,8 @@
-package com.sophie.mareu.model;
+package com.sophie.mareu.helper;
 
-import com.sophie.mareu.DI.DI;
+import com.sophie.mareu.di.DI;
+import com.sophie.mareu.model.Meeting;
+import com.sophie.mareu.model.RoomsPerHour;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -107,7 +109,7 @@ public class MeetingsHandler {
         FilterAndSort.clearLists();
     }
 
-    ArrayList<String> getHours() {
+    public ArrayList<String> getHours() {
         return hours;
     }
 

@@ -2,7 +2,8 @@ package com.sophie.mareu.model;
 
 import androidx.annotation.VisibleForTesting;
 
-import com.sophie.mareu.DI.DI;
+import com.sophie.mareu.di.DI;
+import com.sophie.mareu.helper.MeetingsHandler;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class RoomsPerHour {
         return hour;
     }
 
-    void setHour(Integer key, String hour) {
+    public void setHour(Integer key, String hour) {
         this.hour = new AbstractMap.SimpleEntry<>(key, hour);
     }
 
@@ -34,7 +35,7 @@ public class RoomsPerHour {
         return rooms;
     }
 
-    void addRoom(String room){
+    public void addRoom(String room){
         rooms.add(room);
     }
 

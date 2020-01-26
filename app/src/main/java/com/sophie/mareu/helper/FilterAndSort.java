@@ -1,8 +1,9 @@
-package com.sophie.mareu.model;
+package com.sophie.mareu.helper;
 
 import androidx.annotation.VisibleForTesting;
 
-import com.sophie.mareu.DI.DI;
+import com.sophie.mareu.di.DI;
+import com.sophie.mareu.model.Meeting;
 
 import java.util.ArrayList;
 import java.util.Collections;
