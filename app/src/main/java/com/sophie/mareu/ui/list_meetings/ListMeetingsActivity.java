@@ -140,15 +140,10 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // Because the spinner displayed starts at ""  and our array starts at "Peach"
-        if (position == 0) selectedRoom = "";
-        else selectedRoom = getResources().getStringArray(R.array.room_names)[position - 1];
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_filter, menu);
+        this.menu = menu;
+        return true;
     }
 
     @Override
@@ -158,13 +153,6 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
             filterSelectionView.setVisibility(View.GONE);
             this.menu.close();
         }
-        return true;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_filter, menu);
-        this.menu = menu;
         return true;
     }
 
@@ -208,6 +196,18 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                 new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, spinnerArray);
         spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         roomsSpinner.setAdapter(spinnerAdapter);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // Because the spinner displayed starts at ""  and our array starts at "Peach"
+        if (position == 0) selectedRoom = "";
+        else selectedRoom = getResources().getStringArray(R.array.room_names)[position - 1];
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     @Override
@@ -258,9 +258,9 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
 
     private void filterList() {
         FilterAndSort.filterMeetingsList(selectedDate, selectedRoom);
+        listMeetingsFragment.initList(FILTERED);
         filterSelectionView.setVisibility(View.GONE);
         sortedModeBtn.setVisibility(View.GONE);
-        listMeetingsFragment.initList(FILTERED);
 
         String text;
         if (selectedDate != null && selectedRoom.isEmpty())
