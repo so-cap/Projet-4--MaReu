@@ -4,79 +4,72 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/filter_selected_cardviews"
+    android:layout_marginEnd="10dp"
     android:layout_marginStart="10dp"
-    android:layout_marginBottom="2dp">
-
-    <androidx.cardview.widget.CardView
-        android:visibility="gone"
-        android:id="@+id/filter_selected"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:cardCornerRadius="3dp"
-        app:cardElevation="3dp"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deactivate_filter">
+    android:layout_marginBottom="5dp"
+    android:background="@color/colorPrimary">
 
         <TextView
-            android:id="@+id/filter_selected_text"
-            android:layout_width="wrap_content"
+            android:id="@+id/filter_selected"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:layout_marginTop="2dp"
             android:layout_marginEnd="5dp"
-            android:textSize="16sp"
             android:text="@string/default_filterview_text"
-            android:textColor="@color/dark_grey"
-            android:textStyle="italic|bold" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:visibility="gone"
-        android:id="@+id/deactivate_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:cardBackgroundColor="@color/light_blue"
-        app:cardCornerRadius="3dp"
-        app:cardElevation="3dp"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="italic|bold"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/sorted_list_selected"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/deactivate_filter"/>
 
         <TextView
-            android:id="@+id/deactivate_filter_text"
+            android:id="@+id/deactivate_filter"
+            android:background="@color/light_blue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:text="@string/deactivate_filter"
             android:textColor="@color/dark_grey"
-            android:textStyle="bold" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/deactivate_sorted_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:cardBackgroundColor="@color/light_blue"
-        app:cardCornerRadius="3dp"
-        app:cardElevation="3dp"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
+            android:id="@+id/deactivate_sorted_list"
+            android:background="@color/light_blue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:text="@string/cancel_sorted_list"
             android:textColor="@color/dark_grey"
-            android:textStyle="bold" />
-    </androidx.cardview.widget.CardView>
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
+        <TextView
+            android:id="@+id/sorted_list_selected"
+            android:layout_width="0dp"
+            android:layout_marginTop="2dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:text="@string/sort_by_hour_default"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="italic|bold"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/deactivate_sorted_list"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

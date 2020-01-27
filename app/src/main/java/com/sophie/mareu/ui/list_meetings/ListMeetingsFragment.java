@@ -47,7 +47,6 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
     private ArrayList<Meeting> meetings = new ArrayList<>();
     private MeetingsHandler meetingsHandler = DI.getMeetingsHandler();
     private RecyclerView recyclerView;
-    private Context context;
     private int listCurrentState = -1;
 
     @BindView(R.id.no_new_meetings)
@@ -68,7 +67,7 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
 
         Toolbar mainToolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.my_toolbar);
         mainToolbar.setVisibility(View.VISIBLE);
-        context = view.getContext();
+        Context context = view.getContext();
         recyclerView = (RecyclerView) view;
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));

@@ -72,16 +72,16 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     Spinner roomsSpinner;
     @BindView(R.id.filter_activity)
     CardView filterSelectionView;
-    @BindView(R.id.filter_selected)
-    CardView filterSelectedView;
-    @BindView(R.id.deactivate_filter)
-    CardView deactivateFilterBtn;
-    @BindView(R.id.filter_selected_text)
-    TextView filterModeText;
     @BindView(R.id.filter_activated)
     View filterActivatedView;
+    @BindView(R.id.filter_selected)
+    TextView filterSelected;
+    @BindView(R.id.deactivate_filter)
+    TextView deactivateFilterBtn;
     @BindView(R.id.deactivate_sorted_list)
-    CardView sortedModeBtn;
+    TextView deactivatedSortModeBtn;
+    @BindView(R.id.sorted_list_selected)
+    TextView sortModeSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                 new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.room_names))));
 
         // Add 3 dummyMeetings to illustrate presentation. Then update data.
-        for (int i = 0 ; i < DI.getDummyMeetings().size()-1; i++) {
+        for (int i = 0; i < DI.getDummyMeetings().size() - 1; i++) {
             Meeting meeting = DI.getDummyMeetings().get(i);
             meetingsHandler.addMeeting(meeting, meeting.getDate());
             RoomsAvailability roomsAvailability = meetingsHandler.getCurrentRoomsAvailabilityHandler(meeting.getDate());
@@ -106,7 +106,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         configureAndShowListMeetingFragment();
         configureAndShowHomeStartMeetingCreationFragment();
 
-        sortedModeBtn.setOnClickListener(this);
+        deactivatedSortModeBtn.setOnClickListener(this);
         deactivateFilterBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
         okButtonFilter.setOnClickListener(this);
@@ -184,7 +184,13 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     private void sortList(int sortingOrder) {
         FilterAndSort.sortList(sortingOrder);
         listMeetingsFragment.initList(SORTED);
-        sortedModeBtn.setVisibility(View.VISIBLE);
+        deactivatedSortModeBtn.setVisibility(View.VISIBLE);
+        sortModeSelected.setVisibility(View.VISIBLE);
+        if (sortingOrder == ASCENDING)
+            sortModeSelected.setText(getString(R.string.sort_by_hour_selected, getString(R.string.ascending)));
+        else
+            sortModeSelected.setText(getString(R.string.sort_by_hour_selected, getString(R.string.descending)));
+
     }
 
     private void initSpinner() {
@@ -218,11 +224,10 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
             case R.id.deactivate_sorted_list:
                 if (FilterAndSort.getFilteredList().isEmpty())
                     listMeetingsFragment.initList(UNCHANGED);
-                else {
-                    FilterAndSort.filterMeetingsList(selectedDate, selectedRoom);
+                else
                     listMeetingsFragment.initList(FILTERED);
-                }
-                sortedModeBtn.setVisibility(View.GONE);
+                deactivatedSortModeBtn.setVisibility(View.GONE);
+                sortModeSelected.setVisibility(View.GONE);
                 break;
         }
     }
@@ -258,7 +263,8 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         FilterAndSort.filterMeetingsList(selectedDate, selectedRoom);
         listMeetingsFragment.initList(FILTERED);
         filterSelectionView.setVisibility(View.GONE);
-        sortedModeBtn.setVisibility(View.GONE);
+        deactivatedSortModeBtn.setVisibility(View.GONE);
+        sortModeSelected.setVisibility(View.GONE);
 
         String text;
         if (selectedDate != null && selectedRoom.isEmpty())
@@ -267,8 +273,8 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
             text = getString(R.string.filtered_room_only, selectedRoom);
         else
             text = getString(R.string.filtered_date_and_room, df.format(Objects.requireNonNull(selectedDate)), selectedRoom);
-        filterModeText.setText(text);
-        filterSelectedView.setVisibility(View.VISIBLE);
+        filterSelected.setText(text);
+        filterSelected.setVisibility(View.VISIBLE);
         deactivateFilterBtn.setVisibility(View.VISIBLE);
         resetFilterView();
     }
@@ -284,10 +290,10 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
         listMeetingsFragment.initList(UNCHANGED);
         FilterAndSort.clearLists();
         filterSelectionView.setVisibility(View.GONE);
-        filterSelectedView.setVisibility(View.GONE);
+        filterSelected.setVisibility(View.GONE);
         deactivateFilterBtn.setVisibility(View.GONE);
-        sortedModeBtn.setVisibility(View.GONE);
-        filterSelectionView.setVisibility(View.GONE);
+        deactivatedSortModeBtn.setVisibility(View.GONE);
+        sortModeSelected.setVisibility(View.GONE);
     }
 
     @Override

@@ -15,7 +15,7 @@
             android:id="@+id/meeting_start_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_arrow_back_black_24dp"/>
+            app:navigationIcon="@drawable/ic_arrow_white_black_24dp"/>
     </com.google.android.material.appbar.AppBarLayout>
 
 <ScrollView android:layout_width="match_parent"
