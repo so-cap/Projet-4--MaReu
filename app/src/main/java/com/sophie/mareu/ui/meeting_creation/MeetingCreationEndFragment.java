@@ -196,8 +196,8 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
         FragmentActivity activity = getActivity();
         FilterAndSort.getFilteredList().clear();
         FilterAndSort.getSortedList().clear();
-
         setMeeting();
+
         if (activity != null) {
             if (activity.getClass().equals(MeetingCreationActivity.class)) {
                 activity.finish();

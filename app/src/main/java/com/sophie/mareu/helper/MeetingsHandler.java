@@ -29,9 +29,9 @@ public class MeetingsHandler {
             if (roomsAvailabilityByDate.containsKey(date))
                 return roomsAvailabilityByDate.get(date);
         }
-        RoomsAvailability roomsHandler = DI.getNewRoomsAvailabilityHandler();
-        roomsHandler.initRoomsPerHourList(hours, rooms);
-        return roomsHandler;
+        RoomsAvailability roomsAvailability = DI.getNewRoomsAvailability();
+        roomsAvailability.initRoomsPerHourList(hours, rooms);
+        return roomsAvailability;
     }
 
     public void updateAvailabilityByDate(Date date, RoomsAvailability roomsAvailability) {

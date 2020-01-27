@@ -17,10 +17,11 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sophie.mareu.R;
 import com.sophie.mareu.model.Meeting;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.sophie.mareu.Constants.*;
+import static com.sophie.mareu.Constants.ARGUMENT_MEETING;
 
 public class DetailFragment extends Fragment {
     private Meeting meeting;
@@ -44,15 +45,8 @@ public class DetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, view);
 
-        activity = getActivity();
-        if (activity != null) {
-            Toolbar mainToolbar = activity.findViewById(R.id.my_toolbar);
-            FloatingActionButton fabMain = activity.findViewById(R.id.fab);
-            if (fabMain != null) {
-                fabMain.hide();
-                mainToolbar.setVisibility(View.GONE);
-            } else mainToolbar.setVisibility(View.VISIBLE);
-        }
+        displayMainToolbar();
+
         if (getArguments() != null) {
             meeting = getArguments().getParcelable(ARGUMENT_MEETING);
             initMeetingPage();
@@ -60,6 +54,19 @@ public class DetailFragment extends Fragment {
         toolbar.setNavigationOnClickListener(v -> activity.getSupportFragmentManager()
                 .popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE));
         return view;
+    }
+
+    private void displayMainToolbar() {
+        activity = getActivity();
+        if (activity != null) {
+            Toolbar mainToolbar = activity.findViewById(R.id.my_toolbar);
+            FloatingActionButton fabMain = activity.findViewById(R.id.fab);
+            if (fabMain != null) {
+                fabMain.hide();
+                mainToolbar.setVisibility(View.GONE);
+            } else
+                mainToolbar.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initMeetingPage() {

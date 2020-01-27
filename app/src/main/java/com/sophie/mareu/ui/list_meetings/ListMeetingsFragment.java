@@ -20,11 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.sophie.mareu.di.DI;
 import com.sophie.mareu.R;
+import com.sophie.mareu.di.DI;
 import com.sophie.mareu.helper.FilterAndSort;
-import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.helper.MeetingsHandler;
+import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.ui.DetailFragment;
 import com.sophie.mareu.ui.meeting_creation.MeetingCreationActivity;
 
@@ -65,15 +65,8 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_list_meetings, container, false);
 
-        Toolbar mainToolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.my_toolbar);
-        mainToolbar.setVisibility(View.VISIBLE);
-        Context context = view.getContext();
-        recyclerView = (RecyclerView) view;
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
-
-        if (getActivity() != null)
-            ButterKnife.bind(this, getActivity());
+        bindViews();
+        initRecyclerView(view);
 
         // If the user is in portrait mode.
         if (fab != null) {
@@ -83,18 +76,33 @@ public class ListMeetingsFragment extends Fragment implements View.OnClickListen
         return view;
     }
 
+    private void bindViews() {
+        Toolbar mainToolbar = Objects.requireNonNull(getActivity()).findViewById(R.id.my_toolbar);
+        mainToolbar.setVisibility(View.VISIBLE);
+
+        if (getActivity() != null)
+            ButterKnife.bind(this, getActivity());
+    }
+
+    private void initRecyclerView(View view) {
+        Context context = view.getContext();
+        recyclerView = (RecyclerView) view;
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+    }
+
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(getContext(), MeetingCreationActivity.class);
         startActivity(intent);
     }
 
+    //In case of clicking on the details of a meeting, the list will keep it's previous state.
+    //If creating a new meeting, the list will be updated without any filter applied to it.
     @Override
     public void onResume() {
         super.onResume();
         filterActivatedView.setVisibility(View.VISIBLE);
-        //In case of clicking on the details of a meeting, the list will keep it's previous state.
-        //If creating a new meeting, the list will be updated without any filter applied to it.
         if (FilterAndSort.getFilteredList().isEmpty() && FilterAndSort.getSortedList().isEmpty())
             initList(UNCHANGED);
          else if (!FilterAndSort.getSortedList().isEmpty() && FilterAndSort.getFilteredList().isEmpty())

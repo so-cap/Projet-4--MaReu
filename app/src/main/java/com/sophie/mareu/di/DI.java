@@ -22,7 +22,7 @@ public class DI {
         return dummyMeetings;
     }
 
-    public static RoomsAvailability getNewRoomsAvailabilityHandler(){
+    public static RoomsAvailability getNewRoomsAvailability(){
         return new RoomsAvailability();
     }
 

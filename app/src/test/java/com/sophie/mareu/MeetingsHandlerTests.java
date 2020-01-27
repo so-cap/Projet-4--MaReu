@@ -58,7 +58,7 @@ public class MeetingsHandlerTests {
 
     @Test
     public void getMeetingsWithSuccess(){
-        assertTrue(meetingsHandler.getMeetingsByDate(differentDate).isEmpty());
+        assertTrue(meetingsHandler.getMeetingsByDate(date).isEmpty());
 
         meetingsHandler.addMeeting(meeting, date);
         assertTrue(meetingsHandler.getMeetingsByDate(date).contains(meeting));
