@@ -23,12 +23,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.sophie.mareu.di.DI;
+import com.sophie.mareu.helper.ListOrder;
 import com.sophie.mareu.R;
+import com.sophie.mareu.di.DI;
 import com.sophie.mareu.helper.FilterAndSort;
-import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.helper.MeetingsHandler;
 import com.sophie.mareu.helper.RoomsAvailability;
+import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.model.RoomsPerHour;
 import com.sophie.mareu.ui.DetailFragment;
 import com.sophie.mareu.ui.meeting_creation.HomeStartMeetingCreationFragment;
@@ -45,11 +46,6 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.sophie.mareu.Constants.ASCENDING;
-import static com.sophie.mareu.Constants.DESCENDING;
-import static com.sophie.mareu.Constants.FILTERED;
-import static com.sophie.mareu.Constants.SORTED;
-import static com.sophie.mareu.Constants.UNCHANGED;
 import static com.sophie.mareu.model.Meeting.iconSelector;
 
 public class ListMeetingsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -163,14 +159,14 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                 if (FilterAndSort.getFilteredList().isEmpty() && deactivateFilterBtn.getVisibility() == View.VISIBLE)
                     break;
                 else {
-                    sortList(ASCENDING);
+                    sortList(ListOrder.ASCENDING);
                     break;
                 }
             case R.id.descending:
                 if (FilterAndSort.getFilteredList().isEmpty() && deactivateFilterBtn.getVisibility() == View.VISIBLE)
                     break;
                 else {
-                    sortList(DESCENDING);
+                    sortList(ListOrder.DESCENDING);
                     break;
                 }
             case R.id.menu_filter:
@@ -183,10 +179,10 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
 
     private void sortList(int sortingOrder) {
         FilterAndSort.sortList(sortingOrder);
-        listMeetingsFragment.initList(SORTED);
+        listMeetingsFragment.initList(ListOrder.SORTED);
         deactivatedSortModeBtn.setVisibility(View.VISIBLE);
         sortModeSelected.setVisibility(View.VISIBLE);
-        if (sortingOrder == ASCENDING)
+        if (sortingOrder == ListOrder.ASCENDING)
             sortModeSelected.setText(getString(R.string.sort_by_hour_selected, getString(R.string.ascending)));
         else
             sortModeSelected.setText(getString(R.string.sort_by_hour_selected, getString(R.string.descending)));
@@ -223,9 +219,9 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
                 break;
             case R.id.deactivate_sorted_list:
                 if (FilterAndSort.getFilteredList().isEmpty())
-                    listMeetingsFragment.initList(UNCHANGED);
+                    listMeetingsFragment.initList(ListOrder.UNCHANGED);
                 else
-                    listMeetingsFragment.initList(FILTERED);
+                    listMeetingsFragment.initList(ListOrder.FILTERED);
                 deactivatedSortModeBtn.setVisibility(View.GONE);
                 sortModeSelected.setVisibility(View.GONE);
                 break;
@@ -261,7 +257,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
 
     private void filterList() {
         FilterAndSort.filterMeetingsList(selectedDate, selectedRoom);
-        listMeetingsFragment.initList(FILTERED);
+        listMeetingsFragment.initList(ListOrder.FILTERED);
         filterSelectionView.setVisibility(View.GONE);
         deactivatedSortModeBtn.setVisibility(View.GONE);
         sortModeSelected.setVisibility(View.GONE);
@@ -287,7 +283,7 @@ public class ListMeetingsActivity extends AppCompatActivity implements DatePicke
     }
 
     private void deactivateFilter() {
-        listMeetingsFragment.initList(UNCHANGED);
+        listMeetingsFragment.initList(ListOrder.UNCHANGED);
         FilterAndSort.clearLists();
         filterSelectionView.setVisibility(View.GONE);
         filterSelected.setVisibility(View.GONE);

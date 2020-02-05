@@ -21,7 +21,7 @@ import com.sophie.mareu.model.Meeting;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.sophie.mareu.Constants.ARGUMENT_MEETING;
+import static com.sophie.mareu.ui.meeting_creation.MeetingCreationStartFragment.ARGUMENT_MEETING;
 
 public class DetailFragment extends Fragment {
     private Meeting meeting;

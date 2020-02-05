@@ -2,6 +2,7 @@ package com.sophie.mareu.helper;
 
 import androidx.annotation.VisibleForTesting;
 
+import com.sophie.mareu.helper.ListOrder.ListState;
 import com.sophie.mareu.di.DI;
 import com.sophie.mareu.model.Meeting;
 
@@ -9,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
-
-import static com.sophie.mareu.Constants.*;
 
 /**
  * Created by SOPHIE on 13/01/2020.
@@ -40,15 +39,15 @@ public class FilterAndSort {
             }
     }
 
-    public static void sortList(int listOrder) {
-        if (listOrder == ASCENDING || listOrder == DESCENDING) {
+    public static void sortList(@ListState int listOrder) {
+        if (listOrder == ListOrder.ASCENDING || listOrder == ListOrder.DESCENDING) {
             if (mFilteredList.isEmpty())
                 mSortedList = meetingsHandler.getMeetings();
             else
                 mSortedList = mFilteredList;
             Collections.sort(mSortedList, (meeting1, meeting2) -> meeting1.getHour().getKey().compareTo(meeting2.getHour().getKey()));
         }
-        if (listOrder == DESCENDING)
+        if (listOrder == ListOrder.DESCENDING)
             Collections.reverse(mSortedList);
     }
 

@@ -23,8 +23,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.adroitandroid.chipcloud.ChipCloud;
 import com.adroitandroid.chipcloud.ChipListener;
-import com.sophie.mareu.di.DI;
 import com.sophie.mareu.R;
+import com.sophie.mareu.di.DI;
 import com.sophie.mareu.helper.MeetingsHandler;
 import com.sophie.mareu.helper.RoomsAvailability;
 import com.sophie.mareu.model.Meeting;
@@ -42,11 +42,10 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.sophie.mareu.Constants.ARGUMENT_HOUR_POSITION;
-import static com.sophie.mareu.Constants.ARGUMENT_MEETING;
-import static com.sophie.mareu.Constants.ARGUMENT_ROOMS_AVAILABILITY;
-
 public class MeetingCreationStartFragment extends Fragment implements View.OnClickListener, ChipListener, DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
+    public static final String ARGUMENT_MEETING = "selected meeting";
+    static final String ARGUMENT_ROOMS_AVAILABILITY = "rooms availability service";
+    static final String ARGUMENT_HOUR_POSITION = "hour position";
     private ArrayList<RoomsPerHour> roomsPerHourList;
     private ArrayList<String> spinnerArray;
     private AbstractMap.SimpleEntry<Integer, String> selectedHour;

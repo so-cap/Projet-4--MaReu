@@ -22,8 +22,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.sophie.mareu.di.DI;
+import com.sophie.mareu.helper.ListOrder;
 import com.sophie.mareu.R;
+import com.sophie.mareu.di.DI;
 import com.sophie.mareu.helper.FilterAndSort;
 import com.sophie.mareu.helper.MeetingsHandler;
 import com.sophie.mareu.helper.RoomsAvailability;
@@ -36,10 +37,9 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.sophie.mareu.Constants.ARGUMENT_HOUR_POSITION;
-import static com.sophie.mareu.Constants.ARGUMENT_MEETING;
-import static com.sophie.mareu.Constants.ARGUMENT_ROOMS_AVAILABILITY;
-import static com.sophie.mareu.Constants.UNCHANGED;
+import static com.sophie.mareu.ui.meeting_creation.MeetingCreationStartFragment.ARGUMENT_HOUR_POSITION;
+import static com.sophie.mareu.ui.meeting_creation.MeetingCreationStartFragment.ARGUMENT_MEETING;
+import static com.sophie.mareu.ui.meeting_creation.MeetingCreationStartFragment.ARGUMENT_ROOMS_AVAILABILITY;
 
 public class MeetingCreationEndFragment extends Fragment implements View.OnClickListener {
     private String title, subject;
@@ -207,7 +207,7 @@ public class MeetingCreationEndFragment extends Fragment implements View.OnClick
                 FragmentManager fm = activity.getSupportFragmentManager();
                 fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 if (listMeetingsFragment != null)
-                    listMeetingsFragment.initList(UNCHANGED);
+                    listMeetingsFragment.initList(ListOrder.UNCHANGED);
             }
         }
         Toast.makeText(getContext(), getResources().getString(R.string.meeting_saved), Toast.LENGTH_LONG).show();

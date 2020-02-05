@@ -81,7 +81,11 @@ public class MeetingsHandler {
 
             makeRoomAvailableAgain(meetingHourPosition, meeting, roomsPerHourList);
 
-            Objects.requireNonNull(meetingsByDate.get(meeting.getDate())).remove(meeting);
+            try {
+                Objects.requireNonNull(meetingsByDate.get(meeting.getDate())).remove(meeting);
+            } catch (NullPointerException e){
+                e.getCause();
+            }
             FilterAndSort.removeMeeting(meeting);
 
             if (meetingsByDate.get(meeting.getDate()) == null)
