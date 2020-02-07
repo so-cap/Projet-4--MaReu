@@ -37,16 +37,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/filter" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/choose_date"
-            style="@style/Widget.AppCompat.Button"
+            style="@style/MyButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
             android:text="@string/select_date"
-            android:textSize="14sp"
             android:textColor="@color/dark_grey"
+            android:layout_marginStart="5dp"
             android:textStyle="italic"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/by_date"
             app:layout_constraintStart_toEndOf="@+id/by_date"
             app:layout_constraintTop_toTopOf="@+id/by_date"

@@ -21,8 +21,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.adroitandroid.chipcloud.ChipCloud;
-import com.adroitandroid.chipcloud.ChipListener;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.sophie.mareu.R;
 import com.sophie.mareu.di.DI;
 import com.sophie.mareu.helper.MeetingsHandler;
@@ -42,7 +42,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MeetingCreationStartFragment extends Fragment implements View.OnClickListener, ChipListener, DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
+public class MeetingCreationStartFragment extends Fragment implements View.OnClickListener, DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
     public static final String ARGUMENT_MEETING = "selected meeting";
     static final String ARGUMENT_ROOMS_AVAILABILITY = "rooms availability service";
     static final String ARGUMENT_HOUR_POSITION = "hour position";
@@ -60,8 +60,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
     Button dateView;
     @BindView(R.id.spinner_hour)
     Spinner spinner;
-    @BindView(R.id.chip_cloud)
-    ChipCloud chipCloud;
+    @BindView(R.id.chip_group)
+    ChipGroup chipGroup;
     @BindView(R.id.all_meetings_full)
     TextView meetingsFull;
     @BindView(R.id.next_page)
@@ -79,7 +79,6 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         setUpBackButton();
         dateView.setOnClickListener(this);
         spinner.setOnItemSelectedListener(this);
-        chipCloud.setChipListener(this);
         nextPage.setOnClickListener(this);
         return view;
     }
@@ -132,8 +131,8 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         dateView.setText(df.format(newDate));
         dateView.setTextColor(getResources().getColor(R.color.dark_grey));
 
-        if (!(chipCloud.isShown())) {
-            chipCloud.setVisibility(View.VISIBLE);
+        if (!(chipGroup.isShown())) {
+            chipGroup.setVisibility(View.VISIBLE);
             nextPage.setVisibility(View.VISIBLE);
         }
         updateCurrentRoomsAvailabilityHandler(newDate);
@@ -149,7 +148,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
             initChipCloud();
         } else {
             meetingsFull.setVisibility(View.VISIBLE);
-            chipCloud.setVisibility(View.GONE);
+            chipGroup.setVisibility(View.GONE);
             nextPage.setVisibility(View.GONE);
         }
     }
@@ -179,7 +178,7 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
         selectedHour = roomsPerHourList.get(hourPosition).getHour();
         initChipCloud();
         //In case the user chooses a room, then changes the hour afterwards.
-        roomPosition = - 1;
+        roomPosition = -1;
     }
 
     @Override
@@ -188,20 +187,21 @@ public class MeetingCreationStartFragment extends Fragment implements View.OnCli
 
     private void initChipCloud() {
         String[] rooms = roomsPerHourList.get(hourPosition).getRooms().toArray(new String[0]);
-        chipCloud.removeAllViews();
-        chipCloud.addChips(rooms);
-    }
+        chipGroup.removeAllViews();
 
-    @Override
-    public void chipSelected(int index) {
-        roomPosition = index;
-    }
-
-    @Override
-    public void chipDeselected(int index) {
+        for (int i = 0; i < rooms.length ; i++) {
+            Chip chip = new Chip(chipGroup.getContext());
+            chip.setText(rooms[i]);
+            chip.setClickable(true);
+            chip.setCheckable(true);
+            chip.setTextSize(24);
+            chip.setId(i);
+            chipGroup.addView(chip);
+        }
     }
 
     private boolean checkIfValid() {
+        roomPosition = chipGroup.getCheckedChipId();
         if (roomPosition >= 0) {
             selectedRoom = roomsPerHourList.get(hourPosition).getRooms().get(roomPosition);
             return true;
