@@ -1,5 +1,7 @@
 package com.sophie.mareu.helper;
 
+import android.util.Log;
+
 import com.sophie.mareu.di.DI;
 import com.sophie.mareu.model.Meeting;
 import com.sophie.mareu.model.RoomsPerHour;
@@ -84,7 +86,7 @@ public class MeetingsHandler {
             try {
                 Objects.requireNonNull(meetingsByDate.get(meeting.getDate())).remove(meeting);
             } catch (NullPointerException e){
-                e.getCause();
+                Log.e("MeetingsHandler$delete","meeting without a Date",e.getCause());
             }
             FilterAndSort.removeMeeting(meeting);
 
