@@ -4,7 +4,7 @@
 Maréu est une application de gestion de réunions.
 
 Cette application permet :
-- De créer des réunions
+- De planifier des réunions
 - D'afficher la liste des réunions
 - De les filtrer par date et heure 
 - De voir chacune des réunions en détail
