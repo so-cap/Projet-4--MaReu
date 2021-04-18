@@ -1,4 +1,5 @@
-# **Projet Mareu**
+# Projet Mareu
+**Projet 4 du parcours "Developpeur.euse d'application Android" d'Openclassrooms**
 
 Maréu est une application de gestion de réunions.
 
