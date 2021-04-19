@@ -1,0 +1,6 @@
+
+f
+java:S1301h"KReplace this "switch" statement by "if" statements to increase readability.(×“¾ñùÿÿÿÿ
+S
+java:S1874„"0Remove this use of "getColor"; it is deprecated.(†äóøÿÿÿÿ8Ñ¸°¦Ğ.
+<	java:S131h""Add a default case to this switch.(×“¾ñùÿÿÿÿ

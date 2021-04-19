@@ -18,7 +18,7 @@ public class MeetingCreationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meeting_creation);
+        setContentView(R.layout.activity_meet ing_creation);
 
         configureAndShowMeetingCreationStartFragment();
         configureAndShowListMeetingFragment();
