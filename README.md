@@ -1,9 +1,10 @@
-# **Projet Mareu**
+# Projet Mareu
+**Projet 4 du parcours "Developpeur.euse d'application Android" d'Openclassrooms**
 
 Maréu est une application de gestion de réunions.
 
 Cette application permet :
-- De créer des réunions
+- De planifier des réunions
 - D'afficher la liste des réunions
 - De les filtrer par date et heure 
 - De voir chacune des réunions en détail
@@ -33,15 +34,3 @@ et, si ce n'est pas fait automatiquement, cliquez sur "Sync project with Gradle 
 puis clickez sur "Build Project" (menu "Build"). 
 
 **Lancer l'application:** Cliquez sur le bouton "play" ou sélectionnez "Run 'app' " dans le menu "Run".
-
-## Lancement des tests unitaires et UI
-
-Vous trouverez les test unitaires dans le dossier "test" et les tests instrumentalisés
-dans le dossier "androidTest". 
-
-
-**Lancer tous les tests d'une même classe:** Click droit sur le nom de la classe
-et appuyez sur "Run 'NomDeLaClasse'".  
-
-**Lancer les tests un par un:** Click droit sur le nom de la méthode @Test que vous désirez lancer,
-et appuyez sur ""Run 'NomDeLaMethode'". 
