@@ -1,14 +1,14 @@
 # MaReu
 **School project**
 
-Maréu est une application de gestion de réunions.
+My goal was to create a meetings management app, without using any data persistence.
 
-Cette application permet :
-- De planifier des réunions
-- D'afficher la liste des réunions
-- De les filtrer par date et heure 
-- De voir chacune des réunions en détail
-- Et de les supprimer.
+Functionalities :
+- Plan a meeting
+- Display the list of meetings
+- Filter meetings by date and hour.
+- See the details of each meeting.
+- Delete a meeting.
 
 ![](screenshots/list_meeting.png) | ![](screenshots/detail_meeting.png)
 
