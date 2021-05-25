@@ -1,5 +1,5 @@
-# Projet Mareu
-**Projet 4 du parcours "Developpeur.euse d'application Android" d'Openclassrooms**
+# MaReu
+**School project**
 
 Maréu est une application de gestion de réunions.
 
@@ -15,22 +15,3 @@ Cette application permet :
 ![](screenshots/meeting_creation.png)
 
 ![](screenshots/landscape_mode.png)
-
-## Prerequis 
-**Obtenir le projet:** 
-Clicker sur "Clone or Download" en haut à droite du projet sur Github, télécharger et extraire
-le fichier zip sur votre ordinateur.
-
-**Logiciel nécessaire:**
-Android Studio ([Comment installer Android Studio](https://developer.android.com/studio/install) )
-
-Assurez vous d'installer un émulateur ou de configurer votre smartphone Android en mode développeur afin de pouvoir 
-lancer l'application.
-
-## Lancer le projet
-
-Dans Android Studio, ouvrez le projet que vous venez de télécharger
-et, si ce n'est pas fait automatiquement, cliquez sur "Sync project with Gradle Files" (menu "File")
-puis clickez sur "Build Project" (menu "Build"). 
-
-**Lancer l'application:** Cliquez sur le bouton "play" ou sélectionnez "Run 'app' " dans le menu "Run".
