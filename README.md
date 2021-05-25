@@ -1,5 +1,5 @@
 # MaReu
-**School project**
+**School project. First project from scratch **
 
 My goal was to create a meetings management app, without using any data persistence.
 
