@@ -15,3 +15,8 @@ Functionalities :
 ![](screenshots/meeting_creation.png)
 
 ![](screenshots/landscape_mode.png)
+
+**Library**
+- [ButterKnife](https://github.com/JakeWharton/butterknife)
+- [ChipCloud](https://github.com/adroitandroid/ChipCloud)
+- AndroidX
