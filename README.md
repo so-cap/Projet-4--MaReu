@@ -1,7 +1,7 @@
 # MaReu
 **School project**
 
-My goal was to create a meetings management app, without using any data persistence.
+My goal was to create a meetings management app, without persisting the data.
 
 Functionalities :
 - Plan a meeting
